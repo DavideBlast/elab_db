@@ -17,7 +17,16 @@
 
     
 	\title{Elaborato per il corso di Basi di dati}
-	\author{Davide Carità - 0000873616}
+	\author{
+      Davide Carità - 0000873616\\
+      \texttt{davide.carita@studio.unibo.it}
+      \and
+      Pietro Olivi - 0001020332\\
+      \texttt{pietro.olivi2@studio.unibo.it}
+      \and
+      Lorenzo Dalmonte - 0001021552\\
+      \texttt{lorenzo.dalmonte4@studio.unibo.it}
+    }
 	\date{}
 	
     \maketitle
@@ -27,55 +36,48 @@
 
 	\addcontentsline{toc}{chapter}{Analisi dei requisiti} 
 	\chapter*{Analisi dei requisiti}
-    Si vuole realizzare una base di dati che supporti le funzionalità di 
-    un'applicazione di compravendita di immobili nonché il monitoraggio del 
-    welfare delle principali città europee. Uno dei servizi sarà quello di 
-    filtrare le città in base alle proprie esigenze: si potrà vedere ad 
-    esempio quale città ha ottenuto i migliori punteggi a livello europeo 
-    in tema di qualità dell'aria, costo della vita o efficienza sanitaria. 
-    Una volta trovata la propria città ideale, verranno visualizzati vari 
-    annunci immobiliari suddivisi per zone della città. All'interno 
-    dell'annuncio, verranno mostrati i dettagli relativi all'immobile: 
-    metratura, numero stanze, prezzo, etc\dots
-    Inoltre, il servizio fornirà la funzionalità di avviare una conversazione tra 
-    acquirente e venditore, offrendo loro la possibilità di scambiarsi
-    informazioni in modo rapido.
-
-    Sarà offerta ai giudici d'esecuzione l'opportunità di creare un utente 
-    che avrà il privilegio di gestire aste immobiliari
 
     	\addcontentsline{toc}{section}{Requisiti in linguaggio naturale} 
         \section*{Requisiti in linguaggio naturale}
     	
-
-
-
-
-
+        Si vuole realizzare una base di dati che supporti le funzionalità di un' applicazione di compravendita di immobili nonché il monitoraggio del welfare delle principali città europee. All'interno dell'applicazione, si potrà creare un account che permetta agli utenti di promuovere e vendere le loro proprietà attraverso la piattaforma. Allo stesso tempo, gli utenti potranno utilizzare l'applicazione per cercare e visualizzare annunci immobiliari disponibili. \\ \\ Uno dei servizi sarà quello di individuare la città europea che meglio si adatta alle proprie esigenze: si potrà vedere ad esempio quale città ha ottenuto i migliori punteggi a livello europeo in tema di qualità dell'aria, costo della vita o efficienza sanitaria. Oltre a ciò, saranno disponibili anche i dati relativi agli anni precedenti, in modo da avere uno storico che permetta di valutare lo sviluppo del welfare nella città selezionata. 
+        Una volta che gli utenti hanno individuato la propria città ideale, il servizio offrirà la possibilità di visualizzare annunci immobiliari specifici suddivisi per diverse zone all'interno della città. 
+        Questa suddivisione permette agli utenti di esplorare le opzioni abitative in aree specifiche che potrebbero essere più in linea con le loro preferenze e esigenze. \\ \\ Gli annunci immobiliari saranno suddivisi in tre tipi: vendita, affitto e asta, e forniranno dettagli completi sugli immobili, compresi la metratura, il numero di stanze, il prezzo e altre informazioni pertinenti. Oltre a ciò, il servizio fornirà la funzionalità di avviare una conversazione tra acquirente e venditore, offrendo loro la possibilità di scambiarsi informazioni in modo rapido. Sarà data la possibilità ai giudici d'esecuzione di creare un account privilegiato che consentirà loro di gestire delle aste immobiliari. Questo account fornirà ai giudici strumenti e funzionalità speciali per gestire l'intero processo di vendita all'asta, inclusa la creazione e la pubblicazione degli annunci, la gestione delle offerte e altre attività correlate.
 
     	\addcontentsline{toc}{section}{Estrazione dei concetti principali} 
     	\section*{Estrazione dei concetti principali}
-            A seguito della lettura e comprensione dei requisiti richiesti dal cliente, si procede sviluppando un testo che
-            ne riassuma tutti i concetti e in particolare ne estragga quelli principali, risultando essere in questo modo
-            meglio fruibile per la realizzazione della base di dati.
-            
-            \begin{center}
-                 \begin{tabular}{|c c c|} 
-                     \hline
-                     Termine & Breve descrizione & Sinonimi \\ [0.5ex] 
-                     \hline
-                \end{tabular}
-            \end{center}
-            
-            Di seguito le azioni che sono richieste:
-            
-            \begin{enumerate}
-              \item a
-              \item b
-              \item c
-              \item d
-              
-            \end{enumerate}
+
+        \begin{itemize}
+            \item {\Large \textbf{Città}} $\rightarrow$ Le città sono suddivise in diverse zone e vengono valutate in base a parametri di welfare. Gli utenti utilizzano l'applicazione per individuare la città che meglio si adatta alle loro esigenze e preferenze abitative.
+            \item {\Large \textbf{Categoria}} $\rightarrow$ Le categorie di welfare sono criteri utilizzati per valutare il benessere delle città europee. Essi includono ambiente, trasporto, economia, sanità ed istruzione. Questi parametri forniscono un quadro del livello di comfort e salute delle città. Consentono agli utenti di confrontare le città in base a questi indicatori, facilitando la scelta di una città che meglio si adatta alle proprie esigenze.
+                  \begin{itemize}
+                    \item \textbf{Ambiente} $\rightarrow$ 
+                              Valuta la qualità ambientale delle città, con indicatori come il pm 2.5 (particolato fine) e la percentuale di spazio verde urbano.
+                    \item \textbf{Trasporto} $\rightarrow$ 
+                              Valuta l'efficienza dei sistemi di trasporto urbano, considerando il tempo medio di pendolarismo e il numero di auto per persona. Fornisce informazioni sulla congestione del traffico, sull'accessibilità e sull'efficacia delle opzioni di trasporto pubblico e privato nelle città.
+                    \item \textbf{Economia} $\rightarrow$ 
+                              Valuta la vitalità economica di una città attraverso indicatori come il PIL pro capite, lo stipendio medio e il tasso di disoccupazione. Consente inoltre di avere un'indicazione sul livello di prosperità e opportunità lavorative presenti nell'area urbana considerata.
+                    \item \textbf{Sanità} $\rightarrow$ 
+                              Valuta la qualità del sistema sanitario di una città, considerando l'aspettativa di vita e il numero di ospedali per abitante. Fornisce un'indicazione sulla salute generale e sull'accessibilità alle cure mediche
+                    \item \textbf{Istruzione} $\rightarrow$ 
+                              Valuta la qualità dell'istruzione in una città, considerando la percentuale di laureati, la percentuale di diplomati e il numero di università presenti oltre che dare un'indicazione sulla disponibilità e l'accessibilità all'istruzione superiore e alla formazione professionale nell'area urbana considerata.
+                  \end{itemize} \newpage
+            \item {\Large \textbf{Immobile}} $\rightarrow$ Un immobile si riferisce a una proprietà che può essere promossa, venduta, affittata o messa all'asta dagli utenti attraverso la piattaforma. Gli annunci immobiliari includono informazioni come la metratura, il numero di stanze, il prezzo e altre caratteristiche rilevanti dell'immobile.
+            \item {\Large \textbf{Annuncio}} $\rightarrow$ Una presentazione di un immobile disponibile per la vendita, l'affitto o l'asta. Gli annunci forniscono dettagli completi sull'immobile, come la sua ubicazione, le specifiche, i prezzi e altre informazioni pertinenti. Gli utenti utilizzano l'applicazione per cercare, visualizzare e interagire con gli annunci immobiliari.
+            \item {\Large \textbf{Account}} $\rightarrow$ Gli utilizzatori possono creare un account utente per promuovere e vendere le loro proprietà, cercare annunci immobiliari disponibili, avviare conversazioni con acquirenti o venditori e gestire altre attività correlate. Ai giudici d'esecuzione viene fornita la possibilità di creare un account privilegiato con strumenti e funzionalità speciali per gestire le aste immobiliari e le attività associate al processo di vendita all'asta.
+          \end{itemize} 
+          
+          {\Large \textbf{Di seguito le principali azioni richieste:}}
+          
+          \begin{enumerate}
+            \item Creare un account utente.
+            \item Pubblicare un annuncio immobiliare di vendita/affitto/asta.
+            \item Visualizzare annunci immobiliari disponibili.
+            \item Mostrare dettagli completi di un immobile.
+            \item Avviare una conversazione con un venditore.
+            \item Visualizzare punteggi di welfare di una città.
+            \item Filtrare annunci immobiliari per criteri (es. prezzo, dimensioni).
+          \end{enumerate}
 
 
 	\chapter{Progettazione concettuale}
