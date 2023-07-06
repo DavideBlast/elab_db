@@ -155,7 +155,17 @@
         diversi, anche contemporaneamente, e non si riuscirebbe dunque a dedurre il contesto dei messaggi. Per risolvere quest’ultima problematica 
         si è deciso di interporre l'enitità \textit{messaggio} tra \textit{utente}, nonchè il potenziale acquirente, ed \textit{annuncio\_utente}, 
         ossia il gestore dell’inserzione nelle vesti del suo annuncio. I messaggi all’interno di ogni chat vengono identificati dall’istante 
-        temporale in cui sono inviati (timestamp).
+        temporale in cui sono inviati (timestamp). \\
+        
+        \\
+        Le aste sono tipologie di annunci la cui gestione (dunque pubblicazione) è riservata ad i giudici di esecuzione. In particolare, ciascuna 
+        asta verrà amministrata da uno ed un solo giudice, il quale però potrà dirigerne fino ad N.
+        Per riprodurre le dinamiche di ascesa del prezzo ed infine di vendita, viene istituita l’entità rialzo. \\
+        \\
+        Durante il periodo di attività di un’asta, scandito da una data di inizio ed una di fine, gli utenti hanno la facoltà di avanzare più rialzi 
+        (Il collegare direttamente utente ad asta avrebbe ristretto il numero massimo di rialzi effettuabili da un utente, nella stessa asta, ad 1).
+        I rialzi ricevuti in una determinata asta sono identificati univocamente dall’ utente che li ha effettuati e l’istante temporale in cui sono 
+        stati offerti. Al termine di un asta, si può risalire al prezzo di vendita, ove avvenuta, verificando il rialzo più recente ad essa collegato.
 
 
 
