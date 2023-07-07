@@ -275,7 +275,440 @@
         \end{table}
         	
     	\section{Schemi di navigazione e tabelle degli accessi}
-        	asdasd
+        	
+        \textbf{OP 1: Registrare un nuovo utente}
+        	\begin{table}[h!]
+            \centering
+             \begin{tabular}{||l l l l||}
+             \hline
+             Concetto & Costrutto & Accessi & Tipo \\ [0.5ex] 
+             \hline\hline
+             Account & E & 1 & Scrittura \\ 
+             \hline
+              &   & Totale  3.000 al giorno &  \\ [1ex] 
+             \hline
+             \end{tabular}
+            \end{table}
+
+            \textbf{OP 2: Pubblicare un annuncio immobiliare (vendita o affitto)}
+        	\begin{table}[h!]
+            \centering
+             \begin{tabular}{||l l l l||}
+             \hline
+             Concetto & Costrutto & Accessi & Tipo \\ [0.5ex] 
+             \hline\hline
+             Annuncio & E & 1 & Scrittura \\ 
+             Riguarda & R & 1 & Scrittura \\ 
+             Immobile & E & 1 & Scrittura \\ 
+             \hline
+                &   & Totale  3.000 al giorno &  \\ [1ex] 
+             \hline
+             \end{tabular}
+            \end{table}
+
+            Questo è invece il caso in cui l'immobile è già stato inserito da annunci passati:
+            
+        	\begin{table}[h!]
+            \centering
+             \begin{tabular}{||l l l l||}
+             \hline
+             Concetto & Costrutto & Accessi & Tipo \\ [0.5ex] 
+             \hline\hline
+             Annuncio & E & 1 & Scrittura \\ 
+             \hline
+                &   & Totale  1.000 al giorno &  \\ [1ex] 
+             \hline
+             \end{tabular}
+            \end{table}
+
+            \textbf{OP 3: Visualizzare annunci immobiliari di una città in ordine cronologico}
+            per ogni città, prendiamo le sue 10 zone, che hanno in media 50 immobili l'una, visto che gli annunci (450.000~) sono più degli immobili (350.000~) uso lo stesso loro rapporto (1,3 ~) per calcolare le letture che farò negli annunci
+        	\begin{table}[h!]
+            \centering
+             \begin{tabular}{||l l l l||}
+             \hline
+             Concetto & Costrutto & Accessi & Tipo \\ [0.5ex] 
+             \hline\hline
+             Città & E & 1 & Lettura \\ 
+             Divisione & R & 10 & Lettura \\ 
+             Zona & E & 10 & Lettura \\ 
+             Situato & R & 50 & Lettura \\ 
+             Immobile & E & 50 & Lettura \\ 
+             Riguarda & R & 65 & Lettura \\ 
+             Annuncio & E & 65 & Lettura \\ 
+             \hline
+                &   & Totale  12.550.000 al giorno &  \\ [1ex] 
+             \hline
+             \end{tabular}
+            \end{table}
+
+            \textbf{OP 4: Suddividere gli annunci in vendita, affitto o asta all’interno di una città}
+        	\begin{table}[h!]
+            \centering
+             \begin{tabular}{||l l l l||}
+             \hline
+             Concetto & Costrutto & Accessi & Tipo \\ [0.5ex] 
+             \hline\hline
+             Città & E & 1 & Lettura \\ 
+             Divisione & R & 10 & Lettura \\ 
+             Zona & E & 10 & Lettura \\ 
+             Situato & R & 50 & Lettura \\ 
+             Immobile & E & 50 & Lettura \\ 
+             Riguarda & R & 65 & Lettura \\ 
+             Annuncio & E & 65 & Lettura \\ 
+             \hline
+                &   & Totale  8.785.000 al giorno &  \\ [1ex] 
+             \hline
+             \end{tabular}
+            \end{table}
+
+            \textbf{OP 5: Distinguere immobili per tipologia (appartamento, villa o stanza) in una data città}
+        	\begin{table}[h!]
+            \centering
+             \begin{tabular}{||l l l l||}
+             \hline
+             Concetto & Costrutto & Accessi & Tipo \\ [0.5ex] 
+             \hline\hline
+             Città & E & 1 & Lettura \\ 
+             Divisione & R & 10 & Lettura \\ 
+             Zona & E & 10 & Lettura \\ 
+             Situato & R & 50 & Lettura \\ 
+             Immobile & E & 50 & Lettura \\
+             \hline
+                &   & Totale  4.235.000 al giorno &  \\ [1ex] 
+             \hline
+             \end{tabular}
+            \end{table}
+
+            \textbf{OP 6: Ordinare gli immobili in base a particolari filtri (e.g. metratura, classe energetica)}
+        	\begin{table}[h!]
+            \centering
+             \begin{tabular}{||l l l l||}
+             \hline
+             Concetto & Costrutto & Accessi & Tipo \\ [0.5ex] 
+             \hline\hline
+             Città & E & 1 & Lettura \\ 
+             Divisione & R & 10 & Lettura \\ 
+             Zona & E & 10 & Lettura \\ 
+             Situato & R & 50 & Lettura \\ 
+             Immobile & E & 50 & Lettura \\
+             \hline
+                &   & Totale  605.000 al giorno &  \\ [1ex] 
+             \hline
+             \end{tabular}
+            \end{table}
+
+            \textbf{OP 7: Filtrare gli immobili per zona}
+        	\begin{table}[h!]
+            \centering
+             \begin{tabular}{||l l l l||}
+             \hline
+             Concetto & Costrutto & Accessi & Tipo \\ [0.5ex] 
+             \hline\hline
+             Città & E & 1 & Lettura \\ 
+             Divisione & R & 10 & Lettura \\ 
+             Zona & E & 10 & Lettura \\ 
+             Situato & R & 50 & Lettura \\ 
+             Immobile & E & 50 & Lettura \\
+             \hline
+                &   & Totale  4.840.000 al giorno &  \\ [1ex] 
+             \hline
+             \end{tabular}
+            \end{table}
+
+            \textbf{OP 8: Ordinare gli annunci di affitto per costo mensile}
+        	\begin{table}[h!]
+            \centering
+             \begin{tabular}{||l l l l||}
+             \hline
+             Concetto & Costrutto & Accessi & Tipo \\ [0.5ex] 
+             \hline\hline
+             Città & E & 1 & Lettura \\ 
+             Divisione & R & 10 & Lettura \\ 
+             Zona & E & 10 & Lettura \\ 
+             Situato & R & 50 & Lettura \\ 
+             Immobile & E & 50 & Lettura \\ 
+             Riguarda & R & 65 & Lettura \\ 
+             Annuncio & E & 65 & Lettura \\ 
+             \hline
+                &   & Totale  3.012.000 al giorno &  \\ [1ex] 
+             \hline
+             \end{tabular}
+            \end{table}
+
+            \textbf{OP 9: Filtrare le stanze in base ad un numero massimo di coinquilini}
+        	\begin{table}[h!]
+            \centering
+             \begin{tabular}{||l l l l||}
+             \hline
+             Concetto & Costrutto & Accessi & Tipo \\ [0.5ex] 
+             \hline\hline
+             Città & E & 1 & Lettura \\ 
+             Divisione & R & 10 & Lettura \\ 
+             Zona & E & 10 & Lettura \\ 
+             Situato & R & 50 & Lettura \\ 
+             Immobile & E & 50 & Lettura \\ 
+             \hline
+                &   & Totale  907.500 al giorno &  \\ [1ex] 
+             \hline
+             \end{tabular}
+            \end{table}
+
+            \textbf{OP 10: Mostrare aste attive in una città}
+        	\begin{table}[h!]
+            \centering
+             \begin{tabular}{||l l l l||}
+             \hline
+             Concetto & Costrutto & Accessi & Tipo \\ [0.5ex] 
+             \hline\hline
+             Città & E & 1 & Lettura \\ 
+             Divisione & R & 10 & Lettura \\ 
+             Zona & E & 10 & Lettura \\ 
+             Situato & R & 50 & Lettura \\ 
+             Immobile & E & 50 & Lettura \\ 
+             Riguarda & R & 65 & Lettura \\ 
+             Annuncio & E & 65 & Lettura \\ 
+             \hline
+                &   & Totale  907.500 al giorno &  \\ [1ex] 
+             \hline
+             \end{tabular}
+            \end{table}
+
+            \textbf{OP 11: Ordinare le aste per prezzo attuale crescente}
+        	\begin{table}[h!]
+            \centering
+             \begin{tabular}{||l l l l||}
+             \hline
+             Concetto & Costrutto & Accessi & Tipo \\ [0.5ex] 
+             \hline\hline
+             Città & E & 1 & Lettura \\ 
+             Divisione & R & 10 & Lettura \\ 
+             Zona & E & 10 & Lettura \\ 
+             Situato & R & 50 & Lettura \\ 
+             Immobile & E & 50 & Lettura \\ 
+             Riguarda & R & 65 & Lettura \\ 
+             Annuncio & E & 65 & Lettura \\ 
+             \hline
+                &   & Totale  1.004.000 al giorno &  \\ [1ex] 
+             \hline
+             \end{tabular}
+            \end{table}
+
+            \textbf{OP 12: Effettuare un rialzo all’interno di un’asta (controllando la sua validità)}
+        	\begin{table}[h!]
+            \centering
+             \begin{tabular}{||l l l l||}
+             \hline
+             Concetto & Costrutto & Accessi & Tipo \\ [0.5ex] 
+             \hline\hline
+             Account & E & 1 & Lettura \\ 
+             Offerta & R & 1 & Lettura \\ 
+             Rialzo & E & 1 & Lettura \\ 
+             Riceve & R & 1 & Lettura \\ 
+             Annuncio & E & 1 & Lettura \\ 
+             Offerta & R & 1 & Scrittura \\ 
+             Rialzo & E & 1 & Scrittura \\ 
+             Riceve & R & 1 & Scrittura \\ 
+             \hline
+                &   & Totale  5.500 al giorno &  \\ [1ex] 
+             \hline
+             \end{tabular}
+            \end{table}
+
+            \textbf{OP 13: Contattare un utente in merito ad un annuncio creato}
+        	\begin{table}[h!]
+            \centering
+             \begin{tabular}{||l l l l||}
+             \hline
+             Concetto & Costrutto & Accessi & Tipo \\ [0.5ex] 
+             \hline\hline
+             Account & E & 1 & Lettura \\ 
+             Annuncio & E & 1 & Lettura \\ 
+             Invio/Ricezione & R & 1 & Scrittura \\ 
+             Messaggio & E & 1 & Scrittura \\ 
+             Invio/Ricezione & R & 1 & Scrittura \\ 
+             \hline
+                &   & Totale  120.000 al giorno &  \\ [1ex] 
+             \hline
+             \end{tabular}
+            \end{table}
+
+            \textbf{OP 14: Ricostruire una conversazione tra due utenti}
+        	\begin{table}[h!]
+            \centering
+             \begin{tabular}{||l l l l||}
+             \hline
+             Concetto & Costrutto & Accessi & Tipo \\ [0.5ex] 
+             \hline\hline
+             Account & E & 1 & Lettura \\ 
+             Annuncio & E & 1 & Lettura \\ 
+             Invio/Ricezione & R & 10 & Lettura \\ 
+             Messaggio & E & 10 & Lettura \\ 
+             Invio/Ricezione & R & 10 & Lettura \\ 
+             \hline
+                &   & Totale  960.000 al giorno &  \\ [1ex] 
+             \hline
+             \end{tabular}
+            \end{table}
+
+             \textbf{OP 15: Andamento del prezzo di un immobile in funzione del tempo}
+        	\begin{table}[h!]
+            \centering
+             \begin{tabular}{||l l l l||}
+             \hline
+             Concetto & Costrutto & Accessi & Tipo \\ [0.5ex] 
+             \hline\hline
+             Immobile & E & 1 & Lettura \\ 
+             Riguarda & R & 1.3 & Lettura \\ 
+             Annuncio & E & 1.3 & Lettura \\ 
+             \hline
+                &   & Totale  18.000 al giorno &  \\ [1ex] 
+             \hline
+             \end{tabular}
+            \end{table}
+
+            \textbf{OP 16: Comparare il prezzo di un immobile al mq con quello degli immobili nella stessa zona}
+        	\begin{table}[h!]
+            \centering
+             \begin{tabular}{||l l l l||}
+             \hline
+             Concetto & Costrutto & Accessi & Tipo \\ [0.5ex] 
+             \hline\hline
+             Immobile & E & 1 & Lettura \\ 
+             Situato & R & 1 & Lettura \\ 
+             Zona & E & 1 & Lettura \\ 
+             \hline
+                &   & Totale  30.000 al giorno &  \\ [1ex] 
+             \hline
+             \end{tabular}
+            \end{table}
+
+            \textbf{OP 17: Comparare il prezzo di un immobile al mq con quello degli immobili nella stessa città}
+        	\begin{table}[h!]
+            \centering
+             \begin{tabular}{||l l l l||}
+             \hline
+             Concetto & Costrutto & Accessi & Tipo \\ [0.5ex] 
+             \hline\hline
+             Immobile & E & 1 & Lettura \\ 
+             Situato & R & 1 & Lettura \\ 
+             Zona & E & 10 & Lettura \\ 
+             Divisione & R & 10 & Lettura \\ 
+             Città & E & 1 & Lettura \\ 
+             \hline
+                &   & Totale  172.500 al giorno &  \\ [1ex] 
+             \hline
+             \end{tabular}
+            \end{table}
+
+            \textbf{OP 18: Comparare il prezzo medio al mq di una zona con quello della città}
+        	\begin{table}[h!]
+            \centering
+             \begin{tabular}{||l l l l||}
+             \hline
+             Concetto & Costrutto & Accessi & Tipo \\ [0.5ex] 
+             \hline\hline
+             Zona & E & 10 & Lettura \\ 
+             Divisione & R & 10 & Lettura \\ 
+             Città & E & 1 & Lettura \\ 
+             \hline
+                &   & Totale  73.500 al giorno &  \\ [1ex] 
+             \hline
+             \end{tabular}
+            \end{table}
+
+            \textbf{OP 19: Ordinare le zone di una città per costo medio al mq}
+        	\begin{table}[h!]
+            \centering
+             \begin{tabular}{||l l l l||}
+             \hline
+             Concetto & Costrutto & Accessi & Tipo \\ [0.5ex] 
+             \hline\hline
+             Zona & E & 10 & Lettura \\ 
+             Divisione & R & 10 & Lettura \\ 
+             Città & E & 1 & Lettura \\ 
+             \hline
+                &   & Totale  31.500 al giorno &  \\ [1ex] 
+             \hline
+             \end{tabular}
+            \end{table}
+
+            \textbf{OP 20: Stilare una top 5 città per una o più categorie}
+        	\begin{table}[h!]
+            \centering
+             \begin{tabular}{||l l l l||}
+             \hline
+             Concetto & Costrutto & Accessi & Tipo \\ [0.5ex] 
+             \hline\hline
+             Anno & E & 1 & Lettura \\ 
+             Città\_Anno & E & 700 & Lettura \\ 
+             Appartenenza & R & 5 & Lettura \\ 
+             Città & E & 5 & Lettura \\ 
+             \hline
+                &   & Totale  2.133.000 al giorno &  \\ [1ex] 
+             \hline
+             \end{tabular}
+            \end{table}
+
+            \textbf{OP 21: Classificare città in base all’evoluzione in una o più categorie rispetto all’anno precedente}
+        	\begin{table}[h!]
+            \centering
+             \begin{tabular}{||l l l l||}
+             \hline
+             Concetto & Costrutto & Accessi & Tipo \\ [0.5ex] 
+             \hline\hline
+             Anno & E & 2 & Lettura \\ 
+             Città\_Anno & E & 1.400 & Lettura \\ 
+             Appartenenza & R & 1.400 & Lettura \\ 
+             Città & E & 1.400 & Lettura \\ 
+             \hline
+                &   & Totale  2.101.000 al giorno &  \\ [1ex] 
+             \hline
+             \end{tabular}
+            \end{table}
+
+            \textbf{OP 22: Ordinare le città in base a valori specifici di una o più categorie}
+        	\begin{table}[h!]
+            \centering
+             \begin{tabular}{||l l l l||}
+             \hline
+             Concetto & Costrutto & Accessi & Tipo \\ [0.5ex] 
+             \hline\hline
+             Anno & E & 1 & Lettura \\ 
+             Città\_Anno & E & 700 & Lettura \\ 
+             Valutazione\_A & R & 700 & Lettura \\ 
+             Ambiente & E & 700 & Lettura \\
+             Valutazione\_T & R & 700 & Lettura \\ 
+             Trasporto & E & 700 & Lettura \\
+             Valutazione\_E & R & 700 & Lettura \\ 
+             Economia & E & 700 & Lettura \\
+             Valutazione\_S & R & 700 & Lettura \\ 
+             Sanità & E & 700 & Lettura \\
+             Valutazione\_I & R & 700 & Lettura \\ 
+             Istruzione & E & 700 & Lettura \\
+             \hline
+                &   & Totale  7.701.000 al giorno &  \\ [1ex] 
+             \hline
+             \end{tabular}
+            \end{table}
+
+            \textbf{OP 23: Calcolare performance di uno stato in una o più categorie (da ogni città)}
+        	\begin{table}[h!]
+            \centering
+             \begin{tabular}{||l l l l||}
+             \hline
+             Concetto & Costrutto & Accessi & Tipo \\ [0.5ex] 
+             \hline\hline
+             Stato & E & 1 & Lettura \\ 
+             Composizione & R & 14 & Lettura \\ 
+             Città & E & 14 & Lettura \\ 
+             Appartenenza & R & 28 & Lettura \\ 
+             Città\_Anno & E & 28 & Lettura \\ 
+             \hline
+                &   & Totale  170.000 al giorno &  \\ [1ex] 
+             \hline
+             \end{tabular}
+            \end{table}
         	
     	\section{Analisi delle ridondanze}
         	asdasd
