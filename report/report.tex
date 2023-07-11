@@ -156,10 +156,9 @@
         si è deciso di interporre l'enitità \textit{messaggio} tra \textit{utente}, nonchè il potenziale acquirente, ed \textit{annuncio\_utente}, 
         ossia il gestore dell’inserzione nelle vesti del suo annuncio. I messaggi all’interno di ogni chat vengono identificati dall’istante 
         temporale in cui sono inviati (timestamp). \\
-        
         \\
-        Le aste sono tipologie di annunci la cui gestione (dunque pubblicazione) è riservata ad i giudici di esecuzione. In particolare, ciascuna 
-        asta verrà amministrata da uno ed un solo giudice, il quale però potrà dirigerne fino ad N.
+        Le aste sono tipologie di annunci la cui gestione (dunque pubblicazione) è riservata ad i giudici di esecuzione.
+        In particolare, ciascuna asta verrà amministrata da uno ed un solo giudice, il quale però potrà dirigerne fino ad N.
         Per riprodurre le dinamiche di ascesa del prezzo ed infine di vendita, viene istituita l’entità rialzo. \\
         \\
         Durante il periodo di attività di un’asta, scandito da una data di inizio ed una di fine, gli utenti hanno la facoltà di avanzare più rialzi 
@@ -709,7 +708,42 @@
              \hline
              \end{tabular}
             \end{table}
-        	
+        
+        \section{Raffinamento dello schema}
+            \subsection*{Eliminazione delle gerarchie}
+                La gerarchia che suddivide le tipologie di \textit{account}, avendo copertura totale e
+                detenendo le due specializzazioni mansioni differenti, viene raffinata
+                attraverso un collasso verso il basso. Nonostante le ridondanze di alcuni campi,
+                abbiamo ritenuto questo fosse l'approccio migliore.\\
+                \\
+                Nel caso dell'entità \textit{immobile} si è invece deciso di procedere accorpando le
+                entità figlie \textit{villa, appartamento e stanza} nella prima. Questa scelta deriva
+                dal mancato (o meglio trascurabile) utilizzo delle specializzazioni nelle operazioni
+                precedentemente formulate. (SOLUZIONE MANCANTE)\\
+                \\
+                Nella riformulazione della doppia gerarchia \textit{annuncio-annuncio\_utente} abbiamo
+                adottato due criteri distinti. In primis abbiamo scisso l'\textit{annuncio} in 
+                \textit{asta, annuncio\_utente} poichè modellano due concetti semanticamente diversi.
+                Diversamente, per l'entità \textit{annuncio\_utente} abbiamo optato per un collasso verso
+                l'alto essendo che la quasi totalità delle operazioni interagisce esclusivamente con l'entità 
+                madre, e risulterebbe pertanto vana la differenziazione delle entità per due soli campi, che 
+                sono stati invece riportati come opzionali in \textit{annuncio\_utente}.
+
+
+            \subsection*{Eliminazione degli attributi composti}
+            L'unico attributo composto che compare nello schema concettuale è il campo \textit{indirizzo},
+            contenuto nell'entità \textit{immobile}. Avendo ciascun immobile uno ed un solo indirizzo,
+            si è deciso di scomporre questo nelle sue componenti, \textit{via, numeroCivico}, anch'esse uniche, senza dover quindi 
+            prestare attenzione alla loro coerenza a livello applicativo.
+
+            \subsection*{Scelta delle chiavi primarie}
+            \subsection*{Eliminazione degli identificatori esterni}
+        
+
+
+
+
+
     	\section{Analisi delle ridondanze}
         	asdasd
         	
