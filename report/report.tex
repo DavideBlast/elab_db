@@ -13,6 +13,8 @@
 \usepackage{float}
 \usepackage{hyperref}
 \usepackage[table]{xcolor}
+\usepackage{adjustbox}
+
 
 \begin{document}
 
@@ -242,9 +244,10 @@
     	\section{Descrizione delle operazioni principali e stima della loro frequenza}
         \begin{table}
             \centering
-            \resizebox{\columnwidth}{!}{\begin{tabular}{clr}
-             \rowcolor{LightCyan} \textbf{Codice} & \textbf{Operazione} & \textbf{Frequenza} \\ [0.5ex] 
-             \hline
+            \begin{adjustbox}{width=1.45\textwidth,center}
+            \begin{tabular}{clr}
+            \rowcolor{LightCyan} \textbf{Codice} & \textbf{Operazione} & \textbf{Frequenza} \\ [0.5ex] 
+            \hline
              1 & Registrare un nuovo utente & 1.500 al giorno \\
              2 & Pubblicare un annuncio immobiliare (vendita, affitto o asta) & 500 al giorno \\
              3 & Visualizzare annunci immobiliari di una città in ordine cronologico & 50.000 al giorno \\ 
@@ -268,8 +271,9 @@
              21 & Classificare città in base all'evoluzione in una o più categorie rispetto all'anno precedente & 500 al giorno \\ 
              22 & Ordinare le città in base a valori specifici di una o più categorie & 1.000 al giorno \\ 
              23 & Calcolare performance di uno stato in una o più categorie (da ogni città) & 2.000 al giorno \\ [1ex]
-             \end{tabular}}
-        \end{table}
+            \end{tabular}
+            \end{adjustbox}
+            \end{table}
         	
     	\section{Schemi di navigazione e tabelle degli accessi}
         	
