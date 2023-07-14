@@ -182,7 +182,7 @@
     \definecolor{LightCyan}{rgb}{0.88,1,1}
 
     	\section{Stima del volume dei dati}
-        \begin{table}[h!]
+        \begin{table}[H]
             \centering
              \begin{tabular}{lcr}
              \rowcolor{LightCyan}\textbf{Concetto} & \textbf{Costrutto} & \textbf{Volume} \\ [0.5ex] 
@@ -210,7 +210,7 @@
              \end{tabular}
         \end{table}
 
-        \begin{table}[h!]
+        \begin{table}[H]
             \centering
              \begin{tabular}{lcr} 
              \rowcolor{LightCyan} \textbf{Concetto} & \textbf{Costrutto} & \textbf{Volume} \\ [0.5ex] 
@@ -242,17 +242,17 @@
 
 
     	\section{Descrizione delle operazioni principali e stima della loro frequenza}
-        \begin{table}
+        \begin{table}[H]
             \centering
             \begin{adjustbox}{width=1.45\textwidth,center}
             \begin{tabular}{clr}
             \rowcolor{LightCyan} \textbf{Codice} & \textbf{Operazione} & \textbf{Frequenza} \\ [0.5ex] 
             \hline
-             1 & Registrare un nuovo utente & 1.500 al giorno \\
+             1 & Registrare un nuovo account & 1.500 al giorno \\
              2 & Pubblicare un annuncio immobiliare (vendita, affitto o asta) & 500 al giorno \\
-             3 & Visualizzare annunci immobiliari di una città in ordine cronologico & 50.000 al giorno \\ 
+             3 & Visualizzare annunci immobiliari attivi di una città in ordine cronologico & 50.000 al giorno \\ 
              4 & Suddividere gli annunci in vendita, affitto o asta all'interno di una città & 35.000 al giorno \\
-             5 & Distinguere immobili per tipologia (appartamento, villa o stanza) in una data città & 35.000 al giorno \\
+             5 & Distinguere annunci per tipologia immobile (appartamento, villa o stanza) in una data città & 35.000 al giorno \\
              6 & Ordinare gli immobili in base a particolari filtri (e.g. metratura, classe energetica) & 5.000 al giorno \\
              7 & Filtrare gli immobili per zona & 40.000 al giorno \\
              8 & Ordinare gli annunci di affitto per costo mensile & 12.000 al giorno \\
@@ -278,7 +278,7 @@
     	\section{Schemi di navigazione e tabelle degli accessi}
         	
 
-        \textbf{OP 1: Registrare un nuovo utente}
+        \textbf{OP 1: Registrare un nuovo account}
         	\begin{table}[H]
             \centering
              \begin{tabular}{llll}
@@ -286,11 +286,14 @@
              \hline
              Account & E & 1 & Scrittura \\ 
              \hline
-             \rowcolor{yellow!20}\rowcolor{yellow!20} &   & \textbf{Totale:}  3.000 al giorno &  \\ [1ex] 
+             \rowcolor{yellow!20}\rowcolor{yellow!20} &   & \textbf{Totale:} 1S $\rightarrow$ 3.000 al giorno &  \\ [1ex] 
              \end{tabular}
             \end{table}
 
             \textbf{OP 2: Pubblicare un annuncio immobiliare (vendita o affitto)}
+            Viene di seguito presentato il caso in cui si voglia aggiungere un annuncio relativo ad un immobile
+            non ancora presente nella base di dati: sarà necessario aggiornare, dunque riscrivere, i campi 
+            \textit{numeroImmobili} e \textit{costoMedioMq}.
         	\begin{table}[H]
             \centering
              \begin{tabular}{llll}
@@ -299,26 +302,37 @@
              Annuncio & E & 1 & Scrittura \\ 
              Riguarda & R & 1 & Scrittura \\ 
              Immobile & E & 1 & Scrittura \\ 
+             Situato & R & 1 & Scrittura \\ 
+             Zona & E & 1 & Scrittura \\ 
              \hline
-             \rowcolor{yellow!20}  \rowcolor{yellow!20} &   & \textbf{Totale:}  3.000 al giorno &  \\ [1ex] 
+             \rowcolor{yellow!20}  \rowcolor{yellow!20} &   & \textbf{Totale:} 5S $\rightarrow$ 5.000 al giorno &  \\ [1ex] 
              \end{tabular}
-            \end{table}
-
-            Questo è invece il caso in cui l'immobile è già stato inserito da annunci passati:
+            \end{table} 
+            Nell'eventualità in cui venisse pubblicato un'annuncio relativo ad un immobile già comparso sulla
+            piattaforma, e pertanto già considerato nel calcolo del \textit{costoMedioMq} del quartiere di
+            appartenenza, dovremmo leggere il prezzo al mq designato dal proprietario più recente rispetto all'attuale, 
+            sottrarlo a costoMedioMq*numeroImmobili, aggiungere il nuovo e ri-dividere per lo stesso numeroImmobili.
             
         	\begin{table}[H]
             \centering
              \begin{tabular}{llll}
              \rowcolor{yellow!20}\rowcolor{yellow!20} \textbf{Concetto} & \textbf{Costrutto} & \textbf{Accessi} & \textbf{Tipo}\\ [0.5ex] 
              \hline
-             Annuncio & E & 1 & Scrittura \\ 
+             Annuncio & E & 1 & Lettura \\
+             Annuncio & E & 1 & Scrittura \\
+             Riguarda & R & 1 & Scrittura \\ 
+             Immobile & E & 1 & Lettura \\ 
+             Situato & R & 1 & Lettura \\ 
+             Zona & E & 1 & Scrittura \\  
              \hline
-             \rowcolor{yellow!20} &   & \textbf{Totale:}  1.000 al giorno &  \\ [1ex] 
+             \rowcolor{yellow!20} &   & \textbf{Totale:} 3L + 3S $\rightarrow$ 1.800 al giorno &  \\ [1ex] 
              \end{tabular}
             \end{table}
 
-            \textbf{OP 3: Visualizzare annunci immobiliari di una città in ordine cronologico}
-            per ogni città, prendiamo le sue 10 zone, che hanno in media 50 immobili l'una, visto che gli annunci (450.000~) sono più degli immobili (350.000~) uso lo stesso loro rapporto (1,3 ~) per calcolare le letture che farò negli annunci
+            \textbf{OP 3: Visualizzare annunci immobiliari attivi di una città in ordine cronologico} \\
+            Data una città, prendiamo le sue 10 zone, che hanno in media 5 immobili l'una. Visto che gli annunci totali \textit{attivi} (worst case 450.000) 
+            sono $\ge$ degli immobili (350.000) (considerando che lo stesso immobile può essere pubblicato sia come affitto che vendita)
+            uso lo stesso loro rapporto (1,3) per calcolare le letture che farò negli annunci.
         	\begin{table}[H]
             \centering
              \begin{tabular}{llll}
@@ -332,7 +346,7 @@
              Riguarda & R & 65 & Lettura \\ 
              Annuncio & E & 65 & Lettura \\ 
              \hline
-                \rowcolor{yellow!20} &   & \textbf{Totale:}  12.550.000 al giorno &  \\ [1ex] 
+                \rowcolor{yellow!20} &   & \textbf{Totale:} 251L $\rightarrow$ 12.550.000 al giorno &  \\ [1ex] 
              
              \end{tabular}
             \end{table}
@@ -351,12 +365,12 @@
              Riguarda & R & 65 & Lettura \\ 
              Annuncio & E & 65 & Lettura \\ 
              \hline
-                \rowcolor{yellow!20} &   & \textbf{Totale:}  8.785.000 al giorno &  \\ [1ex] 
+                \rowcolor{yellow!20} &   & \textbf{Totale:} 251L $\rightarrow$ 8.785.000 al giorno &  \\ [1ex] 
              
              \end{tabular}
             \end{table}
 
-            \textbf{OP 5: Distinguere immobili per tipologia (appartamento, villa o stanza) in una data città}
+            \textbf{OP 5: Distinguere annunci per tipologia immobile (appartamento, villa o stanza) in una data città}
         	\begin{table}[H]
             \centering
              \begin{tabular}{llll}
@@ -367,13 +381,15 @@
              Zona & E & 10 & Lettura \\ 
              Situato & R & 50 & Lettura \\ 
              Immobile & E & 50 & Lettura \\
+             Riguarda & R & 65 & Lettura \\ 
+             Annuncio & E & 65 & Lettura \\ 
              \hline
-                \rowcolor{yellow!20} &   & \textbf{Totale:}  4.235.000 al giorno &  \\ [1ex] 
+                \rowcolor{yellow!20} &   & \textbf{Totale:} 251L $\rightarrow$ 8.785.000 al giorno &  \\ [1ex] 
              
              \end{tabular}
             \end{table}
 
-            \textbf{OP 6: Ordinare gli immobili in base a particolari filtri (e.g. metratura, classe energetica)}
+            \textbf{OP 6: Ordinare gli annunci in base a particolari filtri sull'immobile (e.g. metratura, classe energetica)}
         	\begin{table}[H]
             \centering
              \begin{tabular}{llll}
@@ -384,13 +400,15 @@
              Zona & E & 10 & Lettura \\ 
              Situato & R & 50 & Lettura \\ 
              Immobile & E & 50 & Lettura \\
+             Riguarda & R & 65 & Lettura \\ 
+             Annuncio & E & 65 & Lettura \\ 
              \hline
-                \rowcolor{yellow!20} &   & \textbf{Totale:}  605.000 al giorno &  \\ [1ex] 
+                \rowcolor{yellow!20} &   & \textbf{Totale:} 251L $\rightarrow$ 1.255.000 al giorno &  \\ [1ex] 
              
              \end{tabular}
             \end{table}
 
-            \textbf{OP 7: Filtrare gli immobili per zona}
+            \textbf{OP 7: Filtrare gli annunci per zona}
         	\begin{table}[H]
             \centering
              \begin{tabular}{llll}
@@ -401,8 +419,10 @@
              Zona & E & 10 & Lettura \\ 
              Situato & R & 50 & Lettura \\ 
              Immobile & E & 50 & Lettura \\
+             Riguarda & R & 65 & Lettura \\ 
+             Annuncio & E & 65 & Lettura \\ 
              \hline
-                \rowcolor{yellow!20} &   & \textbf{Totale:}  4.840.000 al giorno &  \\ [1ex] 
+                \rowcolor{yellow!20} &   & \textbf{Totale:} 251L $\rightarrow$ 10.040.000 al giorno &  \\ [1ex] 
              
              \end{tabular}
             \end{table}
@@ -421,12 +441,12 @@
              Riguarda & R & 65 & Lettura \\ 
              Annuncio & E & 65 & Lettura \\ 
              \hline
-                \rowcolor{yellow!20} &   & \textbf{Totale:}  3.012.000 al giorno &  \\ [1ex] 
+                \rowcolor{yellow!20} &   & \textbf{Totale:} 251L $\rightarrow$ 3.012.000 al giorno &  \\ [1ex] 
              
              \end{tabular}
             \end{table}
 
-            \textbf{OP 9: Filtrare le stanze in base ad un numero massimo di coinquilini}
+            \textbf{OP 9: Filtrare gli annunci delle stanze in base ad un numero massimo di coinquilini}
         	\begin{table}[H]
             \centering
              \begin{tabular}{llll}
@@ -437,8 +457,10 @@
              Zona & E & 10 & Lettura \\ 
              Situato & R & 50 & Lettura \\ 
              Immobile & E & 50 & Lettura \\ 
+             Riguarda & R & 65 & Lettura \\ 
+             Annuncio & E & 65 & Lettura \\ 
              \hline
-                \rowcolor{yellow!20} &   & \textbf{Totale:}  907.500 al giorno &  \\ [1ex] 
+                \rowcolor{yellow!20} &   & \textbf{Totale:} 251L $\rightarrow$ 1.882.500 al giorno &  \\ [1ex] 
              
              \end{tabular}
             \end{table}
@@ -457,7 +479,7 @@
              Riguarda & R & 65 & Lettura \\ 
              Annuncio & E & 65 & Lettura \\ 
              \hline
-                \rowcolor{yellow!20} &   & \textbf{Totale:}  907.500 al giorno &  \\ [1ex] 
+                \rowcolor{yellow!20} &   & \textbf{Totale:} 251L $\rightarrow$ 1.882.500 al giorno &  \\ [1ex] 
              
              \end{tabular}
             \end{table}
@@ -476,44 +498,46 @@
              Riguarda & R & 65 & Lettura \\ 
              Annuncio & E & 65 & Lettura \\ 
              \hline
-                \rowcolor{yellow!20} &   & \textbf{Totale:}  1.004.000 al giorno &  \\ [1ex] 
+                \rowcolor{yellow!20} &   & \textbf{Totale:} 251L $\rightarrow$ 1.004.000 al giorno &  \\ [1ex] 
              
              \end{tabular}
             \end{table}
 
-            \textbf{OP 12: Effettuare un rialzo all’interno di un’asta (controllando la sua validità)}
+            \textbf{OP 12: Effettuare un rialzo all’interno di un’asta (controllando la sua validità)} \\
+            COMMENTO!!!!!!!!!!!!!!!!! Leggere ultimo rialzo
         	\begin{table}[H]
             \centering
              \begin{tabular}{llll}
              \rowcolor{yellow!20} \textbf{Concetto} & \textbf{Costrutto} & \textbf{Accessi} & \textbf{Tipo}\\ [0.5ex] 
              \hline
-             Account & E & 1 & Lettura \\ 
+             Utente & E & 1 & Lettura \\ 
              Offerta & R & 1 & Lettura \\ 
              Rialzo & E & 1 & Lettura \\ 
              Riceve & R & 1 & Lettura \\ 
-             Annuncio & E & 1 & Lettura \\ 
+             Asta & E & 1 & Lettura \\ 
              Offerta & R & 1 & Scrittura \\ 
              Rialzo & E & 1 & Scrittura \\ 
              Riceve & R & 1 & Scrittura \\ 
              \hline
-                \rowcolor{yellow!20} &   & \textbf{Totale:}  5.500 al giorno &  \\ [1ex] 
+                \rowcolor{yellow!20} &   & \textbf{Totale:} 5L + 3S $\rightarrow$ 5.500 al giorno &  \\ [1ex] 
              
              \end{tabular}
             \end{table}
 
             \textbf{OP 13: Contattare un utente in merito ad un annuncio creato}
+            COMMENTO!!!!!!!!!!!!!!!!! account di chi vuole mandare mex, annuncio di chi lo riceve
         	\begin{table}[H]
             \centering
              \begin{tabular}{llll}
              \rowcolor{yellow!20} \textbf{Concetto} & \textbf{Costrutto} & \textbf{Accessi} & \textbf{Tipo}\\ [0.5ex] 
              \hline
-             Account & E & 1 & Lettura \\ 
-             Annuncio & E & 1 & Lettura \\ 
+             Utente & E & 1 & Lettura \\ 
+             Annuncio\_Utente & E & 1 & Lettura \\ 
              Invio/Ricezione & R & 1 & Scrittura \\ 
              Messaggio & E & 1 & Scrittura \\ 
              Invio/Ricezione & R & 1 & Scrittura \\ 
              \hline
-                \rowcolor{yellow!20} &   & \textbf{Totale:}  120.000 al giorno &  \\ [1ex] 
+                \rowcolor{yellow!20} &   & \textbf{Totale:} 2L + 3S $\rightarrow$ 120.000 al giorno &  \\ [1ex] 
              
              \end{tabular}
             \end{table}
@@ -524,13 +548,13 @@
              \begin{tabular}{llll}
              \rowcolor{yellow!20} \textbf{Concetto} & \textbf{Costrutto} & \textbf{Accessi} & \textbf{Tipo}\\ [0.5ex] 
              \hline
-             Account & E & 1 & Lettura \\ 
-             Annuncio & E & 1 & Lettura \\ 
+             Utente & E & 1 & Lettura \\ 
+             Annuncio\_Utente & E & 1 & Lettura \\ 
              Invio/Ricezione & R & 10 & Lettura \\ 
              Messaggio & E & 10 & Lettura \\ 
              Invio/Ricezione & R & 10 & Lettura \\ 
              \hline
-                \rowcolor{yellow!20} &   & \textbf{Totale:}  960.000 al giorno &  \\ [1ex] 
+                \rowcolor{yellow!20} &   & \textbf{Totale:} 32L $\rightarrow$ 960.000 al giorno &  \\ [1ex] 
              
              \end{tabular}
             \end{table}
@@ -545,7 +569,7 @@
              Riguarda & R & 1.3 & Lettura \\ 
              Annuncio & E & 1.3 & Lettura \\ 
              \hline
-                \rowcolor{yellow!20} &   & \textbf{Totale:}  18.000 al giorno &  \\ [1ex] 
+                \rowcolor{yellow!20} &   & \textbf{Totale:} 3.6L $\rightarrow$ 18.000 al giorno &  \\ [1ex] 
              
              \end{tabular}
             \end{table}
@@ -556,11 +580,15 @@
              \begin{tabular}{llll}
              \rowcolor{yellow!20} \textbf{Concetto} & \textbf{Costrutto} & \textbf{Accessi} & \textbf{Tipo}\\ [0.5ex] 
              \hline
-             Immobile & E & 1 & Lettura \\ 
-             Situato & R & 1 & Lettura \\ 
              Zona & E & 1 & Lettura \\ 
+             Situato & R & 1 & Lettura \\ 
+             Immobile & E & 1 & Lettura \\ 
+             Riguarda & R & 1 & Lettura \\ 
+             Annuncio & E & 1 & Lettura \\ 
+             Annuncio\_Utente & E & 1 & Lettura \\ 
+             Vendita & E & 1 & Lettura \\ 
              \hline
-                \rowcolor{yellow!20} &   & \textbf{Totale:}  30.000 al giorno &  \\ [1ex] 
+                \rowcolor{yellow!20} &   & \textbf{Totale:} 7L $\rightarrow$ 70.000 al giorno &  \\ [1ex] 
              
              \end{tabular}
             \end{table}
@@ -571,28 +599,33 @@
              \begin{tabular}{llll}
              \rowcolor{yellow!20} \textbf{Concetto} & \textbf{Costrutto} & \textbf{Accessi} & \textbf{Tipo}\\ [0.5ex] 
              \hline
-             Immobile & E & 1 & Lettura \\ 
-             Situato & R & 1 & Lettura \\ 
-             Zona & E & 10 & Lettura \\ 
-             Divisione & R & 10 & Lettura \\ 
              Città & E & 1 & Lettura \\ 
+             Divisione & R & 10 & Lettura \\ 
+             Zona & E & 10 & Lettura \\ 
+             Situato & R & 1 & Lettura \\ 
+             Immobile & E & 1 & Lettura \\ 
+             Riguarda & R & 1 & Lettura \\ 
+             Annuncio & E & 1 & Lettura \\ 
+             Annuncio\_Utente & E & 1 & Lettura \\ 
+             Vendita & E & 1 & Lettura \\ 
+
              \hline
-                \rowcolor{yellow!20} &   & \textbf{Totale:}  172.500 al giorno &  \\ [1ex] 
+                \rowcolor{yellow!20} &   & \textbf{Totale:} 27L $\rightarrow$ 202.500 al giorno &  \\ [1ex] 
              
              \end{tabular}
             \end{table}
-
+            
             \textbf{OP 18: Comparare il prezzo medio al mq di una zona con quello della città}
         	\begin{table}[H]
             \centering
              \begin{tabular}{llll}
              \rowcolor{yellow!20} \textbf{Concetto} & \textbf{Costrutto} & \textbf{Accessi} & \textbf{Tipo}\\ [0.5ex] 
              \hline
-             Zona & E & 10 & Lettura \\ 
-             Divisione & R & 10 & Lettura \\ 
              Città & E & 1 & Lettura \\ 
+             Divisione & R & 10 & Lettura \\ 
+             Zona & E & 10 & Lettura \\ 
              \hline
-                \rowcolor{yellow!20} &   & \textbf{Totale:}  73.500 al giorno &  \\ [1ex] 
+                \rowcolor{yellow!20} &   & \textbf{Totale:} 21L $\rightarrow$ 73.500 al giorno &  \\ [1ex] 
              
              \end{tabular}
             \end{table}
@@ -603,11 +636,11 @@
              \begin{tabular}{llll}
              \rowcolor{yellow!20} \textbf{Concetto} & \textbf{Costrutto} & \textbf{Accessi} & \textbf{Tipo}\\ [0.5ex] 
              \hline
-             Zona & E & 10 & Lettura \\ 
-             Divisione & R & 10 & Lettura \\ 
              Città & E & 1 & Lettura \\ 
+             Divisione & R & 10 & Lettura \\ 
+             Zona & E & 10 & Lettura \\ 
              \hline
-                \rowcolor{yellow!20} &   & \textbf{Totale:}  31.500 al giorno &  \\ [1ex] 
+                \rowcolor{yellow!20} &   & \textbf{Totale:} 21L $\rightarrow$ 31.500 al giorno &  \\ [1ex] 
              
              \end{tabular}
             \end{table}
@@ -623,7 +656,7 @@
              Appartenenza & R & 5 & Lettura \\ 
              Città & E & 5 & Lettura \\ 
              \hline
-                \rowcolor{yellow!20} &   & \textbf{Totale:}  2.133.000 al giorno &  \\ [1ex] 
+                \rowcolor{yellow!20} &   & \textbf{Totale:} 711L $\rightarrow$ 2.133.000 al giorno &  \\ [1ex] 
              
              \end{tabular}
             \end{table}
@@ -639,7 +672,7 @@
              Appartenenza & R & 1.400 & Lettura \\ 
              Città & E & 1.400 & Lettura \\ 
              \hline
-                \rowcolor{yellow!20} &   & \textbf{Totale:}  2.101.000 al giorno &  \\ [1ex] 
+                \rowcolor{yellow!20} &   & \textbf{Totale:} 4.202L $\rightarrow$ 2.101.000 al giorno &  \\ [1ex] 
              
              \end{tabular}
             \end{table}
@@ -663,12 +696,13 @@
              Valutazione\_I & R & 700 & Lettura \\ 
              Istruzione & E & 700 & Lettura \\
              \hline
-                \rowcolor{yellow!20} &   & \textbf{Totale:}  7.701.000 al giorno &  \\ [1ex] 
+                \rowcolor{yellow!20} &   & \textbf{Totale:} 7.701L $\rightarrow$ 7.701.000 al giorno &  \\ [1ex] 
              
              \end{tabular}
             \end{table}
 
             \textbf{OP 23: Calcolare performance di uno stato in una o più categorie (da ogni città)}
+            COMMENTO!!!!!!!!!!!!! cambiamento punteggio rispetto ad anno precedente
         	\begin{table}[H]
             \centering
              \begin{tabular}{llll}
@@ -680,7 +714,7 @@
              Appartenenza & R & 28 & Lettura \\ 
              Città\_Anno & E & 28 & Lettura \\ 
              \hline
-                \rowcolor{yellow!20} &   & \textbf{Totale:}  170.000 al giorno &  \\ [1ex] 
+                \rowcolor{yellow!20} &   & \textbf{Totale:} 85L $\rightarrow$ 170.000 al giorno &  \\ [1ex] 
              
              \end{tabular}
             \end{table}
@@ -740,35 +774,121 @@
 
 
 
-
-
-
-
-            
-
-
-
-
-
-
     	\section{Analisi delle ridondanze}
-        	asdasd
+            Durante la fase di sviluppo dello schema concettuale, si è deciso di aggiungere il campo \textit{costoMedioMq}
+            all'entità \textit{zona}, poichè ritenuta una proprietà intrinseca a ciascun quartiere ed adatta alla formulazione
+            di statistiche proiettate nel livello applicativo. Il dato in questione, tuttavia, si sarebbe potuto ottenere 
+            andando ad analizzare tutti gli \textit{immobili} situati nella \textit{zona} di interesse, facendo la media delle divisioni tra il 
+            costo di ciascuna abitazione per la sua metratura. Quest'ultima manovra, già in origine percepita come eccessivamente
+            onerosa a livello computazionale, verrà messa a confronto con l'alternativa adottata, nelle due operazioni coinvolte. 
+
+            \textbf{OP 2: Pubblicare un annuncio immobiliare (vendita o affitto)}
+            \begin{center}
+                \textbf{Con ridondanza}
+            \end{center}
+            \begin{table}[H]
+            \centering
+            \begin{tabular}{llll}
+            \rowcolor{yellow!20} \textbf{Concetto} & \textbf{Costrutto} & \textbf{Accessi} & \textbf{Tipo} \\ [0.5ex] 
+            \hline
+            Annuncio & E & 1 & Scrittura \\ 
+            Riguarda & R & 1 & Scrittura \\ 
+            Immobile & E & 1 & Scrittura \\ 
+            Situato & R & 1 & Scrittura \\ 
+            Zona & E & 2 & Scrittura \\ 
+            \hline
+            \rowcolor{yellow!20}  \rowcolor{yellow!20} &   & \textbf{Totale:}  6.000 al giorno &  \\ [1ex] 
+            \end{tabular}
+            \end{table}
+
+            \begin{center}
+                \textbf{Senza ridondanza}
+            \end{center}
+            \begin{table}[H]
+            \centering
+            \begin{tabular}{llll}
+            \rowcolor{green!20} \textbf{Concetto} & \textbf{Costrutto} & \textbf{Accessi} & \textbf{Tipo} \\ [0.5ex] 
+            \hline
+            Annuncio & E & 1 & Scrittura \\ 
+            Riguarda & R & 1 & Scrittura \\ 
+            Immobile & E & 1 & Scrittura \\ 
+            \hline
+            \rowcolor{green!20}  &   & \textbf{Totale:}  3.000 al giorno &  \\ [1ex] 
+            \end{tabular}
+            \end{table}
         	
+            \textbf{OP 16: Comparare il prezzo di un immobile al mq con quello degli immobili nella stessa zona}
+        	\begin{center}
+                \textbf{Con ridondanza}
+            \end{center}
+            \begin{table}[H]
+            \centering
+             \begin{tabular}{llll}
+             \rowcolor{yellow!20} \textbf{Concetto} & \textbf{Costrutto} & \textbf{Accessi} & \textbf{Tipo}\\ [0.5ex] 
+             \hline
+             Immobile & E & 1 & Lettura \\ 
+             Situato & R & 1 & Lettura \\ 
+             Zona & E & 1 & Lettura \\ 
+             \hline
+                \rowcolor{yellow!20} &   & \textbf{Totale:}  30.000 al giorno &  \\ [1ex] 
+             
+             \end{tabular}
+            \end{table}
+        	\begin{center}
+                \textbf{Senza ridondanza}
+            \end{center}
+            \begin{table}[H]
+            \centering
+             \begin{tabular}{llll}
+             \rowcolor{green!20} \textbf{Concetto} & \textbf{Costrutto} & \textbf{Accessi} & \textbf{Tipo}\\ [0.5ex] 
+             \hline
+             Immobile & E & 50 & Lettura \\ 
+             Situato & R & 50 & Lettura \\ 
+             Zona & E & 1 & Lettura \\ 
+             \hline
+                \rowcolor{green!20} &   & \textbf{Totale:}  1.010.000 al giorno &  \\ [1ex] 
+             
+             \end{tabular}
+            \end{table}
+            Il paragone del numero di letture e scritture necessarie alle operazioni nei due diversi scenari
+            dimostra la correttezza della scelta di mantenere la ridondanza. È importante notare tuttavia come
+            la maggiore efficienza sia resa possibile dal campo \textit{numeroImmobili} di \textit{zona} che
+            ci esonera dalla rilettura di tutti gli immobili di una determinata zona nel caso in cui dovessimo 
+            andare a modificare il \textit{costoMedioMq} in occasione della pubblicazione di un nuovo annuncio 
+            (ci basterà infatti moltiplicare costoMedioMq per numeroImmobili, sommare il costo al mq del nuovo 
+            immobile e dividere per il nuovo numeroImmobili, andando ad aggiornare quest'ultimo). \\
+            \\
+      
+
     	\section{Traduzione di entità e associazioni in relazioni}
-        	asdasd
+        stati(\underline{nome}, superficie, popolazione) \\
+        città(\underline{idCittà}, nome, popolazione, superficie, regione*, nomeStato) \\
+            FK: nomeStato REFERENCES stati
+        città\_anni(\underline{idCittà}: città, \underline{anno}: anni, punteggioAmbiente, punteggioTrasporto, punteggioEconomia, punteggioSanità, punteggioIstruzione) \\
+        anni(\underline{anno}) \\
+        ambiente(\underline{idCittà}: città, \underline{anno}: anni,  PM2.5media, percentualeSpazioVerdeUrbano) \\
+        trasporto(\underline{idCittà}: città, \underline{anno}: anni, percorrenzaMediaPendolare, autoProCapite) \\
+        economia(\underline{idCittà}: città, \underline{anno}: anni, PILProCapite, stipendioMedio, tassoDisoccupazione) \\
+        sanità(\underline{idCittà}: città, \underline{anno}: anni, aspettativaVita, ospedaliProCapite) \\
+        istruzione(\underline{idCittà}: città, \underline{anno}: anni, percentualeLaureati, percentualeDiplomati, numeroUniversità) \\
+        zone(\underline{idZona}, \underline{idCittà}: città, nome, costoMedioMq, numeroImmobili) \\
+        immobili(\underline{idImmobile}, metriQuadri, classeEnergetica*, annoCostruzione*, via, numeroCivico, numeroInterno*, piano*, numeroStanze*, numeroConquilini*, tipoImmobile) \\
+        annunci\_utente(\underline{idAnnuncio}, \underline{idImmobile}: immobili, \underline{email}: utenti, statoAnnuncio, dataCreazione) \\
+        aste(\underline{idAnnuncio}, \underline{idImmobile}: immobili, \underline{email}: giudici\_esecuzione, prezzoMinimo, rialzoMinimo, depositoCauzionale, dataFine, statoAnnuncio, dataCreazione) \\
+        rialzi(\underline{prezzoAttuale}, \underline{idAnnuncio}: aste, \underline{email}: utenti, prezzoAttuale, dataRialzo) \\
+        giudici\_esecuzione(\underline{email}, telefono*, nome) \\
+        utenti(\underline{email}, telefono*, nome) \\
+        messaggi(\underline{email}: utenti, \underline{idAnnuncio}: annunci\_utente, \underline{timestamp}, testo, mittente) \\
         	
     	\section{Schema relazionale finale}
         	asdasd
         	
+            
+    \chapter{Progettazione dell'applicazione}
+            	
     	\section{Descrizione dell'architettura dell'applicazione realizzata}
         	asdasd
-        	
-
-    \addcontentsline{toc}{chapter}{Progettazione dell'applicazione}
-	\chapter*{Progettazione dell'applicazione}
-	
-    	\addcontentsline{toc}{section}{Traduzione delle operazioni in query SQL} 
-    	\section*{Traduzione delle operazioni in query SQL}
+    	\section{Traduzione delle operazioni in query SQL}
     	    asdasd
  
 \end{document}
