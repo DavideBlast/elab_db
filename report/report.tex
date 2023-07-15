@@ -905,7 +905,7 @@
         	
 
             \section{Costruzione delle tabelle del DB in linguaggio SQL}
-
+                
                 \noindent
                 {\large \textbf{Ambiente}} \\
                 \texttt{
@@ -935,9 +935,10 @@
                     \null\quad\quad E-mail varchar NOT NULL FOREIGN KEY REFERENCES Utenti, \\
                     \null\quad\quad StatoAnnuncio       boolean         NOT NULL, \\
                     \null\quad\quad DataCreazione       datetime        NOT NULL, \\
-                    \null\quad\quad TipoAnnuncioUtente  tipo\_annuncio  NOT NULL, \\
-                    \null\quad\quad CostoMensile        int, \\
-                    \null\quad\quad Prezzo              int \\
+                    \null\quad\quad TipoAnnuncioUtente  tipo\_annuncio  NOT NULL \\
+                            \null\qquad\qquad CHECK(tipo\_annuncio in ('Vendita', 'Affitto')) \\
+                    \null\quad\quad CostoMensile        int             NOT NULL CHECK (CostoMensile $>$ 0), \\
+                    \null\quad\quad Prezzo              int             NOT NULL CHECK (Prezzo $>$ 0),\\
                     \null\quad\quad PRIMARY KEY(idAnnuncio, idImmobile, e-mail) \\
                     )
                 } \\
@@ -949,11 +950,13 @@
                     \null\quad\quad idAnnuncio          int         NOT NULL, \\
                     \null\quad\quad idImmobile int NOT NULL FOREIGN KEY REFERENCES Immobili, \\
                     \null\quad\quad E-mail varchar NOT NULL FOREIGN KEY REFERENCES Giudici\_Esecuzione, \\
-                    \null\quad\quad StatoAnnuncio       boolean     NOT NULL, \\
+                    \null\quad\quad StatoAnnuncio       stato\_annuncio     NOT NULL \\
+                            \null\qquad\qquad CHECK(stato\_annuncio in ('Attivo', 'Inattivo')), \\
                     \null\quad\quad DataCreazione       datetime    NOT NULL, \\
-                    \null\quad\quad PrezzoMinimo        int         NOT NULL, \\
-                    \null\quad\quad RialzoMinimo        int         NOT NULL, \\
-                    \null\quad\quad DepositoCauzionale  int         NOT NULL, \\
+                    \null\quad\quad PrezzoMinimo        int         NOT NULL CHECK (PrezzoMinimo $>$ 0), \\
+                    \null\quad\quad RialzoMinimo        int         NOT NULL CHECK (RialzoMinimo $>$ 0), \\
+                    \null\quad\quad DepositoCauzionale  int         NOT NULL \\
+                            \null\qquad\qquad CHECK (DepositoCauzionale $>$ 0), \\
                     \null\quad\quad DataFine            datetime    NOT NULL, \\
                     \null\quad\quad PRIMARY KEY(idAnnuncio, idImmobile, e-mail) \\
                     )
@@ -966,8 +969,8 @@
                     \null\quad\quad idCittà         int         NOT NULL, \\
                     \null\quad\quad NomeStato char(25) NOT NULL FOREIGN KEY REFERENCES Stati, \\
                     \null\quad\quad Nome            char(50)    NOT NULL, \\
-                    \null\quad\quad Popolazione     int         NOT NULL, \\
-                    \null\quad\quad Superficie      int         NOT NULL, \\
+                    \null\quad\quad Popolazione     int         NOT NULL CHECK (Popolazione $>$ 0), \\
+                    \null\quad\quad Superficie      int         NOT NULL CHECK (Superficie $>$ 0), \\
                     \null\quad\quad Regione         char(25), \\
                     \null\quad\quad PRIMARY KEY(idCittà, nomeStato) \\
                     )
@@ -979,11 +982,13 @@
                     CREATE TABLE Città\_Anni ( \\
                     \null\quad\quad idCittà int NOT NULL FOREIGN KEY REFERENCES Città, \\
                     \null\quad\quad Snno int NOT NULL FOREIGN KEY REFERENCES Anni, \\
-                    \null\quad\quad PunteggioAmbiente       int     NOT NULL, \\
-                    \null\quad\quad PunteggioTrasporto      int     NOT NULL, \\
-                    \null\quad\quad PunteggioEconomia       int     NOT NULL, \\
-                    \null\quad\quad PunteggioSanita         int     NOT NULL, \\
-                    \null\quad\quad PunteggioIstruzione     int     NOT NULL, \\
+                    \null\quad\quad PunteggioAmbiente       int     NOT NULL CHECK (PunteggioAmbiente $>$ 0), \\
+                    \null\quad\quad PunteggioTrasporto      int     NOT NULL \\
+                            \null\qquad\qquad CHECK (PunteggioTrasporto $>$ 0), \\
+                    \null\quad\quad PunteggioEconomia       int     NOT NULL CHECK (PunteggioEconomia $>$ 0), \\
+                    \null\quad\quad PunteggioSanita         int     NOT NULL CHECK (PunteggioSanita $>$ 0), \\
+                    \null\quad\quad PunteggioIstruzione     int     NOT NULL \\
+                            \null\qquad\qquad CHECK (PunteggioIstruzione $>$ 0), \\
                     \null\quad\quad PRIMARY KEY(idCittà, anno) \\
                     )
                 } \\
@@ -994,9 +999,9 @@
                     CREATE TABLE Economia ( \\
                     \null\quad\quad idCittà int NOT NULL FOREIGN KEY REFERENCES Città\_Anni, \\
                     \null\quad\quad Anno int NOT NULL FOREIGN KEY REFERENCES Città\_Anni, \\
-                    \null\quad\quad PILProCapite float NOT NULL, \\
-                    \null\quad\quad StipendioMedio int NOT NULL, \\
-                    \null\quad\quad TassoDisoccupazione float NOT NULL, \\
+                    \null\quad\quad PILProCapite            float   NOT NULL CHECK (PILProCapite $>$ 0), \\
+                    \null\quad\quad StipendioMedio          int     NOT NULL CHECK (StipendioMedio $>$ 0), \\
+                    \null\quad\quad TassoDisoccupazione     float   NOT NULL, \\
                     \null\quad\quad PRIMARY KEY(idCittà, anno) \\
                     )
                 } \\
@@ -1005,9 +1010,9 @@
                 {\large \textbf{Giudici\_Esecuzione}} \\
                 \texttt{
                     CREATE TABLE Giudici\_Esecuzione ( \\
-                    \null\quad\quad E-mail varchar PRIMARY KEY, \\
-                    \null\quad\quad Telefono varchar, \\
-                    \null\quad\quad Nome char(25) NOT NULL \\
+                    \null\quad\quad E-mail      varchar     PRIMARY KEY, \\
+                    \null\quad\quad Telefono    varchar     CHECK (len(Telefono)=10), \\
+                    \null\quad\quad Nome        char(25)    NOT NULL \\
                     )
                 } \\
 
@@ -1015,19 +1020,22 @@
                 {\large \textbf{Immobili}} \\
                 \texttt{
                     CREATE TABLE Immobili ( \\
-                    \null\quad\quad idImmobile int NOT NULL, \\
-                    \null\quad\quad idCittà int NOT NULL FOREIGN KEY REFERENCES Città, \\
-                    \null\quad\quad idZona int NOT NULL FOREIGN KEY REFERENCES Zone, \\
-                    \null\quad\quad MetriQuadri int NOT NULL, \\
-                    \null\quad\quad ClasseEnergetica classe\_energetica, \\
-                    \null\quad\quad AnnoCostruzione int, \\
-                    \null\quad\quad Via varchar NOT NULL, \\
-                    \null\quad\quad NumeroCivico varchar NOT NULL, \\
-                    \null\quad\quad TipoImmobile tipo\_immobile NOT NULL, \\
-                    \null\quad\quad NumeroInterno int, \\
-                    \null\quad\quad Piano int, \\
-                    \null\quad\quad NumeroStanze int, \\
-                    \null\quad\quad NumeroConquilini int, \\
+                    \null\quad\quad idImmobile           NOT NULL, \\
+                    \null\quad\quad idCittà              NOT NULL               FOREIGN KEY REFERENCES Città, \\
+                    \null\quad\quad idZona               NOT NULL               FOREIGN KEY REFERENCES Zone, \\
+                    \null\quad\quad MetriQuadri          NOT NULL               CHECK (MetriQuadri $>$ 0), \\
+                    \null\quad\quad ClasseEnergetica     classe\_energetica \\
+                            \null\qquad\qquad CHECK(classe\_energetica in ('A+', 'A', 'B', 'C', 'D', 'E', \\
+                            \null\qquad\qquad 'F', 'G')), \\
+                    \null\quad\quad AnnoCostruzione      int                    CHECK (AnnoCostruzione $>$ 0), \\
+                    \null\quad\quad Via                  varchar                NOT NULL, \\
+                    \null\quad\quad NumeroCivico         int                    NOT NULL, \\
+                    \null\quad\quad TipoImmobile         tipo\_immobile         NOT NULL \\
+                            \null\qquad\qquad CHECK(tipo\_immobile in ('Appartamento', 'Villa', 'Stanza')), \\
+                    \null\quad\quad NumeroInterno        int, \\
+                    \null\quad\quad Piano                int, \\
+                    \null\quad\quad NumeroStanze         int                    CHECK (NumeroStanze $>$ 0), \\
+                    \null\quad\quad NumeroConquilini     int, \\
                     \null\quad\quad PRIMARY KEY(idImmobile, idCittà, idZona) \\
                     )
                 } \\
@@ -1036,11 +1044,13 @@
                 {\large \textbf{Istruzione}} \\
                 \texttt{
                     CREATE TABLE Istruzione ( \\
-                    \null\quad\quad idCittà int NOT NULL FOREIGN KEY REFERENCES Città\_Anni, \\
-                    \null\quad\quad Anno int NOT NULL FOREIGN KEY REFERENCES Città\_Anni, \\
-                    \null\quad\quad PercentualeLaureati float NOT NULL, \\
-                    \null\quad\quad PercentualeDiplomati float NOT NULL, \\
-                    \null\quad\quad NumeroUniversita int NOT NULL, \\
+                    \null\quad\quad idCittà                 int         NOT NULL FOREIGN KEY REFERENCES Città\_Anni, \\
+                    \null\quad\quad Anno                    int         NOT NULL FOREIGN KEY REFERENCES Città\_Anni, \\
+                    \null\quad\quad PercentualeLaureati     float       NOT NULL \\
+                            \null\qquad\qquad CHECK (PercentualeLaureati $>$ 0), \\
+                    \null\quad\quad PercentualeDiplomati    float       NOT NULL \\
+                            \null\qquad\qquad CHECK (PercentualeDiplomati $>$ 0), \\
+                    \null\quad\quad NumeroUniversita        int         NOT NULL, \\
                     \null\quad\quad PRIMARY KEY(idCittà, anno) \\
                     )
                 } \\
@@ -1049,11 +1059,11 @@
                 {\large \textbf{Messaggi}} \\
                 \texttt{
                     CREATE TABLE Messaggi ( \\
-                    \null\quad\quad Timestamp int NOT NULL, \\
-                    \null\quad\quad E-mail varchar NOT NULL FOREIGN KEY REFERENCES Utenti, \\
-                    \null\quad\quad idAnnuncio int NOT NULL FOREIGN KEY REFERENCES Annunci\_Utente, \\
-                    \null\quad\quad Testo char(1024) NOT NULL, \\
-                    \null\quad\quad Mittente int NOT NULL, \\
+                    \null\quad\quad Timestamp   int         NOT NULL, \\
+                    \null\quad\quad E-mail      varchar     NOT NULL FOREIGN KEY REFERENCES Utenti, \\
+                    \null\quad\quad idAnnuncio  int         NOT NULL FOREIGN KEY REFERENCES Annunci\_Utente, \\
+                    \null\quad\quad Testo       char(1024)  NOT NULL, \\
+                    \null\quad\quad Mittente    int         NOT NULL, \\
                     \null\quad\quad PRIMARY KEY(timestamp, e-mail, idAnnuncio) \\
                     )
                 } \\
@@ -1062,10 +1072,10 @@
                 {\large \textbf{Rialzi}} \\
                 \texttt{
                     CREATE TABLE Rialzi ( \\
-                    \null\quad\quad PrezzoAttuale int NOT NULL, \\
-                    \null\quad\quad E-mail varchar NOT NULL FOREIGN KEY REFERENCES Utenti, \\
-                    \null\quad\quad idAnnuncio int NOT NULL FOREIGN KEY REFERENCES Annunci\_Utente, \\
-                    \null\quad\quad DataRialzo datetime NOT NULL, \\
+                    \null\quad\quad PrezzoAttuale   int         NOT NULL CHECK (PrezzoAttuale $>$ 0), \\
+                    \null\quad\quad E-mail          varchar     NOT NULL FOREIGN KEY REFERENCES Utenti, \\
+                    \null\quad\quad idAnnuncio      int         NOT NULL FOREIGN KEY REFERENCES Annunci\_Utente, \\
+                    \null\quad\quad DataRialzo      datetime    NOT NULL, \\
                     \null\quad\quad PRIMARY KEY(prezzoAttuale, e-mail, idAnnuncio) \\
                     )
                 } \\
@@ -1074,13 +1084,15 @@
                 {\large \textbf{Sanità}} \\
                 \texttt{
                     CREATE TABLE Sanità ( \\
-                    \null\quad\quad idCittà int NOT NULL FOREIGN KEY REFERENCES Città\_Anni, \\
-                    \null\quad\quad Anno int NOT NULL FOREIGN KEY REFERENCES Città\_Anni, \\
-                    \null\quad\quad AspettativaVita float NOT NULL, \\
-                    \null\quad\quad OspedaliProCapite float NOT NULL, \\
+                    \null\quad\quad idCittà             int     NOT NULL FOREIGN KEY REFERENCES Città\_Anni, \\
+                    \null\quad\quad Anno                int     NOT NULL FOREIGN KEY REFERENCES Città\_Anni, \\
+                    \null\quad\quad AspettativaVita     float   NOT NULL CHECK (AspettativaVita $>$ 0), \\
+                    \null\quad\quad OspedaliProCapite   float   NOT NULL \\
+                            \null\qquad\qquad CHECK (OspedaliProCapite $>$ 0), \\
                     \null\quad\quad PRIMARY KEY(idCittà, anno) \\
                     )
                 } \\
+
                 \noindent
                 {\large \textbf{Stati}} \\
                 \texttt{
@@ -1090,14 +1102,17 @@
                     \null\quad\quad Popolazione     int             CHECK (Popolazione $>$ 0) \\
                     )   
                 } \\
+
                 \noindent
                 {\large \textbf{Trasporto}} \\
                 \texttt{
                     CREATE TABLE Trasporto ( \\
-                    \null\quad\quad idCittà int NOT NULL FOREIGN KEY REFERENCES Città\_Anni, \\
-                    \null\quad\quad Anno int NOT NULL FOREIGN KEY REFERENCES Città\_Anni, \\
-                    \null\quad\quad PercorrenzaMediaPendolare float NOT NULL, \\
-                    \null\quad\quad AutoProCapite float NOT NULL, \\
+                    \null\quad\quad idCittà                     int     NOT NULL FOREIGN KEY REFERENCES Città\_Anni, \\
+                    \null\quad\quad Anno                        int     NOT NULL FOREIGN KEY REFERENCES Città\_Anni, \\
+                    \null\quad\quad PercorrenzaMediaPendolare   float   NOT NULL \\
+                            \null\qquad\qquad CHECK (PercorrenzaMediaPendolare $>$ 0), \\
+                    \null\quad\quad AutoProCapite               float   NOT NULL \\
+                            \null\qquad\qquad CHECK (AutoProCapite $>$ 0), \\
                     \null\quad\quad PRIMARY KEY(idCittà, anno) \\
                     )
                 } \\
@@ -1106,9 +1121,9 @@
                 {\large \textbf{Utenti}} \\
                 \texttt{
                     CREATE TABLE Utenti ( \\
-                    \null\quad\quad E-mail varchar PRIMARY KEY, \\
-                    \null\quad\quad Telefono varchar, \\
-                    \null\quad\quad Nome char(25) NOT NULL \\
+                    \null\quad\quad E-mail      varchar     PRIMARY KEY, \\
+                    \null\quad\quad Telefono    varchar     CHECK (len(Telefono)=10), \\
+                    \null\quad\quad Nome        char(25)    NOT NULL \\
                     )
                 } \\
 
@@ -1116,10 +1131,10 @@
                 {\large \textbf{Zone}} \\
                 \texttt{
                     CREATE TABLE Zone ( \\
-                    \null\quad\quad idZona int NOT NULL, \\
-                    \null\quad\quad idCittà int NOT NULL FOREIGN KEY REFERENCES Città, \\
-                    \null\quad\quad Nome char(25) NOT NULL, \\
-                    \null\quad\quad CostoMedioMq float NOT NULL, \\
+                    \null\quad\quad idZona          int         NOT NULL, \\
+                    \null\quad\quad idCittà         int         NOT NULL FOREIGN KEY REFERENCES Città, \\
+                    \null\quad\quad Nome            char(25)    NOT NULL, \\
+                    \null\quad\quad CostoMedioMq    float       NOT NULL CHECK (CostoMedioMq $>$ 0), \\
                     \null\quad\quad PRIMARY KEY(idZona, idCittà) \\
                     )
                 } \\
