@@ -860,25 +860,47 @@
             \\
       
 
-    	\section{Traduzione di entità e associazioni in relazioni}
-        stati(\underline{nome}, superficie, popolazione) \\
-        città(\underline{idCittà}, nome, popolazione, superficie, regione*, nomeStato) \\
-            FK: nomeStato REFERENCES stati
-        città\_anni(\underline{idCittà}: città, \underline{anno}: anni, punteggioAmbiente, punteggioTrasporto, punteggioEconomia, punteggioSanità, punteggioIstruzione) \\
-        anni(\underline{anno}) \\
-        ambiente(\underline{idCittà}: città, \underline{anno}: anni,  PM2.5media, percentualeSpazioVerdeUrbano) \\
-        trasporto(\underline{idCittà}: città, \underline{anno}: anni, percorrenzaMediaPendolare, autoProCapite) \\
-        economia(\underline{idCittà}: città, \underline{anno}: anni, PILProCapite, stipendioMedio, tassoDisoccupazione) \\
-        sanità(\underline{idCittà}: città, \underline{anno}: anni, aspettativaVita, ospedaliProCapite) \\
-        istruzione(\underline{idCittà}: città, \underline{anno}: anni, percentualeLaureati, percentualeDiplomati, numeroUniversità) \\
-        zone(\underline{idZona}, \underline{idCittà}: città, nome, costoMedioMq, numeroImmobili) \\
-        immobili(\underline{idImmobile}, metriQuadri, classeEnergetica*, annoCostruzione*, via, numeroCivico, numeroInterno*, piano*, numeroStanze*, numeroConquilini*, tipoImmobile) \\
-        annunci\_utente(\underline{idAnnuncio}, \underline{idImmobile}: immobili, \underline{email}: utenti, statoAnnuncio, dataCreazione) \\
-        aste(\underline{idAnnuncio}, \underline{idImmobile}: immobili, \underline{email}: giudici\_esecuzione, prezzoMinimo, rialzoMinimo, depositoCauzionale, dataFine, statoAnnuncio, dataCreazione) \\
-        rialzi(\underline{prezzoAttuale}, \underline{idAnnuncio}: aste, \underline{email}: utenti, prezzoAttuale, dataRialzo) \\
-        giudici\_esecuzione(\underline{email}, telefono*, nome) \\
-        utenti(\underline{email}, telefono*, nome) \\
-        messaggi(\underline{email}: utenti, \underline{idAnnuncio}: annunci\_utente, \underline{timestamp}, testo, mittente) \\
+        \section{Traduzione di entità e associazioni in relazioni}
+        \onehalfspacing
+        \textbf{stati}(\underline{nome}, superficie, popolazione) \\
+        \textbf{città}(\underline{idCittà}, nome, popolazione, superficie, regione*, nomeStato) \\ 
+            \null\quad\quad FK: nomeStato REFERENCES \textbf{stati} \\
+        \textbf{città\_anni}(\underline{idCittà}, \underline{anno}, punteggioAmbiente, punteggioTrasporto, punteggioEconomia, punteggioSanità, punteggioIstruzione) \\
+            \null\quad\quad FK: idCittà REFERENCES \textbf{città} \\
+            \null\quad\quad FK: anno REFERENCES \textbf{anni} \\
+        \textbf{anni}(\underline{anno}) \\
+        \textbf{ambiente}(\underline{idCittà}, \underline{anno}, PM2.5media, percentualeSpazioVerdeUrbano) \\
+            \null\quad\quad FK: idCittà REFERENCES \textbf{città} \\
+            \null\quad\quad FK: anno REFERENCES \textbf{anni} \\
+        \textbf{trasporto}(\underline{idCittà}, \underline{anno}, percorrenzaMediaPendolare, autoProCapite) \\
+            \null\quad\quad FK: idCittà REFERENCES \textbf{città} \\
+            \null\quad\quad FK: anno REFERENCES \textbf{anni} \\
+        \textbf{economia}(\underline{idCittà}, \underline{anno}, PILProCapite, stipendioMedio, tassoDisoccupazione) \\
+            \null\quad\quad FK: idCittà REFERENCES \textbf{città} \\
+            \null\quad\quad FK: anno REFERENCES \textbf{anni} \\
+        \textbf{sanità}(\underline{idCittà}, \underline{anno}, aspettativaVita, ospedaliProCapite) \\
+            \null\quad\quad FK: idCittà REFERENCES \textbf{città} \\
+            \null\quad\quad FK: anno REFERENCES \textbf{anni} \\
+        \textbf{istruzione}(\underline{idCittà}, \underline{anno}, percentualeLaureati, percentualeDiplomati, numeroUniversità) \\
+            \null\quad\quad FK: idCittà REFERENCES \textbf{città} \\
+            \null\quad\quad FK: anno REFERENCES \textbf{anni} \\
+        \textbf{zone}(\underline{idZona}, \underline{idCittà}, nome, costoMedioMq, numeroImmobili) \\
+            \null\quad\quad FK: idCittà REFERENCES \textbf{città} \\
+        \textbf{immobili}(\underline{idImmobile}, metriQuadri, classeEnergetica*, annoCostruzione*, via, numeroCivico, numeroInterno*, piano*, numeroStanze*, numeroConquilini*, tipoImmobile) \\
+        \textbf{annunci\_utente}(\underline{idAnnuncio}, \underline{idImmobile}, \underline{email}, statoAnnuncio, dataCreazione) \\
+            \null\quad\quad FK: idImmobile REFERENCES \textbf{immobili} \\
+            \null\quad\quad FK: email REFERENCES \textbf{utenti} \\
+        \textbf{aste}(\underline{idAnnuncio}, \underline{idImmobile}, \underline{email}, prezzoMinimo, rialzoMinimo, depositoCauzionale, dataFine, statoAnnuncio, dataCreazione) \\
+            \null\quad\quad FK: idImmobile REFERENCES \textbf{immobili} \\
+            \null\quad\quad FK: email REFERENCES \textbf{giudici\_esecuzione} \\
+        \textbf{rialzi}(\underline{prezzoAttuale}, \underline{idAnnuncio}, \underline{email}, prezzoAttuale, dataRialzo) \\
+            \null\quad\quad FK: idAnnuncio REFERENCES \textbf{aste} \\
+            \null\quad\quad FK: email REFERENCES \textbf{utenti} \\
+        \textbf{giudici\_esecuzione}(\underline{email}, telefono*, nome) \\
+        \textbf{utenti}(\underline{email}, telefono*, nome) \\
+        \textbf{messaggi}(\underline{email}, \underline{idAnnuncio}, \underline{timestamp}, testo, mittente) \\
+            \null\quad\quad FK: idAnnuncio REFERENCES \textbf{annunci\_utente} \\
+            \null\quad\quad FK: email REFERENCES \textbf{utenti} \\
         	
     	\section{Schema relazionale finale}
         	asdasd
