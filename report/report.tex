@@ -14,6 +14,7 @@
 \usepackage{hyperref}
 \usepackage[table]{xcolor}
 \usepackage{adjustbox}
+\usepackage{setspace}
 
 
 \begin{document}
@@ -902,15 +903,169 @@
             \null\quad\quad FK: idAnnuncio REFERENCES \textbf{annunci\_utente} \\
             \null\quad\quad FK: email REFERENCES \textbf{utenti} \\
         	
-    	\section{Schema relazionale finale}
-        	asdasd
-        	
+
+            \section{Costruzione delle tabelle del DB in linguaggio SQL}
+                \textbf{Stati}
+                CREATE TABLE Stati(
+                    Nome            char(25)    PRIMARY KEY,
+                    Superficie      int         CHECK (Superficie > 0)
+                    Popolazione     int         CHECK (Popolazione > 0)
+                )
             
-    \chapter{Progettazione dell'applicazione}
-            	
+                CREATE TABLE Ambiente ( \\
+                    FOREIGN KEY(idCittà) REFERENCES Città\_Anni, \\
+                    FOREIGN KEY(anno) REFERENCES Città\_Anni, \\
+                    PM2.5media      float       NOT NULL, \\
+                    PercentualeSpazioVerdeUrbano float(1) NOT NULL, \\
+                    UNIQUE(idCittà, anno) \\
+                    ) \\
+
+                CREATE TABLE Anno ( \\
+                    Anno int PRIMARY KEY \\
+                    ) \\
+
+                CREATE TABLE Annuncio\_Utente ( \\
+                    idAnnuncio int PRIMARY KEY, \\ 
+                    FOREIGN KEY(idImmobile) REFERENCES Immobili, \\
+                    FOREIGN KEY(e\_mail) REFERENCES Utenti, \\
+                    StatoAnnuncio boolean NOT NULL, \\
+                    DataCreazione datetime NOT NULL, \\
+                    TipoAnnuncioUtente tipo\_annuncio NOT NULL, \\
+                    CostoMensile int, \\
+                    Prezzo int, \\
+                    ) \\
+
+                CREATE TABLE ASTA (
+                    idAnnuncio char(1) NOT NULL,
+                    statoAnnuncio char(1) NOT NULL,
+                    dataCreazione char(1) NOT NULL,
+                    prezzoMinimo char(1) NOT NULL,
+                    rialzoMinimo char(1) NOT NULL,
+                    depositoCauzionale char(1) NOT NULL,
+                    dataFine char(1) NOT NULL,
+                    e\_mail char(1) NOT NULL,
+                    idImmobile char(1) NOT NULL,
+                    constraint ID\_ASTA\_ID primary key (idAnnuncio))
+
+                CREATE TABLE CITTA (
+                    idCitta -- Index attribute not implemented -- NOT NULL,
+                    nome char(1) NOT NULL,
+                    popolazione char(1) NOT NULL,
+                    superficie char(1) NOT NULL,
+                    regione char(1),
+                    nomeStato char(1) NOT NULL,
+                    constraint ID\_CITTA\_ID primary key (idCitta))
+
+                CREATE TABLE CITTA\_ANNO (
+                    anno char(1) NOT NULL,
+                    idCitta -- Index attribute not implemented -- NOT NULL,
+                    punteggioAmbiente char(1) NOT NULL,
+                    punteggioTrasporto char(1) NOT NULL,
+                    punteggioEconomia char(1) NOT NULL,
+                    punteggioSanita char(1) NOT NULL,
+                    punteggioIstruzione char(1) NOT NULL,
+                    constraint ID\_CITTA\_ANNO\_ID primary key (idCitta, anno))
+
+                CREATE TABLE Economia (
+                    FOREIGN KEY(idCittà) REFERENCES Città\_Anni, \\
+                    FOREIGN KEY(anno) REFERENCES Città\_Anni, \\
+                    PILProCapite float NOT NULL, \\
+                    StipendioMedio int NOT NULL, \\
+                    TassoDisoccupazione float NOT NULL, \\
+                    UNIQUE(idCittà, anno)) \\
+
+                CREATE TABLE GIUDICE\_ESECUZIONE (
+                    e\_mail char(1) NOT NULL,
+                    telefono char(1),
+                    nome char(1) NOT NULL,
+                    constraint ID\_GIUDICE\_ESECUZIONE\_ID primary key (e\_mail))
+
+                CREATE TABLE IMMOBILE (
+                    idImmobile char(1) NOT NULL,
+                    metriQuadri char(1) NOT NULL,
+                    classeEnergetica char(1),
+                    annoCostruzione char(1),
+                    via char(1) NOT NULL,
+                    numeroCivico char(1) NOT NULL,
+                    tipoImmobile char(1) NOT NULL,
+                    numeroInterno char(1),
+                    piano char(1),
+                    numeroStanze char(1),
+                    numeroConquilini char(1),
+                    idCitta char(1) NOT NULL,
+                    idZona char(1) NOT NULL,
+                    constraint ID\_IMMOBILE\_ID primary key (idImmobile))
+
+                CREATE TABLE Istruzione (
+                    FOREIGN KEY(idCittà) REFERENCES Città\_Anni, \\
+                    FOREIGN KEY(anno) REFERENCES Città\_Anni, \\
+                    PercentualeLaureati float NOT NULL, \\
+                    PercentualeDiplomati float NOT NULL, \\
+                    NumeroUniversita int NOT NULL, \\
+                    UNIQUE(idCittà, anno))
+
+                CREATE TABLE MESSAGGIO (
+                    idAnnuncio char(1) NOT NULL,
+                    testo char(1) NOT NULL,
+                    mittente char(1) NOT NULL,
+                    timestamp char(1) NOT NULL,
+                    e\_mail char(1) NOT NULL,
+                    constraint ID\_MESSAGGIO\_ID primary key (idAnnuncio, timestamp))
+
+                CREATE TABLE RIALZO (
+                    idAnnuncio char(1) NOT NULL,
+                    prezzoAttuale char(1) NOT NULL,
+                    dataRialzo char(1) NOT NULL,
+                    e\_mail char(1) NOT NULL,
+                    constraint ID\_RIALZO\_ID primary key (idAnnuncio, prezzoAttuale))
+
+                CREATE TABLE Sanità (
+                    FOREIGN KEY(idCittà) REFERENCES Città\_Anni, \\
+                    FOREIGN KEY(anno) REFERENCES Città\_Anni, \\
+                    AspettativaVita float NOT NULL, \\
+                    OspedaliProCapite float NOT NULL, \\
+                    UNIQUE(idCittà, anno))
+
+                CREATE TABLE Stati (
+                    Nome char(25) NOT NULL,
+                    Superficie int NOT NULL,
+                    Popolazione int NOT NULL,
+                    constraint ID\_STATO\_ID primary key (nome))
+
+                CREATE TABLE Trasporto (
+                    FOREIGN KEY(idCittà) REFERENCES Città\_Anni, \\
+                    FOREIGN KEY(anno) REFERENCES Città\_Anni, \\
+                    PercorrenzaMediaPendolare float NOT NULL, \\
+                    AutoProCapite float NOT NULL, \\
+                    UNIQUE(idCittà, anno))
+
+                CREATE TABLE UTENTE (
+                    e\_mail char(1) NOT NULL,
+                    telefono char(1),
+                    nome char(1) NOT NULL,
+                    constraint ID\_UTENTE\_ID primary key (e\_mail))
+
+                CREATE TABLE ZONA (
+                    idCitta char(1) NOT NULL,
+                    idZona char(1) NOT NULL,
+                    nome char(1) NOT NULL,
+                    costoMedioMq char(1) NOT NULL,
+                    constraint ID\_ZONA\_ID primary key (idCitta, idZona))
+
+            \section{Schema relazionale finale}
+                \begin{figure}[H]
+                    \centering{}
+                    \includegraphics[width=\linewidth]{./images/relational_scheme.png}
+                    \caption{Schema relazionale finale}
+            \end{figure}
+                
+            \section{Traduzione delle operazioni in query SQL}
+                asdasd
+            
+            
+        \chapter{Progettazione dell'applicazione}
+            
     	\section{Descrizione dell'architettura dell'applicazione realizzata}
         	asdasd
-    	\section{Traduzione delle operazioni in query SQL}
-    	    asdasd
  
 \end{document}
