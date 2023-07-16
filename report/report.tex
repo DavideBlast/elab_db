@@ -109,9 +109,6 @@
         \end{figure}
 
         \section{Divisione in zone e di immobili}
-        
-        ...
-
         Introducendo una gerarchia per differenziare le varie tipologie di \textit{immobili} inserite negli annunci,
         ogni immobile dovrà essere necessariamente contraddistinto da un ID proprio. Perchè? Se tutte le dimore
         fossero case indipendenti, allora potrebbero essere identificate da attributi che ne specifichino la posizione.
@@ -147,7 +144,7 @@
             \caption{La terza versione dello schema concettuale}
         \end{figure}
         	
-    	\section{Schema finale}
+    	\section{Introduzione della messaggistica}
         La messaggistica viene modellata attraverso le associazioni tra le entità \textit{utente $\Leftrightarrow$ messaggio} e 
         \textit{messaggio $\Leftrightarrow$ annuncio\_utente}. In prima battuta ci si potrebbe erroneamente domandare il motivo 
         del non aver optato per una relazione ad anello tra \textit{utenti}, con il testo del messaggio racchiuso in un campo 
@@ -160,7 +157,8 @@
         si è deciso di interporre l'enitità \textit{messaggio} tra \textit{utente}, nonchè il potenziale acquirente, ed \textit{annuncio\_utente}, 
         ossia il gestore dell’inserzione nelle vesti del suo annuncio. I messaggi all’interno di ogni chat vengono identificati dall’istante 
         temporale in cui sono inviati (timestamp). \\
-        \\
+        
+        \section{Aste e giudici}
         Le aste sono tipologie di annunci la cui gestione (dunque pubblicazione) è riservata ad i giudici di esecuzione.
         In particolare, ciascuna asta verrà amministrata da uno ed un solo giudice, il quale però potrà dirigerne fino ad N.
         Per riprodurre le dinamiche di ascesa del prezzo ed infine di vendita, viene istituita l’entità rialzo. \\
@@ -271,13 +269,13 @@
              20 & Stilare una top 5 città per una o più categorie & 3.000 al giorno \\
              21 & Classificare città in base all'evoluzione in una o più categorie rispetto all'anno precedente & 500 al giorno \\ 
              22 & Ordinare le città in base a valori specifici di una o più categorie & 1.000 al giorno \\ 
-             23 & Calcolare performance di uno stato in una o più categorie (da ogni città) & 2.000 al giorno \\ [1ex]
+             23 & Calcolare performance di uno stato in una o più categorie (da ogni città) & 2.000 al giorno \\ 
+             24 & Aggiornamento annuale dei punteggi di una città (dati i campi delle categorie) & 1 all'anno \\ [1ex]
             \end{tabular}
             \end{adjustbox}
             \end{table}
         	
-    	\section{Schemi di navigazione e tabelle degli accessi}
-        	
+    	\section{Schemi di navigazione e tabelle degli accessi}	
 
         \textbf{OP 1: Registrare un nuovo account}
         	\begin{table}[H]
@@ -719,6 +717,21 @@
              
              \end{tabular}
             \end{table}
+
+            \textbf{OP 24: Aggiornamento annuale dei punteggi di una città (dati i campi delle categorie)}
+        	\begin{table}[H]
+            \centering
+             \begin{tabular}{llll}
+             \rowcolor{yellow!20} \textbf{Concetto} & \textbf{Costrutto} & \textbf{Accessi} & \textbf{Tipo}\\ [0.5ex] 
+             \hline
+             Città & E & 1 & Lettura \\ 
+             Appartenenza & R & 1 & Lettura \\ 
+             Città\_Anno & E & 1 & Lettura \\ 
+             \hline
+                \rowcolor{yellow!20} &   & \textbf{Totale:} 85L $\rightarrow$ 170.000 al giorno &  \\ [1ex] 
+             
+             \end{tabular}
+            \end{table}
         
         \section{Raffinamento dello schema}
             \subsection*{Eliminazione delle gerarchie}
@@ -933,7 +946,8 @@
                     \null\quad\quad idAnnuncio          int             NOT NULL, \\ 
                     \null\quad\quad idImmobile int NOT NULL FOREIGN KEY REFERENCES Immobili, \\
                     \null\quad\quad E-mail varchar NOT NULL FOREIGN KEY REFERENCES Utenti, \\
-                    \null\quad\quad StatoAnnuncio       boolean         NOT NULL, \\
+                    \null\quad\quad StatoAnnuncio       stato\_annuncio         NOT NULL \\
+                            \null\qquad\qquad CHECK(stato\_annuncio in ('Attivo', 'Inattivo')), \\
                     \null\quad\quad DataCreazione       datetime        NOT NULL, \\
                     \null\quad\quad TipoAnnuncioUtente  tipo\_annuncio  NOT NULL \\
                             \null\qquad\qquad CHECK(tipo\_annuncio in ('Vendita', 'Affitto')) \\
@@ -981,7 +995,7 @@
                 \texttt{
                     CREATE TABLE Città\_Anni ( \\
                     \null\quad\quad idCittà int NOT NULL FOREIGN KEY REFERENCES Città, \\
-                    \null\quad\quad Snno int NOT NULL FOREIGN KEY REFERENCES Anni, \\
+                    \null\quad\quad Anno int NOT NULL FOREIGN KEY REFERENCES Anni, \\
                     \null\quad\quad PunteggioAmbiente       int     NOT NULL CHECK (PunteggioAmbiente $>$ 0), \\
                     \null\quad\quad PunteggioTrasporto      int     NOT NULL \\
                             \null\qquad\qquad CHECK (PunteggioTrasporto $>$ 0), \\
@@ -1147,9 +1161,72 @@
             \end{figure}
                 
             \section{Traduzione delle operazioni in query SQL}
-                asdasd
+
+            \textbf{OP 1: Registrare un nuovo account} \\
+            INSERT INTO Utenti (E-mail, Telefono, Nome) \\
+            VALUES (?, ?, ?)
+            
+            \textbf{OP 2: Pubblicare un annuncio immobiliare (vendita o affitto)} \\
+            IF (SELECT *
+                FROM Immobili
+                WHERE Via = ? AND NumeroCivico = ? AND idCittà = ?) IS NOT NULL
+            
+            Se tale condizione risulta soddisfatta, procediamo all'inizializzazione di \textit{annuncio\_utente} con i
+            parametri appena trovati. Se non dovesse essere soddisfatta, vengono inseriti i dati di input.
+
+            INSERT INTO Annunci\_Utente (idAnnuncio, idImmobile, E-mail, StatoAnnuncio, DataCreazione, TipoAnnuncioUtente, CostoMensile, Prezzo)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+
+            \textbf{OP 3: Visualizzare annunci immobiliari attivi di una città in ordine cronologico} \\
+            SELECT *
+            FROM Annunci\_Utente 
+            WHERE StatoAnnuncio = 'Attivo' AND idCittà = ?
+            ORDER BY DataCreazione DESC
+
+            \textbf{OP 4: Suddividere gli annunci in vendita, affitto o asta all’interno di una città} \\
             
             
+            \textbf{OP 5: Distinguere annunci per tipologia immobile (appartamento, villa o stanza) in una data città} \\
+             \\
+            \textbf{OP 6: Ordinare gli annunci in base a particolari filtri sull'immobile (e.g. metratura, classe energetica)} \\
+             \\
+            \textbf{OP 7: Filtrare gli annunci per zona} \\
+             \\
+            \textbf{OP 8: Ordinare gli annunci di affitto per costo mensile} \\
+             \\
+            \textbf{OP 9: Filtrare gli annunci delle stanze in base ad un numero massimo di coinquilini} \\
+             \\
+            \textbf{OP 10: Mostrare aste attive in una città} \\
+             \\
+            \textbf{OP 11: Ordinare le aste per prezzo attuale crescente} \\
+             \\
+            \textbf{OP 12: Effettuare un rialzo all’interno di un’asta (controllando la sua validità)} \\
+             \\
+            \textbf{OP 13: Contattare un utente in merito ad un annuncio creato} \\
+             \\
+            \textbf{OP 14: Ricostruire una conversazione tra due utenti} \\
+             \\
+            \textbf{OP 15: Andamento del prezzo di un immobile in funzione del tempo} \\
+             \\
+            \textbf{OP 16: Comparare il prezzo di un immobile al mq con quello degli immobili nella stessa zona} \\
+             \\
+            \textbf{OP 17: Comparare il prezzo di un immobile al mq con quello degli immobili nella stessa città} \\
+             \\
+            \textbf{OP 18: Comparare il prezzo medio al mq di una zona con quello della città} \\
+             \\
+            \textbf{OP 19: Ordinare le zone di una città per costo medio al mq} \\
+             \\
+            \textbf{OP 20: Stilare una top 5 città per una o più categorie} \\
+             \\
+            \textbf{OP 21: Classificare città in base all’evoluzione in una o più categorie rispetto all’anno precedente} \\
+             \\
+            \textbf{OP 22: Ordinare le città in base a valori specifici di una o più categorie} \\
+             \\
+            \textbf{OP 23: Calcolare performance di uno stato in una o più categorie (da ogni città)} \\
+             \\
+            \textbf{OP 24: Aggiornamento annuale dei punteggi di una città (dati i campi delle categorie)} \\
+            
+
         \chapter{Progettazione dell'applicazione}
             
     	\section{Descrizione dell'architettura dell'applicazione realizzata}
