@@ -1165,88 +1165,126 @@
             \section{Traduzione delle operazioni in query SQL}
 
             \textbf{OP 1: Registrare un nuovo account} \\
-            INSERT INTO Utenti (E-mail, Telefono, Nome) \\
-            VALUES (?, ?, ?)
+            \texttt{
+                \textcolor{blue}{INSERT INTO} Utenti (E-mail, Telefono, Nome) \\
+                \textcolor{blue}{VALUES} (?, ?, ?) \\
+            } 
             
+            \noindent
             \textbf{OP 2: Pubblicare un annuncio immobiliare (vendita o affitto)} \\
-            IF (SELECT * \\
-                FROM Immobili \\
-                WHERE Via = ? AND NumeroCivico = ? AND idCittà = ?) IS NOT NULL \\
-            
+            \texttt{
+                \textcolor{blue}{IF} (\textcolor{blue}{SELECT} * \\
+                \textcolor{blue}{FROM} Immobili \\
+                \textcolor{blue}{WHERE} Via = ? \textcolor{blue}{AND} NumeroCivico = ? \textcolor{blue}{AND} idCittà = ?) \textcolor{blue}{IS NOT NULL} \\
+            } \\
             Se tale condizione risulta soddisfatta, procediamo all'inizializzazione di \textit{annuncio\_utente} con i
-            parametri appena trovati. Se non dovesse essere soddisfatta, vengono inseriti i dati di input. \\
+            parametri appena trovati. Se non dovesse essere soddisfatta, vengono inseriti i dati di input. \\ \\
+            \texttt{
+                \textcolor{blue}{INSERT INTO} Annunci\_Utente (idAnnuncio, idImmobile, E-mail, StatoAnnuncio, DataCreazione, TipoAnnuncioUtente, CostoMensile, Prezzo) \\
+                \textcolor{blue}{VALUES} (?, ?, ?, ?, ?, ?, ?, ?) \\
+            }
 
-            INSERT INTO Annunci\_Utente (idAnnuncio, idImmobile, E-mail, StatoAnnuncio, DataCreazione, TipoAnnuncioUtente, CostoMensile, Prezzo) \\
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?) \\
-
+            \noindent
             \textbf{OP 3: Visualizzare annunci immobiliari attivi di una città in ordine cronologico} \\
-            SELECT * \\
-            FROM Annunci\_Utente, Aste \\
-            WHERE StatoAnnuncio = 'Attivo' AND idCittà = ? \\
-            ORDER BY DataCreazione DESC \\
-
-            \textbf{OP 4: Suddividere gli annunci in vendita, affitto o asta all’interno di una città} \\
-            SELECT * \\
-            FROM Annunci\_Utente, Aste \\
-            WHERE idCittà = ? AND StatoAnnuncio = 'Attivo' AND (Annunci\_Utente.TipoAnnuncioUtente = ? OR Aste.PrezzoMinimo IS NOT NULL) \\
-            ORDER BY DataCreazione DESC \\
+            \texttt{
+                \textcolor{blue}{SELECT} * \\
+                \textcolor{blue}{FROM} Annunci\_Utente, Aste \\
+                \textcolor{blue}{WHERE} StatoAnnuncio = 'Attivo'  \textcolor{blue}{AND} idCittà = ? \\
+                \textcolor{blue}{ORDER BY} DataCreazione  \textcolor{blue}{DESC} \\
+            }
             
+            \noindent
+            \textbf{OP 4: Suddividere gli annunci in vendita, affitto o asta all’interno di una città} \\
+            \texttt{
+                \textcolor{blue}{SELECT} * \\
+                \textcolor{blue}{FROM} Annunci\_Utente, Aste \\
+                \textcolor{blue}{WHERE} idCittà = ?  \textcolor{blue}{AND} StatoAnnuncio = 'Attivo'  \\
+                \textcolor{blue}{AND} (Annunci\_Utente.TipoAnnuncioUtente = ?  \textcolor{blue}{OR} Aste.PrezzoMinimo \textcolor{blue}{IS NOT NULL}) \\
+                \textcolor{blue}{ORDER BY} DataCreazione  \textcolor{blue}{DESC} \\
+            }
+
+            \noindent
             \textbf{OP 5: Distinguere annunci per tipologia immobile (appartamento, villa o stanza) in una data città} \\
-             \\
+            
+            \noindent
             \textbf{OP 6: Ordinare gli annunci in base a particolari filtri sull'immobile (e.g. metratura, classe energetica)} \\
-             \\
+            
+            \noindent
             \textbf{OP 7: Filtrare gli annunci per zona} \\
-            SELECT * \\
-            FROM Annunci\_Utente, Aste \\
-            WHERE idZona = ? AND StatoAnnuncio = 'Attivo' \\
-            ORDER BY DataCreazione DESC \\
-
+            \texttt{
+                \textcolor{blue}{SELECT} * \\
+                \textcolor{blue}{FROM} Annunci\_Utente, Aste \\
+                \textcolor{blue}{WHERE} idZona = ?   \textcolor{blue}{AND} StatoAnnuncio = 'Attivo' \\
+                \textcolor{blue}{ORDER BY} DataCreazione   \textcolor{blue}{DESC} \\
+            }
+            
+            \noindent
             \textbf{OP 8: Ordinare gli annunci di affitto per costo mensile} \\
-             \\
+            
+            \noindent
             \textbf{OP 9: Filtrare gli annunci delle stanze in base ad un numero massimo di coinquilini} \\
-             \\
+            
+            \noindent
             \textbf{OP 10: Mostrare aste attive in una città} \\
-            SELECT * \\
-            FROM  Aste \\
-            WHERE idCittà = ? AND StatoAnnuncio = 'Attivo' \\
-            ORDER BY DataCreazione DESC \\
-
+            \texttt{
+                \textcolor{blue}{SELECT} * \\
+                \textcolor{blue}{FROM}  Aste \\
+                \textcolor{blue}{WHERE} idCittà = ?  \textcolor{blue}{AND} StatoAnnuncio = 'Attivo' \\
+                \textcolor{blue}{ORDER BY} DataCreazione  \textcolor{blue}{DESC} \\
+            }
+            
+            \noindent
             \textbf{OP 11: Ordinare le aste per prezzo attuale crescente} \\
-             \\
+            
+            \noindent
             \textbf{OP 12: Effettuare un rialzo all’interno di un’asta (controllando la sua validità)} \\
-             \\
+            
+            \noindent
             \textbf{OP 13: Contattare un utente in merito ad un annuncio creato} \\
-             \\
+            
+            \noindent
             \textbf{OP 14: Ricostruire una conversazione tra due utenti} \\
-             \\
+            
+            \noindent
             \textbf{OP 15: Andamento del prezzo di un immobile in funzione del tempo} \\
-             \\
+            
+            \noindent
             \textbf{OP 16: Comparare il prezzo di un immobile al mq con quello degli immobili nella stessa zona} \\
-             \\
+            
+            \noindent
             \textbf{OP 17: Comparare il prezzo di un immobile al mq con quello degli immobili nella stessa città} \\
-             \\
+            
+            \noindent
             \textbf{OP 18: Comparare il prezzo medio al mq di una zona con quello della città} \\
-             \\
+            
+            \noindent
             \textbf{OP 19: Ordinare le zone di una città per costo medio al mq} \\
-            SELECT * \\
-            FROM Zone \\
-            WHERE idCittà = ? \\
-            ORDER BY CostoMedioMq DESC \\
+            \texttt{
+                \textcolor{blue}{SELECT} * \\
+                \textcolor{blue}{FROM} Zone \\
+                \textcolor{blue}{WHERE} idCittà = ? \\
+                \textcolor{blue}{ORDER BY} CostoMedioMq \textcolor{blue}{DESC} \\
+            }
 
             \textbf{OP 20: Stilare una top 5 città per una o più categorie} \\
-             \\
-            \textbf{OP 21: Classificare città in base all’evoluzione in una o più categorie rispetto all’anno precedente} \\
-             \\
-            \textbf{OP 22: Ordinare le città in base a valori specifici di una o più categorie} \\
-            SELECT A.percentualeSpazioVerdeUrbano, A.idCittà, C.nome, C.anno, C.idCittà \\
-            FROM Ambiente A, Città\_Anni C \\
-            WHERE A.idCittà = C.idCittà  \\
-            AND C.anno = ? \\
-            ORDER BY A.percentualeSpazioVerdeUrbano DESC \\
-
             
+            \noindent
+            \textbf{OP 21: Classificare città in base all’evoluzione in una o più categorie rispetto all’anno precedente} \\
+            
+            \noindent
+            \textbf{OP 22: Ordinare le città in base a valori specifici di una o più categorie} \\
+            \texttt{
+                \textcolor{blue}{SELECT} A.percentualeSpazioVerdeUrbano, A.idCittà, C.nome, C.anno, C.idCittà \\
+                \textcolor{blue}{FROM} Ambiente A, Città\_Anni C \\
+                \textcolor{blue}{WHERE} A.idCittà = C.idCittà  \\
+                \textcolor{blue}{AND} C.anno = ? \\
+                \textcolor{blue}{ORDER BY} A.percentualeSpazioVerdeUrbano \textcolor{blue}{DESC} \\
+            }
+            
+            \noindent
             \textbf{OP 23: Calcolare performance di uno stato in una o più categorie (da ogni città)} \\
-             \\
+            
+            \noindent
             \textbf{OP 24: Aggiornamento annuale dei punteggi di una città (dati i campi delle categorie)} \\
             
 
