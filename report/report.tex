@@ -901,8 +901,9 @@
             \null\quad\quad FK: anno REFERENCES \textbf{anni} \\
         \textbf{zone}(\underline{idZona}, \underline{idCittà}, nome, costoMedioMq, numeroImmobili) \\
             \null\quad\quad FK: idCittà REFERENCES \textbf{città} \\
-        \textbf{immobili}(\underline{idImmobile}, metriQuadri, classeEnergetica*, annoCostruzione*, via, numeroCivico, numeroInterno*, piano*, numeroStanze*, numeroConquilini*, tipoImmobile) \\
-        \textbf{annunci\_utente}(\underline{idAnnuncio}, \underline{idImmobile}, \underline{email}, statoAnnuncio, dataCreazione) \\
+        \textbf{immobili}(\underline{idImmobile}, \underline{idZona}, metriQuadri, classeEnergetica*, annoCostruzione*, via, numeroCivico, numeroInterno*, piano*, numeroStanze*, numeroConquilini*, tipoImmobile) \\
+            \null\quad\quad FK: idZona REFERENCES \textbf{zone} \\
+        \textbf{annunci\_utente}(\underline{idAnnuncio}, \underline{idImmobile}, \underline{email}, statoAnnuncio, dataCreazione, tipoAnnuncioUtente, costoMensiile*, prezzo*) \\
             \null\quad\quad FK: idImmobile REFERENCES \textbf{immobili} \\
             \null\quad\quad FK: email REFERENCES \textbf{utenti} \\
         \textbf{aste}(\underline{idAnnuncio}, \underline{idImmobile}, \underline{email}, prezzoMinimo, rialzoMinimo, depositoCauzionale, dataFine, statoAnnuncio, dataCreazione) \\
@@ -1036,7 +1037,6 @@
                 \texttt{
                     CREATE TABLE Immobili ( \\
                     \null\quad\quad idImmobile           NOT NULL, \\
-                    \null\quad\quad idCittà              NOT NULL               FOREIGN KEY REFERENCES Città, \\
                     \null\quad\quad idZona               NOT NULL               FOREIGN KEY REFERENCES Zone, \\
                     \null\quad\quad MetriQuadri          NOT NULL               CHECK (MetriQuadri $>$ 0), \\
                     \null\quad\quad ClasseEnergetica     classe\_energetica \\
@@ -1150,6 +1150,7 @@
                     \null\quad\quad idCittà         int         NOT NULL FOREIGN KEY REFERENCES Città, \\
                     \null\quad\quad Nome            char(25)    NOT NULL, \\
                     \null\quad\quad CostoMedioMq    float       NOT NULL CHECK (CostoMedioMq $>$ 0), \\
+                    \null\quad\quad numeroImmobili  int         NOT NULL CHECK (numeroImmobili $\geq$ 0), \\
                     \null\quad\quad PRIMARY KEY(idZona, idCittà) \\
                     )
                 } \\
