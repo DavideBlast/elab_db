@@ -899,8 +899,7 @@
         \textbf{istruzione}(\underline{idCittà}, \underline{anno}, percentualeLaureati, percentualeDiplomati, numeroUniversità) \\
             \null\quad\quad FK: idCittà REFERENCES \textbf{città} \\
             \null\quad\quad FK: anno REFERENCES \textbf{anni} \\
-        \textbf{zone}(\underline{idZona}, \underline{idCittà}, nome, costoMedioMq, numeroImmobili) \\
-            \null\quad\quad FK: idCittà REFERENCES \textbf{città} \\
+        \textbf{zone}(\underline{idZona}, idCittà, nome, costoMedioMq, numeroImmobili) \\
         \textbf{immobili}(\underline{idImmobile}, \underline{idZona}, metriQuadri, classeEnergetica*, annoCostruzione*, via, numeroCivico, numeroInterno*, piano*, numeroStanze*, numeroConquilini*, tipoImmobile) \\
             \null\quad\quad FK: idZona REFERENCES \textbf{zone} \\
         \textbf{annunci\_utente}(\underline{idAnnuncio}, \underline{idImmobile}, \underline{email}, statoAnnuncio, dataCreazione, tipoAnnuncioUtente, costoMensiile*, prezzo*) \\
