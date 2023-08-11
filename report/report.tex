@@ -1163,7 +1163,7 @@
 
             \textbf{OP 1: Registrare un nuovo account} \\
             \texttt{
-                \textcolor{blue}{INSERT INTO} Utenti (E-mail, Telefono, Nome) \\
+                \textcolor{blue}{INSERT INTO} Utenti (e-mail, telefono, nome) \\
                 \textcolor{blue}{VALUES} (?, ?, ?) \\
             } 
             
@@ -1172,13 +1172,13 @@
             \texttt{
                 \textcolor{blue}{IF} (\textcolor{blue}{SELECT} \textcolor{blue}{COUNT}(*) \\
                 \null\quad\quad\textcolor{blue}{FROM} Immobili \\
-                \null\quad\quad\textcolor{blue}{WHERE} Via = ? \textcolor{blue}{AND} NumeroCivico = ? \textcolor{blue}{AND} idCittà = ? > 0, \\
+                \null\quad\quad\textcolor{blue}{WHERE} via = ? \textcolor{blue}{AND} numeroCivico = ? \textcolor{blue}{AND} idCittà = ? > 0, \\
                 \null\quad\quad TRUE, FALSE)  \\
             } \\
             Se tale condizione risulta soddisfatta, procediamo all'inizializzazione di \textit{annuncio\_utente} con i
             parametri appena trovati. Se non dovesse essere soddisfatta, vengono inseriti i dati di input. \\ \\
             \texttt{
-                \textcolor{blue}{INSERT INTO} Annunci\_Utente (idAnnuncio, idImmobile, E-mail, StatoAnnuncio, DataCreazione, TipoAnnuncioUtente, CostoMensile, Prezzo) \\
+                \textcolor{blue}{INSERT INTO} Annunci\_Utente (idAnnuncio, idImmobile, e-mail, statoAnnuncio, dataCreazione, tipoAnnuncioUtente, costoMensile, prezzo) \\
                 \textcolor{blue}{VALUES} (?, ?, ?, ?, ?, ?, ?, ?) \\
             }
 
@@ -1186,7 +1186,7 @@
             \textbf{OP 3: Visualizzare annunci immobiliari attivi di una città in ordine cronologico} \\
             \texttt{
                 \textcolor{blue}{SELECT} * \\
-                FROM (Immobili I JOIN Annunci\_Utente A ON (A.idImmobile = I.idImmobile)) J JOIN Zone Z ON (J.idZona = I.idZona AND Z.idCittà = ? AND StatoAnnuncio = 'Attivo') \\
+                \textcolor{blue}{FROM} (Immobili I \textcolor{blue}{JOIN} Annunci\_Utente A \textcolor{blue}{ON} (A.idImmobile = I.idImmobile)) J \textcolor{blue}{JOIN} Zone Z \textcolor{blue}{ON} (J.idZona = I.idZona \textcolor{blue}{AND} Z.idCittà = ? \textcolor{blue}{AND} StatoAnnuncio = 'Attivo') \\
                 \textcolor{blue}{ORDER BY} J.DataCreazione  \textcolor{blue}{DESC} \\
             }
 
@@ -1195,97 +1195,110 @@
             annunci\_utente: \\
             \texttt{
                 \textcolor{blue}{SELECT} * \\
-                FROM (Immobili I JOIN Annunci\_Utente A ON (A.idImmobile = I.idImmobile)) J JOIN Zone Z ON (J.idZona = I.idZona AND Z.idCittà = ? AND StatoAnnuncio = 'Attivo' AND tipoAnnuncioUtente = ?) \\
+                \textcolor{blue}{FROM} (Immobili I \textcolor{blue}{JOIN} Annunci\_Utente A \textcolor{blue}{ON} (A.idImmobile = I.idImmobile)) J \textcolor{blue}{JOIN} Zone Z \textcolor{blue}{ON} (J.idZona = I.idZona \textcolor{blue}{AND} Z.idCittà = ? \textcolor{blue}{AND} StatoAnnuncio = 'Attivo' \textcolor{blue}{AND} tipoAnnuncioUtente = ?) \\
                 \textcolor{blue}{ORDER BY} J.DataCreazione  \textcolor{blue}{DESC} \\
             }
             aste: \\
             \texttt{
                 \textcolor{blue}{SELECT} * \\
-                FROM (Immobili I JOIN Aste A ON (A.idImmobile = I.idImmobile)) J JOIN Zone Z ON (J.idZona = I.idZona AND Z.idCittà = ? AND A.dataFine > NOW()) \\
+                \textcolor{blue}{FROM} (Immobili I \textcolor{blue}{JOIN} Aste A \textcolor{blue}{ON} (A.idImmobile = I.idImmobile)) J \textcolor{blue}{JOIN} Zone Z \textcolor{blue}{ON} (J.idZona = I.idZona \textcolor{blue}{AND} Z.idCittà = ? \textcolor{blue}{AND} A.dataFine > \textcolor{blue}{NOW()}) \\
                 \textcolor{blue}{ORDER BY} J.DataCreazione  \textcolor{blue}{DESC} \\
             }
 
             \noindent
             \textbf{OP 5: Ordinare gli annunci in base a particolari filtri sull'immobile (e.g. metratura, tipoImmobile)} \\
             AGGIUNGERE CASO ASTE \\
-            SELECT * \\
-            FROM immobili I JOIN annunci\_utente A ON (I.idImmobile = A.idImmobile AND A.statoAnnuncio = “Attivo” AND I.tipoImmobile = ?) \\
-            WHERE EXISTS (SELECT * \\
-                            FROM zone Z, città C \\
-                            WHERE C.idCittà = ? \\
-                            AND Z.idCittà = C.idCittà \\
-                            AND Z.idZona = I.idZona) \\
+            \texttt{
+                \textcolor{blue}{SELECT} * \\
+                \textcolor{blue}{FROM} immobili I \textcolor{blue}{JOIN} annunci\_utente A \textcolor{blue}{ON} (I.idImmobile = A.idImmobile \textcolor{blue}{AND} A.statoAnnuncio = “Attivo” \textcolor{blue}{AND} I.tipoImmobile = ?) \\
+                \textcolor{blue}{WHERE} \textcolor{blue}{EXISTS} (\textcolor{blue}{SELECT} * \\
+                    \null\qquad\qquad\qquad\quad\textcolor{blue}{FROM} zone Z, città C \\
+                    \null\qquad\qquad\qquad\quad\textcolor{blue}{WHERE} C.idCittà = ? \\
+                    \null\qquad\qquad\qquad\quad\textcolor{blue}{AND} Z.idCittà = C.idCittà \\
+                    \null\qquad\qquad\qquad\quad\textcolor{blue}{AND} Z.idZona = I.idZona) \\
+            }
 
             \noindent
             \textbf{OP 7: Filtrare gli annunci per zona} \\
             AGGIUNGERE CASO ASTE \\
             \texttt{
                 \textcolor{blue}{SELECT} * \\
-                FROM immobili I JOIN annunci\_utente A ON (I.idImmobile = A.idImmobile AND A.statoAnnuncio = “Attivo” AND I.idZona = ?)
+                \textcolor{blue}{FROM} immobili I \textcolor{blue}{JOIN} annunci\_utente A \textcolor{blue}{ON} (I.idImmobile = A.idImmobile \\
+                \textcolor{blue}{AND} A.statoAnnuncio = "Attivo" \textcolor{blue}{AND} I.idZona = ?) \\
                 \textcolor{blue}{ORDER BY} DataCreazione   \textcolor{blue}{DESC} \\
             }
 
             \noindent
             \textbf{OP 8: Ordinare gli annunci di affitto per costo mensile} \\
-            SELECT * \\
-            FROM Immobili I JOIN annunci\_utente A ON (I.idImmobile = A.idImmobile AND A.statoAnnuncio = 'Attivo' AND A.tipoAnnuncioUtente = 'Affitto') \\
-            WHERE EXISTS (SELECT * \\
-                            FROM zone Z, città C \\
-                            WHERE C.idCittà = ? \\
-                            AND Z.idCittà = C.idCittà \\
-                            AND Z.idZona = I.idZona) \\
-            ORDER BY A.costoMensiile DESC \\
+            \texttt{
+                \textcolor{blue}{SELECT} * \\
+                \textcolor{blue}{FROM} Immobili I \textcolor{blue}{JOIN} annunci\_utente A \textcolor{blue}{ON} (I.idImmobile = A.idImmobile \textcolor{blue}{AND} A.statoAnnuncio = 'Attivo' \textcolor{blue}{AND} A.tipoAnnuncioUtente = 'Affitto') \\
+                \textcolor{blue}{WHERE EXISTS} (\textcolor{blue}{SELECT} * \\
+                    \null\qquad\qquad\qquad\quad\textcolor{blue}{FROM} zone Z, città C \\
+                    \null\qquad\qquad\qquad\quad\textcolor{blue}{WHERE} C.idCittà = ? \\
+                    \null\qquad\qquad\qquad\quad\textcolor{blue}{AND} Z.idCittà = C.idCittà \\
+                    \null\qquad\qquad\qquad\quad\textcolor{blue}{AND} Z.idZona = I.idZona) \\
+                \textcolor{blue}{ORDER BY} A.costoMensiile \textcolor{blue}{DESC} \\
+            }
             
             \noindent
             \textbf{OP 10: Mostrare aste attive in una città} \\
             \texttt{
                 \textcolor{blue}{SELECT} * \\
-                FROM (Immobili I JOIN Aste A ON (A.idImmobile = I.idImmobile)) J JOIN Zone Z ON (J.idZona = I.idZona AND Z.idCittà = ? AND J.dataFine > NOW()) \\
+                \textcolor{blue}{FROM} (Immobili I \textcolor{blue}{JOIN} Aste A \\ 
+                \textcolor{blue}{ON} (A.idImmobile = I.idImmobile)) J \textcolor{blue}{JOIN} Zone Z \\ 
+                \textcolor{blue}{ON} (J.idZona = I.idZona \textcolor{blue}{AND} Z.idCittà = ? \textcolor{blue}{AND} J.dataFine > \textcolor{blue}{NOW()}) \\
                 \textcolor{blue}{ORDER BY} J.DataCreazione  \textcolor{blue}{DESC} \\
             }
             
             \noindent
             \textbf{OP 11: Ordinare le aste per prezzo attuale crescente} \\
             \texttt{
-                SELECT idAnnuncio, IF((SELECT COUNT(*) \\
-                                        FROM rialzi R \\
-                                        WHERE R.idAnnuncio = idAnnuncio) == 0, prezzoMinimo, (DECLARE prezzoMassimo float; \\
-                                                                                              SELECT TOP(1) prezzoAttuale \\
-                                                                                              INTO prezzoMassimo \\
-                                                                                              FROM rialzi R \\
-                                                                                              WHERE R.idAnnuncio = idAnnuncio \\
-                                                                                              ORDER BY prezzoAttuale DESC; \\
-                                                                                              prezzoMassimo)) \\
-                FROM aste \\
-                WHERE dataFine > NOW() \\
+                \textcolor{blue}{SELECT} idAnnuncio, \textcolor{blue}{IF}(( \textcolor{blue}{SELECT COUNT}(*) \\
+                    \null\qquad\qquad\qquad\qquad\qquad\qquad \textcolor{blue}{FROM} rialzi R \\
+                    \null\qquad\qquad\qquad\qquad\qquad\qquad \textcolor{blue}{WHERE} R.idAnnuncio = idAnnuncio) == 0, \\
+                    \null\qquad\qquad\qquad\qquad\qquad\qquad prezzoMinimo, \\
+                    \null\qquad\qquad\qquad\qquad\qquad\qquad (\textcolor{blue}{DECLARE} prezzoMassimo float; \\
+                    \null\qquad\qquad\qquad\qquad\qquad\qquad \textcolor{blue}{SELECT TOP}(1) prezzoAttuale \\
+                    \null\qquad\qquad\qquad\qquad\qquad\qquad \textcolor{blue}{INTO} prezzoMassimo \\
+                    \null\qquad\qquad\qquad\qquad\qquad\qquad \textcolor{blue}{FROM} rialzi R \\
+                    \null\qquad\qquad\qquad\qquad\qquad\qquad \textcolor{blue}{WHERE} R.idAnnuncio = idAnnuncio \\
+                    \null\qquad\qquad\qquad\qquad\qquad\qquad \textcolor{blue}{ORDER BY} prezzoAttuale \textcolor{blue}{DESC}; \\
+                    \null\qquad\qquad\qquad\qquad\qquad\qquad prezzoMassimo)) \\
+                \textcolor{blue}{FROM} aste \\
+                \textcolor{blue}{WHERE} dataFine > \textcolor{blue}{NOW()} \\
             }
+
             \noindent
             \textbf{OP 12: Effettuare un rialzo all’interno di un’asta (controllando la sua validità)} \\
             \texttt{
-                IF ((SELECT MAX(prezzoAttuale) \\
-                FROM Rialzi \\
-                WHERE idAnnuncio = ? ) <= ? - (SELECT rialzoMinimo \\
-                                                FROM Aste \\
-                                                WHERE idAnnuncio = ?), \\
-                                                INSERT INTO Rialzi(prezzoAttuale, e-mail, idAnnuncio, dataRialzo) \\
-                                                VALUES(?, ?, ?, ?), NULL ) \\
+                \textcolor{blue}{IF} ((\textcolor{blue}{SELECT MAX}(prezzoAttuale) \\
+                    \null\qquad \textcolor{blue}{FROM} Rialzi \\
+                    \null\qquad \textcolor{blue}{WHERE} idAnnuncio = ?) <= ? - (\textcolor{blue}{SELECT} rialzoMinimo \\
+                        \null\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad \textcolor{blue}{FROM} Aste \\
+                        \null\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad \textcolor{blue}{WHERE} idAnnuncio = ?), \\
+                    \null\qquad \textcolor{blue}{INSERT INTO} Rialzi(prezzoAttuale, e-mail, idAnnuncio, dataRialzo) \\
+                    \null\qquad \textcolor{blue}{VALUES}(?, ?, ?, ?), \\ 
+                    \null\qquad \textcolor{blue}{NULL}) \\
             }       
             
             \noindent
             \textbf{OP 13: Contattare un utente in merito ad un annuncio creato} \\
             \texttt{
                 \textcolor{blue}{INSERT INTO} Messaggi (Timestamp, E-mail, idAnnuncio, Testo, Mittente) \\
-                \textcolor{blue}{VALUES} (NOW(), ?, ?, ?, ?) \\
+                \textcolor{blue}{VALUES} (\textcolor{blue}{NOW()}, ?, ?, ?, ?) \\
             } 
+
             \noindent
             \textbf{OP 14: Ricostruire una conversazione tra due utenti} \\
             \texttt{
-                SELECT testo, mittente, timestamp \\
-                FROM messaggi \\
-                WHERE email = ? \\
-                AND idAnnuncio = ? \\
-                ORDER BY timestamp \\
-            } 
+                \textcolor{blue}{SELECT} testo, mittente, timestamp \\
+                \textcolor{blue}{FROM} messaggi \\
+                \textcolor{blue}{WHERE} email = ? \\
+                \textcolor{blue}{AND} idAnnuncio = ? \\
+                \textcolor{blue}{ORDER BY} timestamp \\
+            }
+
             \noindent
             \textbf{OP 15: Andamento del prezzo di un immobile in funzione del tempo} \\
             \texttt{
@@ -1308,30 +1321,32 @@
             \noindent
             \textbf{OP 17: Comparare il prezzo di un immobile al mq con quello degli immobili nella stessa città} \\
             \texttt{
-                SET @costoMedioMqCitta = (SELECT SUM(costoMedioMq*numeroImmobili) \\
-                                            FROM Zone \\
-                                            WHERE idCittà = ?) / SELECT SUM(numeroImmobili) \\
-                                                                    FROM Zone  \\
-                                                                    WHERE idCittà = ? \\
+                \textcolor{blue}{SET} @costoMedioMqCitta = (\textcolor{blue}{SELECT SUM}(costoMedioMq*numeroImmobili) \\
+                    \null\qquad\qquad\qquad\qquad\qquad\qquad\quad\textcolor{blue}{FROM} Zone \\
+                    \null\qquad\qquad\qquad\qquad\qquad\qquad\quad\textcolor{blue}{WHERE} idCittà = ?) / \textcolor{blue}{SELECT SUM}(numeroImmobili) \\
+                        \null\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\textcolor{blue}{FROM} Zone  \\
+                        \null\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\textcolor{blue}{WHERE} idCittà = ? \\
                 \textcolor{blue}{SELECT} ((prezzo/metriQuadri)-@costoMedioMqCitta) * 100/@costoMedioMqCitta \\
                 \textcolor{blue}{FROM} (Immobili I \textcolor{blue}{JOIN} Annunci\_Utente A  \\
                 \textcolor{blue}{ON} (A.idImmobile = I.idImmobile)) J \textcolor{blue}{JOIN} Zone Z \\
-                \textcolor{blue}{ON} (J.idZona = I.idZona) JOIN Città C \\
-                ON (C.idCittà = Z.idCittà) \\
+                \textcolor{blue}{ON} (J.idZona = I.idZona) \textcolor{blue}{JOIN} Città C \\
+                \textcolor{blue}{ON} (C.idCittà = Z.idCittà) \\
                 \textcolor{blue}{WHERE} idImmobile = ? \textcolor{blue}{AND} statoAnnuncio = 'Attivo' \\
             }
+
             \noindent
             \textbf{OP 18: Comparare il prezzo medio al mq di una zona con quello della città} \\
             \texttt{
-                SELECT * \\
-                FROM  \\
+                \textcolor{blue}{SELECT} * \\
+                \textcolor{blue}{FROM}  \\
                 \textcolor{blue}{SELECT} idZona, (costoMedioMq-\textcolor{blue}{SUM}(costoMedioMq * numeroImmobili)/ \\
                 \textcolor{blue}{SUM}(numeroImmobili)) * 100 / \textcolor{blue}{SUM}(costoMedioMq * numeroImmobili)/ \\
                 \textcolor{blue}{SUM}(numeroImmobili) \\
                 \textcolor{blue}{FROM} Zone \\
-                \textcolor{blue}{WHERE} idCittà = ? AS percZonaCitta\\
-                WHERE percZonaCitta.idZona = ? \\
-            }   
+                \textcolor{blue}{WHERE} idCittà = ? \textcolor{blue}{AS} percZonaCitta\\
+                \textcolor{blue}{WHERE} percZonaCitta.idZona = ? \\
+            }
+
             \noindent
             \textbf{OP 19: Ordinare le zone di una città per costo medio al mq} \\
             \texttt{
@@ -1341,21 +1356,26 @@
                 \textcolor{blue}{ORDER BY} CostoMedioMq \textcolor{blue}{DESC} \\
             }
 
+            \noindent
             \textbf{OP 20: Stilare una top 5 città per una o più categorie} \\
-            SELECT TOP(5) WITH TIES \\
-            FROM città\_anni \\
-            WHERE A.anni = ? \\
-            ORDER BY A.punteggioAmbiente*?+ \\
-            A.punteggioTrasporto*?+A.punteggioEconomia*?+ \\
-            A.punteggioSanità*?+A.punteggioIstruzione*? DESC \\
-
+            \texttt{
+                \textcolor{blue}{SELECT TOP}(5) \textcolor{blue}{WITH TIES} \\
+                \textcolor{blue}{FROM} città\_anni \\
+                \textcolor{blue}{WHERE} A.anni = ? \\
+                \textcolor{blue}{ORDER BY} A.punteggioAmbiente*?+ \\
+                A.punteggioTrasporto*?+A.punteggioEconomia*?+ \\
+                A.punteggioSanità*?+A.punteggioIstruzione*? \textcolor{blue}{DESC} \\
+            }
+            
             \noindent
             \textbf{OP 21: Classificare città in base all’evoluzione in una o più categorie rispetto all’anno precedente} \\
-            SELECT idCittà, anno, punteggioCittà
+            \texttt{
+                \textcolor{blue}{SELECT} idCittà, anno, punteggioCittà \\
+                \textcolor{blue}{SELECT} punteggioAmbiente+punteggioTrasporto+punteggioEconomia+punteggioSanità+punteggioIstruzione AS punteggioCittà, anno \\
+                \textcolor{blue}{FROM} città\_anni \\
+                \textcolor{blue}{WHERE} idCittà = ? \textcolor{blue}{AND} anno = ? \\
+            }
             
-            SELECT punteggioAmbiente+punteggioTrasporto+punteggioEconomia+punteggioSanità+punteggioIstruzione AS punteggioCittà, anno \\
-            FROM città\_anni \\
-            WHERE idCittà = ? AND anno = ? \\
             \noindent
             \textbf{OP 22: Ordinare le città in base a valori specifici di una o più categorie} \\
             \texttt{
@@ -1368,22 +1388,27 @@
             
             \noindent
             \textbf{OP 23: Calcolare performance di uno stato in una o più categorie (da ogni città)} \\
-            SELECT AVG(A.punteggio*) \\
-            FROM (stati S JOIN città C ON (S.nome = C.nomeStato)) J \\
-                    JOIN città\_anni A ON (A.idCittà = J.idCittà AND anno = ?) \\
-            WHERE J.nomeStato = ? \\
+            \texttt{
+                \textcolor{blue}{SELECT AVG} (A.punteggio*) \\
+                \textcolor{blue}{FROM} (stati S \textcolor{blue}{JOIN} città C \\
+                \textcolor{blue}{ON} (S.nome = C.nomeStato)) J \\
+                \textcolor{blue}{JOIN} città\_anni A \\
+                \textcolor{blue}{ON} (A.idCittà = J.idCittà \textcolor{blue}{AND} anno = ?) \\
+                \textcolor{blue}{WHERE} J.nomeStato = ? \\
+            }
 
             \noindent
             \textbf{OP 24: Aggiornamento annuale dei punteggi di una città (dati i campi delle categorie)} \\
-            newHashAmbiente = CAST(PM2.5media*10 AS int)*1001 + CAST(percentualeSpazioVerdeUrbano*10 AS int) \\
-            IF ((SELECT COUNT(hashAmbiente) \\
-                FROM Ambiente \\
-                WHERE hashAmbiente = newHashAmbiente) > 0,  \\
-            NULL,  \\
-            INSERT INTO Ambiente(hashAmbiente, PM2.5media, percentualeSpazioVerdeUrbano) \\
-            VALUES (newHashAmbiente, ?, ?)) \\
- \\
-            INSERT INTO Città\_Anni(punteggioAmbiente, newHashAmbiente) \\
+            \texttt{
+                newHashAmbiente = \textcolor{blue}{CAST}(PM2.5media*10 \textcolor{blue}{AS} int)*1001 + \textcolor{blue}{CAST}(percentualeSpazioVerdeUrbano*10 \textcolor{blue}{AS} int) \\ \\
+                \textcolor{blue}{IF} ((SELECT COUNT(hashAmbiente) \\
+                \textcolor{blue}{FROM} Ambiente \\
+                \textcolor{blue}{WHERE} hashAmbiente = newHashAmbiente) > 0,  \\
+                \textcolor{blue}{NULL},  \\
+                \textcolor{blue}{INSERT INTO} Ambiente(hashAmbiente, PM2.5media, percentualeSpazioVerdeUrbano) \\
+                \textcolor{blue}{VALUES} (newHashAmbiente, ?, ?)) \\
+                \textcolor{blue}{INSERT INTO} Città\_Anni(punteggioAmbiente, newHashAmbiente) \\
+            }
 
         \chapter{Progettazione dell'applicazione}
             
