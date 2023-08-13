@@ -8,7 +8,7 @@ public class Rialzo {
     private final String email;
     private final int dataRialzo;
 
-    public Rialzo(int prezzoAttuale, int idAnnuncio, String email, int dataRialzo) {
+    public Rialzo(final int prezzoAttuale, final int idAnnuncio, final String email, final int dataRialzo) {
         this.prezzoAttuale = prezzoAttuale;
         this.idAnnuncio = idAnnuncio;
         this.email = email;
