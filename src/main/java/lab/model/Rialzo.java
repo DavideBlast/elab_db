@@ -11,8 +11,8 @@ public class Rialzo {
     public Rialzo(final int prezzoAttuale, final int idAnnuncio, final String email, final int dataRialzo) {
         this.prezzoAttuale = prezzoAttuale;
         this.idAnnuncio = idAnnuncio;
-        this.email = email;
-        this.dataRialzo = Objects.requireNonNull(dataRialzo);
+        this.email = Objects.requireNonNull(email);
+        this.dataRialzo = dataRialzo;
     }
 
     public int getPrezzoAttuale() {

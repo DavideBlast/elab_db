@@ -1,5 +1,6 @@
 package lab.model;
 
+import java.util.Objects;
 import java.util.Optional;
 
 public class Annuncio {
@@ -16,12 +17,12 @@ public class Annuncio {
             final TipoAnnuncio tipoAnnuncio, final Optional<Integer> costoMensile, final Optional<Integer> prezzo) {
         this.idAnnuncio = idAnnuncio;
         this.idImmobile = idImmobile;
-        this.email = email;
-        this.statoAnnuncio = statoAnnuncio;
+        this.email = Objects.requireNonNull(email);
+        this.statoAnnuncio = Objects.requireNonNull(statoAnnuncio);
         this.dataCreazione = dataCreazione;
-        this.tipoAnnuncio = tipoAnnuncio;
-        this.costoMensile = costoMensile;
-        this.prezzo = prezzo;
+        this.tipoAnnuncio = Objects.requireNonNull(tipoAnnuncio);
+        this.costoMensile = Objects.requireNonNull(costoMensile);
+        this.prezzo = Objects.requireNonNull(prezzo);
     }
 
     public int getIdAnnuncio() {

@@ -12,7 +12,7 @@ public class Messaggio {
     public Messaggio(final int timestamp, final int idAnnuncio, final String email, final String testo, final Ruolo mittente) {
         this.timestamp = timestamp;
         this.idAnnuncio = idAnnuncio;
-        this.email = email;
+        this.email = Objects.requireNonNull(email);
         this.testo = Objects.requireNonNull(testo);
         this.mittente = Objects.requireNonNull(mittente);
     }

@@ -9,7 +9,7 @@ public class Giudice {
     private final String nome;
 
     public Giudice(final String email, final Optional<Integer> telefono, final String nome) {
-        this.email = email;
+        this.email = Objects.requireNonNull(email);
         this.telefono = Objects.requireNonNull(telefono);
         this.nome = Objects.requireNonNull(nome);
     }
