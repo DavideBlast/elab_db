@@ -62,11 +62,7 @@ public class AnnuncioUtente extends Annuncio {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + getIdAnnuncio();
-        result = prime * result + getIdImmobile();
-        result = prime * result + ((getEmail() == null) ? 0 : getEmail().hashCode());
         result = prime * result + ((statoAnnuncio == null) ? 0 : statoAnnuncio.hashCode());
-        result = prime * result + ((getDataCreazione() == null) ? 0 : getDataCreazione().hashCode());
         result = prime * result + ((tipoAnnuncio == null) ? 0 : tipoAnnuncio.hashCode());
         result = prime * result + ((costoMensile == null) ? 0 : costoMensile.hashCode());
         result = prime * result + ((prezzo == null) ? 0 : prezzo.hashCode());
@@ -82,18 +78,7 @@ public class AnnuncioUtente extends Annuncio {
         if (getClass() != obj.getClass())
             return false;
         AnnuncioUtente other = (AnnuncioUtente) obj;
-        if (getIdAnnuncio() != other.getIdAnnuncio())
-            return false;
-        if (getIdImmobile() != other.getIdImmobile())
-            return false;
-        if (getEmail() == null) {
-            if (other.getEmail() != null)
-                return false;
-        } else if (!getEmail().equals(other.getEmail()))
-            return false;
         if (statoAnnuncio != other.statoAnnuncio)
-            return false;
-        if (getDataCreazione() != other.getDataCreazione())
             return false;
         if (tipoAnnuncio != other.tipoAnnuncio)
             return false;

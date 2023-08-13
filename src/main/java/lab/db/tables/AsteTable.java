@@ -13,16 +13,14 @@ import java.util.Objects;
 import java.util.Optional;
 import lab.utils.Utils;
 import lab.db.Table;
-import lab.model.AnnuncioUtente;
-import lab.model.AnnuncioUtente.StatoAnnuncio;
-import lab.model.AnnuncioUtente.TipoAnnuncio;
+import lab.model.Asta;
 
-public final class AnnunciTable implements Table<AnnuncioUtente, Integer> {
-    public static final String TABLE_NAME = "Annunci_Utente";
+public final class AsteTable implements Table<Asta, Integer> {
+    public static final String TABLE_NAME = "Aste";
 
      private final Connection connection; 
 
-     public AnnunciTable(final Connection connection) {
+     public AsteTable(final Connection connection) {
          this.connection = Objects.requireNonNull(connection);
      }
 
@@ -41,13 +39,12 @@ public final class AnnunciTable implements Table<AnnuncioUtente, Integer> {
                          "idAnnuncio int NOT NULL," +
                          "idImmobile int NOT NULL FOREIGN KEY REFERENCES Immobili," + 
                          "E-mail varchar NOT NULL FOREIGN KEY REFERENCES Utenti," + 
-                         "StatoAnnuncio stato_annuncio NOT NULL" + //
-                            "CHECK(stato_annuncio in ('Attivo', 'Inattivo'))," +
                          "DataCreazione datetime NOT NULL," +
-                         "TipoAnnuncioUtente tipo_annuncio NOT NULL" +
-                            "CHECK(tipo annuncio in ('Vendita', 'Affitto'))," +
-                         "CostoMensile int NOT NULL CHECK (CostoMensile > 0)," +
-                         "Prezzo int NOT NULL CHECK (Prezzo > 0)," +
+                         "PrezzoMinimo int NOT NULL CHECK (PrezzoMinimo > 0)," +
+                         "RialzoMinimo int NOT NULL CHECK (RialzoMinimo > 0)," +
+                         "DepositoCauzionale int NOT NULL" +
+                            "CHECK (DepositoCauzionale > 0)," +
+                         "DataFine datetime NOT NULL," +
                          "PRIMARY KEY(idAnnuncio, idImmobile, e-mail)" +
                      ")");
              return true;
@@ -58,7 +55,7 @@ public final class AnnunciTable implements Table<AnnuncioUtente, Integer> {
      }
 
      @Override
-     public Optional<AnnuncioUtente> findByPrimaryKey(final Integer id) {
+     public Optional<Asta> findByPrimaryKey(final Integer id) {
          throw new UnsupportedOperationException("TODO");
      }
 
@@ -67,7 +64,7 @@ public final class AnnunciTable implements Table<AnnuncioUtente, Integer> {
       * @param resultSet a ResultSet from which the Student(s) will be extracted
       * @return a List of all the students in the ResultSet
       */
-     private List<AnnuncioUtente> readStudentsFromResultSet(final ResultSet resultSet) {
+     private List<Asta> readStudentsFromResultSet(final ResultSet resultSet) {
         // Create an empty list, then
         // Inside a loop you should:
         //      1. Call resultSet.next() to advance the pointer and check there are still rows to fetch
@@ -79,19 +76,19 @@ public final class AnnunciTable implements Table<AnnuncioUtente, Integer> {
         // Helpful resources:
         // https://docs.oracle.com/javase/7/docs/api/java/sql/ResultSet.html
         // https://docs.oracle.com/javase/tutorial/jdbc/basics/retrieving.html
-        List<AnnuncioUtente> list = new ArrayList<>();
+        List<Asta> list = new ArrayList<>();
         
         try {
             while (resultSet.next()) {
-                AnnuncioUtente annuncioUtente = new AnnuncioUtente(resultSet.getInt(1),
+                Asta asta = new Asta(resultSet.getInt(1),
                     resultSet.getInt(2),
                     resultSet.getString(3),
-                    resultSet.getInt(4) == 0 ? StatoAnnuncio.ATTIVO : StatoAnnuncio.INATTIVO,
-                    resultSet.getDate(5),
-                    resultSet.getInt(6) == 0 ? TipoAnnuncio.AFFITTO : TipoAnnuncio.VENDITA,
-                    resultSet.getInt(7) < 0 ? Optional.empty() : Optional.of(resultSet.getInt(7)),
-                    resultSet.getInt(8) < 0 ? Optional.empty() : Optional.of(resultSet.getInt(8)));
-                list.add(annuncioUtente);
+                    resultSet.getDate(4),
+                    resultSet.getInt(5),
+                    resultSet.getInt(6),
+                    resultSet.getInt(7),
+                    resultSet.getDate(8));
+                list.add(asta);
             }
         } catch (SQLException e) {
             // TODO Auto-generated catch block
@@ -102,7 +99,7 @@ public final class AnnunciTable implements Table<AnnuncioUtente, Integer> {
      }
 
      @Override
-     public List<AnnuncioUtente> findAll() {
+     public List<Asta> findAll() {
          throw new UnsupportedOperationException("TODO");
      }
 
@@ -112,7 +109,7 @@ public final class AnnunciTable implements Table<AnnuncioUtente, Integer> {
      }
 
      @Override
-     public boolean save(final AnnuncioUtente utente) {
+     public boolean save(final Asta utente) {
          throw new UnsupportedOperationException("TODO");
      }
 
@@ -122,7 +119,7 @@ public final class AnnunciTable implements Table<AnnuncioUtente, Integer> {
      }
 
      @Override
-     public boolean update(final AnnuncioUtente utente) {
+     public boolean update(final Asta utente) {
          throw new UnsupportedOperationException("TODO");
      }
     

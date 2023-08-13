@@ -1,13 +1,15 @@
 package lab.model;
 
+import java.sql.Date;
+
 public class Asta extends Annuncio{
     private final int prezzoMinimo;
     private final int rialzoMinimo;
     private final int depositoCauzionale;
-    private final int dataFine;
+    private final Date dataFine;
 
-    public Asta(final int idAnnuncio, final int idImmobile, final String email, final int dataCreazione, final int prezzoMinimo, final int rialzoMinimo,
-            final int depositoCauzionale, final int dataFine) {
+    public Asta(final int idAnnuncio, final int idImmobile, final String email, final Date dataCreazione, final int prezzoMinimo, final int rialzoMinimo,
+            final int depositoCauzionale, final Date dataFine) {
         super(idAnnuncio, idImmobile, email, dataCreazione);
         this.prezzoMinimo = prezzoMinimo;
         this.rialzoMinimo = rialzoMinimo;
@@ -27,7 +29,7 @@ public class Asta extends Annuncio{
         return getEmail();
     }
 
-    public int getDataCreazione() {
+    public Date getDataCreazione() {
         return getDataCreazione();
     }
 
@@ -43,7 +45,7 @@ public class Asta extends Annuncio{
         return depositoCauzionale;
     }
 
-    public int getDataFine() {
+    public Date getDataFine() {
         return dataFine;
     }
 
@@ -58,14 +60,10 @@ public class Asta extends Annuncio{
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + getIdAnnuncio();
-        result = prime * result + getIdImmobile();
-        result = prime * result + ((getEmail() == null) ? 0 : getEmail().hashCode());
-        result = prime * result + getDataCreazione();
         result = prime * result + prezzoMinimo;
         result = prime * result + rialzoMinimo;
         result = prime * result + depositoCauzionale;
-        result = prime * result + dataFine;
+        result = prime * result + ((dataFine == null) ? 0 : dataFine.hashCode());
         return result;
     }
 
@@ -78,24 +76,16 @@ public class Asta extends Annuncio{
         if (getClass() != obj.getClass())
             return false;
         Asta other = (Asta) obj;
-        if (getIdAnnuncio() != other.getIdAnnuncio())
-            return false;
-        if (getIdImmobile() != other.getIdImmobile())
-            return false;
-        if (getEmail() == null) {
-            if (other.getEmail() != null)
-                return false;
-        } else if (!getEmail().equals(other.getEmail()))
-            return false;
-        if (getDataCreazione() != other.getDataCreazione())
-            return false;
         if (prezzoMinimo != other.prezzoMinimo)
             return false;
         if (rialzoMinimo != other.rialzoMinimo)
             return false;
         if (depositoCauzionale != other.depositoCauzionale)
             return false;
-        if (dataFine != other.dataFine)
+        if (dataFine == null) {
+            if (other.dataFine != null)
+                return false;
+        } else if (!dataFine.equals(other.dataFine))
             return false;
         return true;
     }
