@@ -9,7 +9,7 @@ public class Messaggio {
     private final String testo;
     private final Ruolo mittente;    
     
-    public Messaggio(final int timestamp, final int idAnnuncio, final String email, final String testo, final Ruolo mittente) {
+    public Messaggio(final int timestamp, final String email, final int idAnnuncio, final String testo, final Ruolo mittente) {
         this.timestamp = timestamp;
         this.idAnnuncio = idAnnuncio;
         this.email = Objects.requireNonNull(email);
@@ -83,7 +83,7 @@ public class Messaggio {
         return true;
     }
 
-    private enum Ruolo {
+    public enum Ruolo {
         ACQUIRENTE(true),
         VENDITORE(false);
         
