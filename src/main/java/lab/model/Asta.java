@@ -1,12 +1,6 @@
 package lab.model;
 
-import java.util.Objects;
-
-public class Asta {
-    private final int idAnnuncio;
-    private final int idImmobile;
-    private final String email;
-    private final int dataCreazione;
+public class Asta extends Annuncio{
     private final int prezzoMinimo;
     private final int rialzoMinimo;
     private final int depositoCauzionale;
@@ -14,10 +8,7 @@ public class Asta {
 
     public Asta(final int idAnnuncio, final int idImmobile, final String email, final int dataCreazione, final int prezzoMinimo, final int rialzoMinimo,
             final int depositoCauzionale, final int dataFine) {
-        this.idAnnuncio = idAnnuncio;
-        this.idImmobile = idImmobile;
-        this.email = Objects.requireNonNull(email);
-        this.dataCreazione = dataCreazione;
+        super(idAnnuncio, idImmobile, email, dataCreazione);
         this.prezzoMinimo = prezzoMinimo;
         this.rialzoMinimo = rialzoMinimo;
         this.depositoCauzionale = depositoCauzionale;
@@ -25,19 +16,19 @@ public class Asta {
     }
 
     public int getIdAnnuncio() {
-        return idAnnuncio;
+        return getIdAnnuncio();
     }
 
     public int getIdImmobile() {
-        return idImmobile;
+        return getIdImmobile();
     }
 
     public String getEmail() {
-        return email;
+        return getEmail();
     }
 
     public int getDataCreazione() {
-        return dataCreazione;
+        return getDataCreazione();
     }
 
     public int getPrezzoMinimo() {
@@ -58,8 +49,8 @@ public class Asta {
 
     @Override
     public String toString() {
-        return "Asta [idAnnuncio=" + idAnnuncio + ", idImmobile=" + idImmobile + ", email=" + email + ", dataCreazione="
-                + dataCreazione + ", prezzoMinimo=" + prezzoMinimo + ", rialzoMinimo=" + rialzoMinimo
+        return "Asta [idAnnuncio=" + getIdAnnuncio() + ", idImmobile=" + getIdImmobile() + ", email=" + getEmail() + ", dataCreazione="
+                + getDataCreazione() + ", prezzoMinimo=" + prezzoMinimo + ", rialzoMinimo=" + rialzoMinimo
                 + ", depositoCauzionale=" + depositoCauzionale + ", dataFine=" + dataFine + "]";
     }
 
@@ -67,10 +58,10 @@ public class Asta {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + idAnnuncio;
-        result = prime * result + idImmobile;
-        result = prime * result + ((email == null) ? 0 : email.hashCode());
-        result = prime * result + dataCreazione;
+        result = prime * result + getIdAnnuncio();
+        result = prime * result + getIdImmobile();
+        result = prime * result + ((getEmail() == null) ? 0 : getEmail().hashCode());
+        result = prime * result + getDataCreazione();
         result = prime * result + prezzoMinimo;
         result = prime * result + rialzoMinimo;
         result = prime * result + depositoCauzionale;
@@ -87,16 +78,16 @@ public class Asta {
         if (getClass() != obj.getClass())
             return false;
         Asta other = (Asta) obj;
-        if (idAnnuncio != other.idAnnuncio)
+        if (getIdAnnuncio() != other.getIdAnnuncio())
             return false;
-        if (idImmobile != other.idImmobile)
+        if (getIdImmobile() != other.getIdImmobile())
             return false;
-        if (email == null) {
-            if (other.email != null)
+        if (getEmail() == null) {
+            if (other.getEmail() != null)
                 return false;
-        } else if (!email.equals(other.email))
+        } else if (!getEmail().equals(other.getEmail()))
             return false;
-        if (dataCreazione != other.dataCreazione)
+        if (getDataCreazione() != other.getDataCreazione())
             return false;
         if (prezzoMinimo != other.prezzoMinimo)
             return false;
