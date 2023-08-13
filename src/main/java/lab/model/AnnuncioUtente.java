@@ -1,5 +1,6 @@
 package lab.model;
 
+import java.sql.Date;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -9,7 +10,7 @@ public class AnnuncioUtente extends Annuncio {
     private final Optional<Integer> costoMensile;
     private final Optional<Integer> prezzo;
 
-    public AnnuncioUtente(final int idAnnuncio, final int idImmobile, final String email, final StatoAnnuncio statoAnnuncio, final int dataCreazione,
+    public AnnuncioUtente(final int idAnnuncio, final int idImmobile, final String email, final StatoAnnuncio statoAnnuncio, final Date dataCreazione,
             final TipoAnnuncio tipoAnnuncio, final Optional<Integer> costoMensile, final Optional<Integer> prezzo) {
         super(idAnnuncio, idImmobile, email, dataCreazione);
         this.statoAnnuncio = Objects.requireNonNull(statoAnnuncio);
@@ -34,7 +35,7 @@ public class AnnuncioUtente extends Annuncio {
         return statoAnnuncio;
     }
 
-    public int getDataCreazione() {
+    public Date getDataCreazione() {
         return super.getDataCreazione();
     }
 
@@ -65,7 +66,7 @@ public class AnnuncioUtente extends Annuncio {
         result = prime * result + getIdImmobile();
         result = prime * result + ((getEmail() == null) ? 0 : getEmail().hashCode());
         result = prime * result + ((statoAnnuncio == null) ? 0 : statoAnnuncio.hashCode());
-        result = prime * result + getDataCreazione();
+        result = prime * result + ((getDataCreazione() == null) ? 0 : getDataCreazione().hashCode());
         result = prime * result + ((tipoAnnuncio == null) ? 0 : tipoAnnuncio.hashCode());
         result = prime * result + ((costoMensile == null) ? 0 : costoMensile.hashCode());
         result = prime * result + ((prezzo == null) ? 0 : prezzo.hashCode());
@@ -109,7 +110,7 @@ public class AnnuncioUtente extends Annuncio {
         return true;
     }
 
-    private enum StatoAnnuncio {
+    public enum StatoAnnuncio {
         ATTIVO(true),
         INATTIVO(false);
 
@@ -124,7 +125,7 @@ public class AnnuncioUtente extends Annuncio {
         }
     }
 
-    private enum TipoAnnuncio {
+    public enum TipoAnnuncio {
         VENDITA(true),
         AFFITTO(false);
 

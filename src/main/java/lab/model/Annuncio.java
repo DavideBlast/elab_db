@@ -1,14 +1,15 @@
 package lab.model;
 
+import java.sql.Date;
 import java.util.Objects;
 
 public class Annuncio {
     private final int idAnnuncio;
     private final int idImmobile;
     private final String email;
-    private final int dataCreazione;
+    private final Date dataCreazione;
 
-    public Annuncio(final int idAnnuncio, final int idImmobile, final String email, final int dataCreazione) {
+    public Annuncio(final int idAnnuncio, final int idImmobile, final String email, final Date dataCreazione) {
         this.idAnnuncio = idAnnuncio;
         this.idImmobile = idImmobile;
         this.email = Objects.requireNonNull(email);
@@ -27,7 +28,7 @@ public class Annuncio {
         return email;
     }
 
-    public int getDataCreazione() {
+    public Date getDataCreazione() {
         return dataCreazione;
     }
 }
