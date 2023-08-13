@@ -84,17 +84,17 @@ public class Messaggio {
     }
 
     private enum Ruolo {
-        MITTENTE(true),
-        DESTINATARIO(false);
+        ACQUIRENTE(true),
+        VENDITORE(false);
         
-        private final boolean mittente;
+        private final boolean acquirente;
         
-        private Ruolo(final boolean mittente) {
-            this.mittente = mittente;
+        private Ruolo(final boolean acquirente) {
+            this.acquirente = acquirente;
         }
 
-        public boolean isMittente() {
-            return this.mittente;
+        public boolean isAcquirente() {
+            return this.acquirente;
         }
     }
 }
