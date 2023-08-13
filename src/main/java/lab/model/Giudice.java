@@ -5,10 +5,10 @@ import java.util.Optional;
 
 public class Giudice {
     private final String email;
-    private final Optional<Integer> telefono;
+    private final Optional<String> telefono;
     private final String nome;
 
-    public Giudice(final String email, final Optional<Integer> telefono, final String nome) {
+    public Giudice(final String email, final Optional<String> telefono, final String nome) {
         this.email = Objects.requireNonNull(email);
         this.telefono = Objects.requireNonNull(telefono);
         this.nome = Objects.requireNonNull(nome);
@@ -18,7 +18,7 @@ public class Giudice {
         return email;
     }
 
-    public Optional<Integer> getTelefono() {
+    public Optional<String> getTelefono() {
         return telefono;
     }
 
