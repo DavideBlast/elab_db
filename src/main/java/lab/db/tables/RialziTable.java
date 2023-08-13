@@ -13,14 +13,14 @@ import java.util.Objects;
 import java.util.Optional;
 import lab.utils.Utils;
 import lab.db.Table;
-import lab.model.Messaggio;
+import lab.model.Rialzo;
 
-public final class MessaggiTable implements Table<Messaggio, Integer> {
-    public static final String TABLE_NAME = "Messaggi";
+public final class RialziTable implements Table<Rialzo, Integer> {
+    public static final String TABLE_NAME = "Rialzi";
 
      private final Connection connection; 
 
-     public MessaggiTable(final Connection connection) {
+     public RialziTable(final Connection connection) {
          this.connection = Objects.requireNonNull(connection);
      }
 
@@ -36,12 +36,11 @@ public final class MessaggiTable implements Table<Messaggio, Integer> {
              // 2. Execute the statement with the given query
              statement.executeUpdate(
                  "CREATE TABLE " + TABLE_NAME + " (" +
-                         "Timestamp int NOT NULL," +
+                         "PrezzoAttuale int NOT NULL CHECK (PrezzoAttuale > 0)," +
                          "E-mail varchar NOT NULL FOREIGN KEY REFERENCES Utenti," + 
                          "idAnnuncio int NOT NULL FOREIGN KEY REFERENCES Annunci_Utente," + 
-                         "Testo char(1024) NOT NULL," + 
-                         "Mittente int NOT NULL," +
-                         "PRIMARY KEY(timestamp, e-mail, idAnnuncio)" +
+                         "DataRialzo datetime NOT NULL," +
+                         "PRIMARY KEY(prezzoAttuale, e-mail, idAnnuncio)" +
                      ")");
              return true;
          } catch (final SQLException e) {
@@ -51,7 +50,7 @@ public final class MessaggiTable implements Table<Messaggio, Integer> {
      }
 
      @Override
-     public Optional<Messaggio> findByPrimaryKey(final Integer id) {
+     public Optional<Rialzo> findByPrimaryKey(final Integer id) {
          throw new UnsupportedOperationException("TODO");
      }
 
@@ -60,7 +59,7 @@ public final class MessaggiTable implements Table<Messaggio, Integer> {
       * @param resultSet a ResultSet from which the Student(s) will be extracted
       * @return a List of all the students in the ResultSet
       */
-     private List<Messaggio> readStudentsFromResultSet(final ResultSet resultSet) {
+     private List<Rialzo> readStudentsFromResultSet(final ResultSet resultSet) {
         // Create an empty list, then
         // Inside a loop you should:
         //      1. Call resultSet.next() to advance the pointer and check there are still rows to fetch
@@ -72,16 +71,15 @@ public final class MessaggiTable implements Table<Messaggio, Integer> {
         // Helpful resources:
         // https://docs.oracle.com/javase/7/docs/api/java/sql/ResultSet.html
         // https://docs.oracle.com/javase/tutorial/jdbc/basics/retrieving.html
-        List<Messaggio> list = new ArrayList<>();
+        List<Rialzo> list = new ArrayList<>();
         
         try {
             while (resultSet.next()) {
-                Messaggio messaggio = new Messaggio(resultSet.getInt(1),
+                Rialzo rialzo = new Rialzo(resultSet.getInt(1),
                     resultSet.getString(2),
                     resultSet.getInt(3),
-                    resultSet.getString(4),
-                    resultSet.getInt(5) == 0 ? Messaggio.Ruolo.ACQUIRENTE : Messaggio.Ruolo.VENDITORE);
-                list.add(messaggio);
+                    resultSet.getDate(4));
+                list.add(rialzo);
             }
         } catch (SQLException e) {
             // TODO Auto-generated catch block
@@ -92,7 +90,7 @@ public final class MessaggiTable implements Table<Messaggio, Integer> {
      }
 
      @Override
-     public List<Messaggio> findAll() {
+     public List<Rialzo> findAll() {
          throw new UnsupportedOperationException("TODO");
      }
 
@@ -102,7 +100,7 @@ public final class MessaggiTable implements Table<Messaggio, Integer> {
      }
 
      @Override
-     public boolean save(final Messaggio utente) {
+     public boolean save(final Rialzo utente) {
          throw new UnsupportedOperationException("TODO");
      }
 
@@ -112,7 +110,7 @@ public final class MessaggiTable implements Table<Messaggio, Integer> {
      }
 
      @Override
-     public boolean update(final Messaggio utente) {
+     public boolean update(final Rialzo utente) {
          throw new UnsupportedOperationException("TODO");
      }
     

@@ -1,18 +1,19 @@
 package lab.model;
 
+import java.sql.Date;
 import java.util.Objects;
 
 public class Rialzo {
     private final int prezzoAttuale;
     private final int idAnnuncio;
     private final String email;
-    private final int dataRialzo;
+    private final Date dataRialzo;
 
-    public Rialzo(final int prezzoAttuale, final int idAnnuncio, final String email, final int dataRialzo) {
+    public Rialzo(final int prezzoAttuale, final String email, final int idAnnuncio, final Date dataRialzo) {
         this.prezzoAttuale = prezzoAttuale;
         this.idAnnuncio = idAnnuncio;
         this.email = Objects.requireNonNull(email);
-        this.dataRialzo = dataRialzo;
+        this.dataRialzo = Objects.requireNonNull(dataRialzo);
     }
 
     public int getPrezzoAttuale() {
@@ -27,7 +28,7 @@ public class Rialzo {
         return email;
     }
 
-    public int getDataRialzo() {
+    public Date getDataRialzo() {
         return dataRialzo;
     }
 
@@ -44,7 +45,7 @@ public class Rialzo {
         result = prime * result + prezzoAttuale;
         result = prime * result + idAnnuncio;
         result = prime * result + ((email == null) ? 0 : email.hashCode());
-        result = prime * result + dataRialzo;
+        result = prime * result + ((dataRialzo == null) ? 0 : dataRialzo.hashCode());
         return result;
     }
 
