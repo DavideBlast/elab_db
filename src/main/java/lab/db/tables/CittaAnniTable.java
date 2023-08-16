@@ -11,7 +11,7 @@ import lab.model.CittaAnno;
 
 public class CittaAnniTable implements Table<CittaAnno, Integer> {
 
-    public static final String TABLE_NAME = "Città_anni";
+    public static final String TABLE_NAME = "citta_anni";
     private final Connection connection; 
 
     public CittaAnniTable(final Connection connection) {

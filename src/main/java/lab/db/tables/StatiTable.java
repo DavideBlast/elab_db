@@ -11,7 +11,7 @@ import lab.model.Stato;
 
 public class StatiTable implements Table<Stato, Integer> {
 
-    public static final String TABLE_NAME = "Stati";
+    public static final String TABLE_NAME = "stati";
     private final Connection connection; 
 
     public StatiTable(final Connection connection) {

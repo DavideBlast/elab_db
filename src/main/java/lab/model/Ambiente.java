@@ -4,25 +4,25 @@ import java.util.Objects;
 import java.util.Optional;
 
 public class Ambiente {
-    private final Integer hashAmbiente;
-    private final Float pm25media;
-    private final Float percentualeSpazioVerdeUrbano;
+    private final int hashAmbiente;
+    private final float pm25media;
+    private final float percentualeSpazioVerdeUrbano;
 
-    public Ambiente(Integer hashAmbiente, Float pm25media, Float percentualeSpazioVerdeUrbano) {
+    public Ambiente(int hashAmbiente, float pm25media, float percentualeSpazioVerdeUrbano) {
         this.hashAmbiente = hashAmbiente;
         this.pm25media = pm25media;
         this.percentualeSpazioVerdeUrbano = percentualeSpazioVerdeUrbano;
     }
 
-    public Integer getHashAmbiente() {
+    public int getHashAmbiente() {
         return hashAmbiente;
     }
 
-    public Float getPm25media() {
+    public float getPm25media() {
         return pm25media;
     }
 
-    public Float getPercentualeSpazioVerdeUrbano() {
+    public float getPercentualeSpazioVerdeUrbano() {
         return percentualeSpazioVerdeUrbano;
     }
 
@@ -36,10 +36,9 @@ public class Ambiente {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((hashAmbiente == null) ? 0 : hashAmbiente.hashCode());
-        result = prime * result + ((pm25media == null) ? 0 : pm25media.hashCode());
-        result = prime * result
-                + ((percentualeSpazioVerdeUrbano == null) ? 0 : percentualeSpazioVerdeUrbano.hashCode());
+        result = prime * result + hashAmbiente;
+        result = prime * result + Float.floatToIntBits(pm25media);
+        result = prime * result + Float.floatToIntBits(percentualeSpazioVerdeUrbano);
         return result;
     }
 
@@ -52,23 +51,14 @@ public class Ambiente {
         if (getClass() != obj.getClass())
             return false;
         Ambiente other = (Ambiente) obj;
-        if (hashAmbiente == null) {
-            if (other.hashAmbiente != null)
-                return false;
-        } else if (!hashAmbiente.equals(other.hashAmbiente))
+        if (hashAmbiente != other.hashAmbiente)
             return false;
-        if (pm25media == null) {
-            if (other.pm25media != null)
-                return false;
-        } else if (!pm25media.equals(other.pm25media))
+        if (Float.floatToIntBits(pm25media) != Float.floatToIntBits(other.pm25media))
             return false;
-        if (percentualeSpazioVerdeUrbano == null) {
-            if (other.percentualeSpazioVerdeUrbano != null)
-                return false;
-        } else if (!percentualeSpazioVerdeUrbano.equals(other.percentualeSpazioVerdeUrbano))
+        if (Float.floatToIntBits(percentualeSpazioVerdeUrbano) != Float
+                .floatToIntBits(other.percentualeSpazioVerdeUrbano))
             return false;
         return true;
     }
-
     
 }

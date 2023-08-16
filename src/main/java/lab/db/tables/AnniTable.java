@@ -11,7 +11,7 @@ import lab.model.Anno;
 
 public class AnniTable implements Table<Anno, Integer> {
 
-    public static final String TABLE_NAME = "Anni";
+    public static final String TABLE_NAME = "anni";
     private final Connection connection; 
 
     public AnniTable(final Connection connection) {

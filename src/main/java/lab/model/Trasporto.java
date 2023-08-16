@@ -4,25 +4,25 @@ import java.util.Objects;
 import java.util.Optional;
 
 public class Trasporto {
-    private final Integer hashEconomia;
-    private final Float percorrenzaMediaPendolare;
-    private final Float autoProCapite;
+    private final int hashEconomia;
+    private final float percorrenzaMediaPendolare;
+    private final float autoProCapite;
     
-    public Trasporto(Integer hashEconomia, Float percorrenzaMediaPendolare, Float autoProCapite) {
+    public Trasporto(int hashEconomia, float percorrenzaMediaPendolare, float autoProCapite) {
         this.hashEconomia = hashEconomia;
         this.percorrenzaMediaPendolare = percorrenzaMediaPendolare;
         this.autoProCapite = autoProCapite;
     }
     
-    public Integer getHashEconomia() {
+    public int getHashEconomia() {
         return hashEconomia;
     }
 
-    public Float getPercorrenzaMediaPendolare() {
+    public float getPercorrenzaMediaPendolare() {
         return percorrenzaMediaPendolare;
     }
 
-    public Float getAutoProCapite() {
+    public float getAutoProCapite() {
         return autoProCapite;
     }
 
@@ -31,14 +31,14 @@ public class Trasporto {
         return "Trasporto [hashEconomia=" + hashEconomia + ", percorrenzaMediaPendolare=" + percorrenzaMediaPendolare
                 + ", autoProCapite=" + autoProCapite + "]";
     }
-    
+
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((hashEconomia == null) ? 0 : hashEconomia.hashCode());
-        result = prime * result + ((percorrenzaMediaPendolare == null) ? 0 : percorrenzaMediaPendolare.hashCode());
-        result = prime * result + ((autoProCapite == null) ? 0 : autoProCapite.hashCode());
+        result = prime * result + hashEconomia;
+        result = prime * result + Float.floatToIntBits(percorrenzaMediaPendolare);
+        result = prime * result + Float.floatToIntBits(autoProCapite);
         return result;
     }
 
@@ -51,21 +51,13 @@ public class Trasporto {
         if (getClass() != obj.getClass())
             return false;
         Trasporto other = (Trasporto) obj;
-        if (hashEconomia == null) {
-            if (other.hashEconomia != null)
-                return false;
-        } else if (!hashEconomia.equals(other.hashEconomia))
+        if (hashEconomia != other.hashEconomia)
             return false;
-        if (percorrenzaMediaPendolare == null) {
-            if (other.percorrenzaMediaPendolare != null)
-                return false;
-        } else if (!percorrenzaMediaPendolare.equals(other.percorrenzaMediaPendolare))
+        if (Float.floatToIntBits(percorrenzaMediaPendolare) != Float.floatToIntBits(other.percorrenzaMediaPendolare))
             return false;
-        if (autoProCapite == null) {
-            if (other.autoProCapite != null)
-                return false;
-        } else if (!autoProCapite.equals(other.autoProCapite))
+        if (Float.floatToIntBits(autoProCapite) != Float.floatToIntBits(other.autoProCapite))
             return false;
         return true;
     }
+    
 }

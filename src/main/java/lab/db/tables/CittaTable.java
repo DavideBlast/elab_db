@@ -11,7 +11,7 @@ import lab.model.Citta;
 
 public class CittaTable implements Table<Citta, Integer> {
 
-    public static final String TABLE_NAME = "Città";
+    public static final String TABLE_NAME = "citta";
     private final Connection connection; 
 
     public CittaTable(final Connection connection) {

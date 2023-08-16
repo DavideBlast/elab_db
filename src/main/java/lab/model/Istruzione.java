@@ -5,32 +5,32 @@ import java.util.Optional;
 
 public class Istruzione {
 
-    private final Integer hashIstruzione;
-    private final Float percentualeLaureati;
-    private final Float percentualeDiplomati;
-    private final Integer numeroUniversita;
+    private final int hashIstruzione;
+    private final float percentualeLaureati;
+    private final float percentualeDiplomati;
+    private final int numeroUniversita;
 
-    public Istruzione(Integer hashIstruzione, Float percentualeLaureati, Float percentualeDiplomati,
-            Integer numeroUniversita) {
+    public Istruzione(int hashIstruzione, float percentualeLaureati, float percentualeDiplomati,
+            int numeroUniversita) {
         this.hashIstruzione = hashIstruzione;
         this.percentualeLaureati = percentualeLaureati;
         this.percentualeDiplomati = percentualeDiplomati;
         this.numeroUniversita = numeroUniversita;
     }
 
-    public Integer getHashIstruzione() {
+    public int getHashIstruzione() {
         return hashIstruzione;
     }
 
-    public Float getPercentualeLaureati() {
+    public float getPercentualeLaureati() {
         return percentualeLaureati;
     }
 
-    public Float getPercentualeDiplomati() {
+    public float getPercentualeDiplomati() {
         return percentualeDiplomati;
     }
 
-    public Integer getNumeroUniversita() {
+    public int getNumeroUniversita() {
         return numeroUniversita;
     }
 
@@ -44,10 +44,10 @@ public class Istruzione {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((hashIstruzione == null) ? 0 : hashIstruzione.hashCode());
-        result = prime * result + ((percentualeLaureati == null) ? 0 : percentualeLaureati.hashCode());
-        result = prime * result + ((percentualeDiplomati == null) ? 0 : percentualeDiplomati.hashCode());
-        result = prime * result + ((numeroUniversita == null) ? 0 : numeroUniversita.hashCode());
+        result = prime * result + hashIstruzione;
+        result = prime * result + Float.floatToIntBits(percentualeLaureati);
+        result = prime * result + Float.floatToIntBits(percentualeDiplomati);
+        result = prime * result + numeroUniversita;
         return result;
     }
 
@@ -60,25 +60,13 @@ public class Istruzione {
         if (getClass() != obj.getClass())
             return false;
         Istruzione other = (Istruzione) obj;
-        if (hashIstruzione == null) {
-            if (other.hashIstruzione != null)
-                return false;
-        } else if (!hashIstruzione.equals(other.hashIstruzione))
+        if (hashIstruzione != other.hashIstruzione)
             return false;
-        if (percentualeLaureati == null) {
-            if (other.percentualeLaureati != null)
-                return false;
-        } else if (!percentualeLaureati.equals(other.percentualeLaureati))
+        if (Float.floatToIntBits(percentualeLaureati) != Float.floatToIntBits(other.percentualeLaureati))
             return false;
-        if (percentualeDiplomati == null) {
-            if (other.percentualeDiplomati != null)
-                return false;
-        } else if (!percentualeDiplomati.equals(other.percentualeDiplomati))
+        if (Float.floatToIntBits(percentualeDiplomati) != Float.floatToIntBits(other.percentualeDiplomati))
             return false;
-        if (numeroUniversita == null) {
-            if (other.numeroUniversita != null)
-                return false;
-        } else if (!numeroUniversita.equals(other.numeroUniversita))
+        if (numeroUniversita != other.numeroUniversita)
             return false;
         return true;
     }

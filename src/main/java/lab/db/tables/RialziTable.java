@@ -16,7 +16,7 @@ import lab.db.Table;
 import lab.model.Rialzo;
 
 public final class RialziTable implements Table<Rialzo, Integer> {
-    public static final String TABLE_NAME = "Rialzi";
+    public static final String TABLE_NAME = "rialzi";
 
      private final Connection connection; 
 
@@ -36,10 +36,10 @@ public final class RialziTable implements Table<Rialzo, Integer> {
              // 2. Execute the statement with the given query
              statement.executeUpdate(
                  "CREATE TABLE " + TABLE_NAME + " (" +
-                         "PrezzoAttuale int NOT NULL CHECK (PrezzoAttuale > 0)," +
-                         "E-mail varchar NOT NULL FOREIGN KEY REFERENCES Utenti," + 
-                         "idAnnuncio int NOT NULL FOREIGN KEY REFERENCES Annunci_Utente," + 
-                         "DataRialzo datetime NOT NULL," +
+                         "prezzoAttuale int NOT NULL CHECK (prezzoAttuale > 0)," +
+                         "email varchar(30) NOT NULL FOREIGN KEY REFERENCES utenti," + 
+                         "idAnnuncio int NOT NULL FOREIGN KEY REFERENCES annunci_utente," + 
+                         "dataRialzo datetime NOT NULL," +
                          "PRIMARY KEY(prezzoAttuale, e-mail, idAnnuncio)" +
                      ")");
              return true;

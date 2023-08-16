@@ -17,7 +17,7 @@ package lab.db.tables;
  import lab.model.Utente;
 
 public final class UtentiTable implements Table<Utente, Integer> {
-    public static final String TABLE_NAME = "students";
+    public static final String TABLE_NAME = "utenti";
 
      private final Connection connection; 
 

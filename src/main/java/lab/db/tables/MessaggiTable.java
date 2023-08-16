@@ -16,7 +16,7 @@ import lab.db.Table;
 import lab.model.Messaggio;
 
 public final class MessaggiTable implements Table<Messaggio, Integer> {
-    public static final String TABLE_NAME = "Messaggi";
+    public static final String TABLE_NAME = "messaggi";
 
      private final Connection connection; 
 
@@ -36,12 +36,12 @@ public final class MessaggiTable implements Table<Messaggio, Integer> {
              // 2. Execute the statement with the given query
              statement.executeUpdate(
                  "CREATE TABLE " + TABLE_NAME + " (" +
-                         "Timestamp int NOT NULL," +
-                         "E-mail varchar NOT NULL FOREIGN KEY REFERENCES Utenti," + 
-                         "idAnnuncio int NOT NULL FOREIGN KEY REFERENCES Annunci_Utente," + 
-                         "Testo char(1024) NOT NULL," + 
-                         "Mittente int NOT NULL," +
-                         "PRIMARY KEY(timestamp, e-mail, idAnnuncio)" +
+                         "timestamp int NOT NULL," +
+                         "email varchar NOT NULL FOREIGN KEY REFERENCES utenti," + 
+                         "idAnnuncio int NOT NULL FOREIGN KEY REFERENCES annunci_utente," + 
+                         "testo char(1024) NOT NULL," + 
+                         "mittente int NOT NULL," +
+                         "PRIMARY KEY(timestamp, email, idAnnuncio)" +
                      ")");
              return true;
          } catch (final SQLException e) {

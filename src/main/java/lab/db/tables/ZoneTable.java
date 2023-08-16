@@ -11,7 +11,7 @@ import lab.model.Zona;
 
 public class ZoneTable implements Table<Zona, Integer> {
 
-    public static final String TABLE_NAME = "Zone";
+    public static final String TABLE_NAME = "zone";
     private final Connection connection; 
 
     public ZoneTable(final Connection connection) {
@@ -31,10 +31,10 @@ public class ZoneTable implements Table<Zona, Integer> {
             statement.executeUpdate(
                 "CREATE TABLE " + TABLE_NAME + " (" +
                     "idZona int NOT NULL," +
-                    "idCitta` int NOT NULL FOREIGN KEY REFERENCES Citta," + 
+                    "idCitta int NOT NULL FOREIGN KEY REFERENCES citta," + 
                     "nome char(25) NOT NULL," +
                     "costoMedioMq float NOT NULL CHECK (costoMedioMq > 0)," +
-                    "numeroImmobili int NOT NULL CHECK (numeroImmobili ≥ 0)," +
+                    "numeroImmobili int NOT NULL CHECK (numeroImmobili >= 0)," +
                     "PRIMARY KEY(idZona, idCitta)" +
                 ")");
             return true;

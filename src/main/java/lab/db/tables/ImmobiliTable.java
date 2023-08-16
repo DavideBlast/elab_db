@@ -11,7 +11,7 @@ import lab.model.Immobile;
 
 public class ImmobiliTable implements Table<Immobile, Integer> {
 
-    public static final String TABLE_NAME = "Immobili";
+    public static final String TABLE_NAME = "immobili";
     private final Connection connection; 
 
     public ImmobiliTable(final Connection connection) {
@@ -33,11 +33,11 @@ public class ImmobiliTable implements Table<Immobile, Integer> {
                     "idImmobile NOT NULL," +
                     "idZona NOT NULL FOREIGN KEY REFERENCES Zone," + 
                     "metriQuadri NOT NULL CHECK (metriQuadri > 0)," +
-                    "classeEnergetica classe energetica CHECK(classe energetica in (’A+’, ’A’, ’B’, ’C’, ’D’, ’E’,’F’, ’G’))," +
+                    "classeEnergetica classe_energetica CHECK(classe_energetica in (’A+’, ’A’, ’B’, ’C’, ’D’, ’E’,’F’, ’G’))," +
                     "annoCostruzione int CHECK (annoCostruzione > 0)," +
                     "via varchar NOT NULL," +
                     "numeroCivico int NOT NULL," +
-                    "tipoImmobile tipo immobile NOT NULL CHECK(tipo immobile in (’Appartamento’, ’Villa’, ’Stanza’))," +
+                    "tipoImmobile tipo_immobile NOT NULL CHECK(tipo_immobile in (’Appartamento’, ’Villa’, ’Stanza’))," +
                     "numeroInterno int," +
                     "piano int," +
                     "numeroStanze int CHECK (numeroStanze > 0)," +

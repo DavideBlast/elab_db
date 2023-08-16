@@ -16,7 +16,7 @@ import lab.db.Table;
 import lab.model.Giudice;
 
 public final class GiudiciTable implements Table<Giudice, Integer> {
-    public static final String TABLE_NAME = "Giudici";
+    public static final String TABLE_NAME = "giudici_esecuzione";
 
      private final Connection connection; 
 
@@ -36,9 +36,9 @@ public final class GiudiciTable implements Table<Giudice, Integer> {
              // 2. Execute the statement with the given query
              statement.executeUpdate(
                  "CREATE TABLE " + TABLE_NAME + " (" +
-                         "E-mail varchar PRIMARY KEY," +
-                         "Telefono varchar CHECK (len(Telefono)=10)," + 
-                         "Nome char(25) NOT NULL" +
+                         "email varchar(30) PRIMARY KEY," +
+                         "telefono varchar(10) CHECK (LENGTH(telefono)=10)," + 
+                         "nome char(25) NOT NULL" +
                      ")");
              return true;
          } catch (final SQLException e) {

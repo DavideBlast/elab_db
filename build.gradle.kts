@@ -21,7 +21,8 @@ val javaFXModules = listOf(
 val supportedPlatforms = listOf("linux", "mac", "win") // All required for OOP
 
 dependencies {
-
+    implementation ("com.oracle.database.jdbc:ojdbc8:19.6.0.0")
+    implementation ("com.oracle.database.jdbc:ucp:19.6.0.0")
     val javaFxVersion = 15
     for (platform in supportedPlatforms) {
         for (module in javaFXModules) {
@@ -40,7 +41,7 @@ dependencies {
 application {
     // The following allows to run with: ./gradlew -PmainClass=it.unibo.oop.MyMainClass run
     //mainClass.set(project.properties["mainClass"].toString())
-    mainClass.set("game.ControllerImpl")
+    mainClass.set("application.App")
 }
 
 tasks.test {

@@ -18,7 +18,7 @@ import lab.model.AnnuncioUtente.StatoAnnuncio;
 import lab.model.AnnuncioUtente.TipoAnnuncio;
 
 public final class AnnunciTable implements Table<AnnuncioUtente, Integer> {
-    public static final String TABLE_NAME = "Annunci_Utente";
+    public static final String TABLE_NAME = "annunci_utente";
 
      private final Connection connection; 
 

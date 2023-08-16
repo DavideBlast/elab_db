@@ -16,7 +16,7 @@ import lab.db.Table;
 import lab.model.Asta;
 
 public final class AsteTable implements Table<Asta, Integer> {
-    public static final String TABLE_NAME = "Aste";
+    public static final String TABLE_NAME = "aste";
 
      private final Connection connection; 
 
@@ -36,15 +36,15 @@ public final class AsteTable implements Table<Asta, Integer> {
              // 2. Execute the statement with the given query
              statement.executeUpdate(
                  "CREATE TABLE " + TABLE_NAME + " (" +
-                         "idAnnuncio int NOT NULL," +
-                         "idImmobile int NOT NULL FOREIGN KEY REFERENCES Immobili," + 
-                         "E-mail varchar NOT NULL FOREIGN KEY REFERENCES Utenti," + 
-                         "DataCreazione datetime NOT NULL," +
-                         "PrezzoMinimo int NOT NULL CHECK (PrezzoMinimo > 0)," +
-                         "RialzoMinimo int NOT NULL CHECK (RialzoMinimo > 0)," +
-                         "DepositoCauzionale int NOT NULL" +
-                            "CHECK (DepositoCauzionale > 0)," +
-                         "DataFine datetime NOT NULL," +
+                         "idAsta int NOT NULL," +
+                         "idImmobile int NOT NULL FOREIGN KEY REFERENCES immobili," + 
+                         "email varchar NOT NULL FOREIGN KEY REFERENCES utenti," + 
+                         "dataCreazione datetime NOT NULL," +
+                         "prezzoMinimo int NOT NULL CHECK (prezzoMinimo > 0)," +
+                         "rialzoMinimo int NOT NULL CHECK (rialzoMinimo > 0)," +
+                         "depositoCauzionale int NOT NULL" +
+                            "CHECK (depositoCauzionale > 0)," +
+                         "dataFine datetime NOT NULL," +
                          "PRIMARY KEY(idAnnuncio, idImmobile, e-mail)" +
                      ")");
              return true;

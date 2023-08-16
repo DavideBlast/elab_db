@@ -4,25 +4,25 @@ import java.util.Objects;
 import java.util.Optional;
 
 public class Sanita {
-    private final Integer hashSanita;
-    private final Float aspettativaVita;
-    private final Float postiLettoProCapite;
+    private final int hashSanita;
+    private final float aspettativaVita;
+    private final float postiLettoProCapite;
     
-    public Sanita(Integer hashSanita, Float aspettativaVita, Float postiLettoProCapite) {
+    public Sanita(int hashSanita, float aspettativaVita, float postiLettoProCapite) {
         this.hashSanita = hashSanita;
         this.aspettativaVita = aspettativaVita;
         this.postiLettoProCapite = postiLettoProCapite;
     }
 
-    public Integer getHashSanita() {
+    public int getHashSanita() {
         return hashSanita;
     }
 
-    public Float getAspettativaVita() {
+    public float getAspettativaVita() {
         return aspettativaVita;
     }
 
-    public Float getPostiLettoProCapite() {
+    public float getPostiLettoProCapite() {
         return postiLettoProCapite;
     }
 
@@ -36,9 +36,9 @@ public class Sanita {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((hashSanita == null) ? 0 : hashSanita.hashCode());
-        result = prime * result + ((aspettativaVita == null) ? 0 : aspettativaVita.hashCode());
-        result = prime * result + ((postiLettoProCapite == null) ? 0 : postiLettoProCapite.hashCode());
+        result = prime * result + hashSanita;
+        result = prime * result + Float.floatToIntBits(aspettativaVita);
+        result = prime * result + Float.floatToIntBits(postiLettoProCapite);
         return result;
     }
 
@@ -51,20 +51,11 @@ public class Sanita {
         if (getClass() != obj.getClass())
             return false;
         Sanita other = (Sanita) obj;
-        if (hashSanita == null) {
-            if (other.hashSanita != null)
-                return false;
-        } else if (!hashSanita.equals(other.hashSanita))
+        if (hashSanita != other.hashSanita)
             return false;
-        if (aspettativaVita == null) {
-            if (other.aspettativaVita != null)
-                return false;
-        } else if (!aspettativaVita.equals(other.aspettativaVita))
+        if (Float.floatToIntBits(aspettativaVita) != Float.floatToIntBits(other.aspettativaVita))
             return false;
-        if (postiLettoProCapite == null) {
-            if (other.postiLettoProCapite != null)
-                return false;
-        } else if (!postiLettoProCapite.equals(other.postiLettoProCapite))
+        if (Float.floatToIntBits(postiLettoProCapite) != Float.floatToIntBits(other.postiLettoProCapite))
             return false;
         return true;
     }
