@@ -3,12 +3,12 @@ plugins {
     java
     id("org.danilopianini.gradle-java-qa") version "0.40.0"
     id("com.github.johnrengelman.shadow") version "7.0.0"
-
 }
 
 repositories {
     mavenCentral()
 }
+
 
 val javaFXModules = listOf(
     "base",
@@ -18,11 +18,10 @@ val javaFXModules = listOf(
     "graphics"
 )
 
-val supportedPlatforms = listOf("linux", "mac", "win") // All required for OOP
+val supportedPlatforms = listOf("linux", "mac", "win")
 
 dependencies {
-    implementation ("com.oracle.database.jdbc:ojdbc8:19.6.0.0")
-    implementation ("com.oracle.database.jdbc:ucp:19.6.0.0")
+    implementation("mysql:mysql-connector-java:8.0.33")
     val javaFxVersion = 15
     for (platform in supportedPlatforms) {
         for (module in javaFXModules) {
@@ -41,7 +40,7 @@ dependencies {
 application {
     // The following allows to run with: ./gradlew -PmainClass=it.unibo.oop.MyMainClass run
     //mainClass.set(project.properties["mainClass"].toString())
-    mainClass.set("application.App")
+    mainClass.set("application.Main")
 }
 
 tasks.test {

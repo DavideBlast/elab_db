@@ -234,8 +234,6 @@ public class App extends Application {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    	
-    	System.out.println(System.getProperty("javafx.runtime.version"));
         launch(args);
     }
 }
