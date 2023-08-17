@@ -1,239 +1,193 @@
 package application;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
-import javafx.scene.text.Text;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
+import lab.db.ConnectionProvider;
 
 public class App extends Application {
 
-    private Tab utentiTab;
-    private Tab giudiciTab;
+    ConnectionProvider connProv = new ConnectionProvider("root", "root", "elab01");
+	Connection connection = connProv.getMySQLConnection();
+
+    private Stage primaryStage;
+    private Scene loginScene;
+    private Scene utenteScene;
+    private Scene giudiceScene;
 
     @Override
     public void start(Stage primaryStage){
-        primaryStage.setTitle("Multi-Tab Program");
 
-        // Create login page
-        StackPane loginPage = new StackPane();
-        GridPane loginGridPane = new GridPane();
-        loginGridPane.setPadding(new Insets(10));
-        loginGridPane.setHgap(10);
-        loginGridPane.setVgap(10);
+        primaryStage.setTitle("Elaborato DB");
+        this.primaryStage = primaryStage;
 
-        Text loginTitle = new Text("Login");
-        loginTitle.setFont(Font.font(20));
-        loginGridPane.add(loginTitle, 0, 0, 2, 1);
+        createLoginScene();
 
-        Label usernameLabel = new Label("Username:");
-        TextField usernameField = new TextField();
-        loginGridPane.add(usernameLabel, 0, 1);
-        loginGridPane.add(usernameField, 1, 1);
+        // Create "utente" scene
+        TabPane tabPane = createUtenteTabPane();
+        utenteScene = new Scene(tabPane, 800, 600);
 
-        Label passwordLabel = new Label("Password:");
-        PasswordField passwordField = new PasswordField();
-        loginGridPane.add(passwordLabel, 0, 2);
-        loginGridPane.add(passwordField, 1, 2);
+        // Create "giudice" scene
+        StackPane giudiceLayout = new StackPane(new Label("Giudice Scene"));
+        giudiceScene = new Scene(giudiceLayout, 300, 200);
 
-        Button loginButton = new Button("Login");
-        loginGridPane.add(loginButton, 0, 3, 2, 1);
-        loginGridPane.setHalignment(loginButton, javafx.geometry.HPos.CENTER);
+        // Set initial scene
+        primaryStage.setScene(loginScene);
+        primaryStage.setTitle("Login");
+        primaryStage.show();
+       
+    }
 
-        loginPage.getChildren().add(loginGridPane);
+    private void createLoginScene() {
+        GridPane grid = new GridPane();
+        grid.setAlignment(Pos.CENTER);
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(25, 25, 25, 25));
 
-        // Create the "Utenti" tab
-        utentiTab = new Tab("Utenti");
-        utentiTab.setClosable(false);
+        loginScene = new Scene(grid, 400, 300);
 
-        // Create content for "Utenti" tab
-        TabPane utentiTabPane = new TabPane();
+        Label sceneTitle = new Label("Log In");
+        sceneTitle.setFont(Font.font("Tahoma", FontWeight.BOLD, 25));
+        grid.add(sceneTitle, 0, 0, 2, 1);
 
-        // Create the "Città" tab
-        Tab cittaTab = new Tab("Città");
-        cittaTab.setClosable(false);
+        Label userName = new Label("Username:");
+        grid.add(userName, 0, 1);
 
-        // Create content for "Città" tab
-        StackPane cittaContent = new StackPane();
+        TextField userTextField = new TextField();
+        grid.add(userTextField, 1, 1);
 
-        Text cittaTitle = new Text("Città");
-        cittaTitle.setFont(Font.font(20));
+        Label pw = new Label("Password:");
+        grid.add(pw, 0, 2);
 
-        Button button1 = new Button("Button 1");
-        Button button2 = new Button("Button 2");
-        Button button3 = new Button("Button 3");
+        PasswordField pwBox = new PasswordField();
+        grid.add(pwBox, 1, 2);
 
-        GridPane cittaGridPane = new GridPane();
-        cittaGridPane.setPadding(new Insets(10));
-        cittaGridPane.setHgap(10);
-        cittaGridPane.setVgap(10);
-        cittaGridPane.add(cittaTitle, 0, 0);
-        cittaGridPane.add(button1, 0, 1);
-        cittaGridPane.add(button2, 0, 2);
-        cittaGridPane.add(button3, 0, 3);
+        Button loginBtn = new Button("Log in");
+        HBox hbBtn = new HBox(10);
+        hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
+        hbBtn.getChildren().add(loginBtn);
+        grid.add(hbBtn, 1, 4);
 
-        cittaContent.getChildren().add(cittaGridPane);
-        cittaTab.setContent(cittaContent);
+        loginBtn.setOnAction(event -> {
+            String username = userTextField.getText();
+            String password = pwBox.getText();
 
-        // Create the "Annunci" tab
-        Tab annunciTab = new Tab("Annunci");
-        annunciTab.setClosable(false);
-
-        // Create content for "Annunci" tab
-        StackPane annunciContent = new StackPane();
-
-        Text annunciTitle = new Text("Annunci");
-        annunciTitle.setFont(Font.font(20));
-
-        Button button4 = new Button("Button 4");
-        Button button5 = new Button("Button 5");
-        Button button6 = new Button("Button 6");
-
-        GridPane annunciGridPane = new GridPane();
-        annunciGridPane.setPadding(new Insets(10));
-        annunciGridPane.setHgap(10);
-        annunciGridPane.setVgap(10);
-        annunciGridPane.add(annunciTitle, 0, 0);
-        annunciGridPane.add(button4, 0, 1);
-        annunciGridPane.add(button5, 0, 2);
-        annunciGridPane.add(button6, 0, 3);
-
-        annunciContent.getChildren().add(annunciGridPane);
-        annunciTab.setContent(annunciContent);
-
-        // Create the "Messaggi" tab
-        Tab messaggiTab = new Tab("Messaggi");
-        messaggiTab.setClosable(false);
-
-        // Create content for "Messaggi" tab
-        StackPane messaggiContent = new StackPane();
-
-        Text messaggiTitle = new Text("Messaggi");
-        messaggiTitle.setFont(Font.font(20));
-
-        Button button7 = new Button("Button 7");
-        Button button8 = new Button("Button 8");
-        Button button9 = new Button("Button 9");
-
-        GridPane messaggiGridPane = new GridPane();
-        messaggiGridPane.setPadding(new Insets(10));
-        messaggiGridPane.setHgap(10);
-        messaggiGridPane.setVgap(10);
-        messaggiGridPane.add(messaggiTitle, 0, 0);
-        messaggiGridPane.add(button7, 0, 1);
-        messaggiGridPane.add(button8, 0, 2);
-        messaggiGridPane.add(button9, 0, 3);
-
-        messaggiContent.getChildren().add(messaggiGridPane);
-        messaggiTab.setContent(messaggiContent);
-
-        // Add nested tabs to the "Utenti" tab pane
-        utentiTabPane.getTabs().addAll(cittaTab, annunciTab, messaggiTab);
-        utentiTab.setContent(utentiTabPane);
-
-        // Create the "Giudici d'esecuzione" tab
-        giudiciTab = new Tab("Giudici d'esecuzione");
-        giudiciTab.setClosable(false);
-
-        // Create content for "Giudici d'esecuzione" tab
-        StackPane giudiciContent = new StackPane();
-
-        Text giudiciTitle = new Text("Giudici d'esecuzione");
-        giudiciTitle.setFont(Font.font(20));
-
-        Button button10 = new Button("Button 10");
-        Button button11 = new Button("Button 11");
-        Button button12 = new Button("Button 12");
-
-        GridPane giudiciGridPane = new GridPane();
-        giudiciGridPane.setPadding(new Insets(10));
-        giudiciGridPane.setHgap(10);
-        giudiciGridPane.setVgap(10);
-        giudiciGridPane.add(giudiciTitle, 0, 0);
-        giudiciGridPane.add(button10, 0, 1);
-        giudiciGridPane.add(button11, 0, 2);
-        giudiciGridPane.add(button12, 0, 3);
-
-        giudiciContent.getChildren().add(giudiciGridPane);
-        giudiciTab.setContent(giudiciContent);
-
-        // Create the tab pane and add tabs
-        TabPane tabPane = new TabPane();
-        tabPane.getTabs().addAll(utentiTab, giudiciTab);
-
-        // Set initial visibility
-        tabPane.setVisible(false);
-
-        // Set login button action
-        loginButton.setOnAction(event -> {
-            String username = usernameField.getText();
-            String password = passwordField.getText();
-            if (isValidCredentials(username, password)) {
-                loginPage.setVisible(false);
-                tabPane.setVisible(true);
-                disableTabs(username);
+            if (username.equals("utente") && password.equals("psw")) {
+                primaryStage.setScene(utenteScene);
+                primaryStage.setTitle("Utente");
+            } else if (username.equals("giudice") && password.equals("psw")) {
+                primaryStage.setScene(giudiceScene);
+                primaryStage.setTitle("Giudice");
             } else {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Credenziali errate");
+                alert.setTitle("Login Error");
                 alert.setHeaderText(null);
-                alert.setContentText("Username o password non validi. Riprova");
+                alert.setContentText("Invalid username or password.");
                 alert.showAndWait();
             }
         });
-
-        // Create the main scene
-        Scene mainScene = new Scene(new StackPane(loginPage, tabPane), 400, 300);
-        primaryStage.setScene(mainScene);
-        primaryStage.show();
     }
 
-    private boolean isValidCredentials(String username, String password) {
-        // Perform your validation logic here
-        // This is just a dummy implementation
-        return (username.equals("utente") || username.equals("giudice")) && password.equals("psw");
+    private TabPane createUtenteTabPane() {
+        TabPane tabPane = new TabPane();
+
+        Tab tab1 = new Tab("Città");
+        tab1.setClosable(false);
+        String query1 = "SELECT * FROM citta";
+        tab1.setContent(createTabContent("Città", query1));
+
+        Tab tab2 = new Tab("Zone");
+        tab2.setClosable(false);
+        String query2 = "SELECT * FROM zone";
+        tab2.setContent(createTabContent("Zone", query2));
+
+        Tab tab3 = new Tab("Immobili");
+        tab3.setClosable(false);
+        String query3 = "SELECT * FROM immobili";
+        tab3.setContent(createTabContent("Immobili", query3));
+
+        tabPane.getTabs().addAll(tab1, tab2, tab3);
+        return tabPane;
     }
 
-    private void disableTabs(String username) {
-        if (username.equals("utente")) {
-            giudiciTab.setDisable(true);
-        } else if (username.equals("giudice")) {
-            utentiTab.setDisable(true);
+     private VBox createTabContent(String queryName, String query) {
+        VBox layout = new VBox(10);
+        layout.setPadding(new Insets(20));
+
+        Label label = new Label(queryName);
+        label.setFont(Font.font("Tahoma", FontWeight.BOLD, 16));
+
+        TableView<DataItem> tableView = new TableView<>();
+        tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query);
+            ResultSet resultSet = preparedStatement.executeQuery()) {
+
+            ResultSetMetaData metaData = resultSet.getMetaData();
+            int numColumns = metaData.getColumnCount();
+
+            for (int i = 1; i <= numColumns; i++) {
+                TableColumn<DataItem, String> column = new TableColumn<>(metaData.getColumnName(i));
+                int j = i;
+                column.setCellValueFactory(cellData -> cellData.getValue().valueProperty(j - 1));
+                tableView.getColumns().add(column);
+            }
+            
+            Button updateButton = new Button("Update Table");
+            updateButton.setOnAction(event -> updateTableDataFromDatabase(tableView, numColumns, query));
+
+            layout.getChildren().addAll(label, tableView, updateButton);
+            return layout;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+            return layout;
+            
+    }
+
+    private void updateTableDataFromDatabase(TableView<DataItem> tableView, int numColumns, String query) {
+        ObservableList<DataItem> data = FXCollections.observableArrayList();
+
+        try (Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(query)) {
+
+            while (resultSet.next()) {
+                String[] values = new String[numColumns];
+                for (int i = 0; i < numColumns; i++) {
+                    values[i] = resultSet.getString(i + 1);  // Column indexes start from 1
+                }
+                data.add(new DataItem(values));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        
+
+        tableView.setItems(data);
     }
 
     public static void main(String[] args) {
-    	
-    	try {
-			Connection connection;
-			connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/elab01", "root", "root");
-		
-	        Statement statement = connection.createStatement();
-	
-	        // Execute the query to get all the rows of the table
-	        ResultSet resultSet = statement.executeQuery("SELECT * FROM " + "utenti");
-	
-	        // Loop through the result set and print the rows
-	        while (resultSet.next()) {
-	            // Print the values of each row
-	            for (int i = 1; i <= resultSet.getMetaData().getColumnCount(); i++) {
-	                System.out.print(resultSet.getString(i) + " ");
-	            }
-	            System.out.println();
-        }
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
         launch(args);
     }
 }
