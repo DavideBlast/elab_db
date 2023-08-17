@@ -6,7 +6,10 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
+import java.util.Optional;
 
+import application.operations.OpFactory;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -112,7 +115,7 @@ public class App extends Application {
 
         Tab tab1 = new Tab("Città");
         tab1.setClosable(false);
-        String query1 = "SELECT * FROM citta";
+        String query1 = new OpFactory().createOp7().getQuery(Optional.of(List.of(1)));
         tab1.setContent(createTabContent("Città", query1));
 
         Tab tab2 = new Tab("Zone");
