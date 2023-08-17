@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 import application.operations.OpFactory;
+import application.operations.Operation;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -115,7 +116,7 @@ public class App extends Application {
 
         Tab tab1 = new Tab("Città");
         tab1.setClosable(false);
-        String query1 = new OpFactory().createOp7().getQuery(Optional.of(List.of(1)));
+        Operation query1 = new OpFactory().createOp7();
         tab1.setContent(createTabContent("Città", query1));
 
         Tab tab2 = new Tab("Zone");
@@ -132,7 +133,7 @@ public class App extends Application {
         return tabPane;
     }
 
-     private VBox createTabContent(String queryName, String query) {
+     private VBox createTabContent(String queryName, Operation query) {
         VBox layout = new VBox(10);
         layout.setPadding(new Insets(20));
 
@@ -142,7 +143,7 @@ public class App extends Application {
         TableView<DataItem> tableView = new TableView<>();
         tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query);
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query.getQuery(Optional.empty()));
             ResultSet resultSet = preparedStatement.executeQuery()) {
 
             ResultSetMetaData metaData = resultSet.getMetaData();
@@ -154,9 +155,9 @@ public class App extends Application {
                 column.setCellValueFactory(cellData -> cellData.getValue().valueProperty(j - 1));
                 tableView.getColumns().add(column);
             }
-            
+            int x = 1;
             Button updateButton = new Button("Update Table");
-            updateButton.setOnAction(event -> updateTableDataFromDatabase(tableView, numColumns, query));
+            updateButton.setOnAction(event -> updateTableDataFromDatabase(tableView, numColumns, query.getQuery(Optional.of(List.of(x)))));
 
             layout.getChildren().addAll(label, tableView, updateButton);
             return layout;
