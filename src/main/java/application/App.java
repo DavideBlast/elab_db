@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -141,8 +142,16 @@ public class App extends Application {
         Label label = new Label(queryName);
         label.setFont(Font.font("Tahoma", FontWeight.BOLD, 16));
 
+        List<TextField> inputs = new ArrayList<TextField>();
+
         for (var inputName : query.getInputNames()) {
-            TextField textfield = new TextField(inputName);
+            Label labelTextField = new Label(inputName + ": ");
+            TextField textField = new TextField();
+            HBox hb = new HBox();
+            hb.getChildren().addAll(labelTextField, textField);
+            hb.setSpacing(10);
+            inputs.add(textField);
+            layout.getChildren().add(hb);
         }
 
         TableView<DataItem> tableView = new TableView<>();
@@ -160,9 +169,8 @@ public class App extends Application {
                 column.setCellValueFactory(cellData -> cellData.getValue().valueProperty(j - 1));
                 tableView.getColumns().add(column);
             }
-            int x = 1;
             Button updateButton = new Button("Update Table");
-            updateButton.setOnAction(event -> updateTableDataFromDatabase(tableView, numColumns, query.getQuery(Optional.of(List.of(x)))));
+            updateButton.setOnAction(event -> updateTableDataFromDatabase(tableView, numColumns, query.getQuery(Optional.of(List.of(Integer.parseInt(inputs.get(0).getText()))))));
 
             layout.getChildren().addAll(label, tableView, updateButton);
             return layout;

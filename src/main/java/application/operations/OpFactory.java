@@ -30,6 +30,11 @@ public class OpFactory {
             public List<Tipo> getInputTypes() {
                 return List.of(Tipo.INT);
             }
+
+            @Override
+            public List<Object> translateInput(List<String> inputs) {
+                return List.of(Integer.parseInt(inputs.get(0)));
+            }
         };
     }
     

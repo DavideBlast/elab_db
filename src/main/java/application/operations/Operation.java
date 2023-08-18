@@ -9,7 +9,10 @@ public interface Operation {
 
     List<String> getInputNames();
 
+    @Deprecated
     List<Tipo> getInputTypes();
+
+    List<Object> translateInput(List<String> inputs);
 
     public enum Tipo {
         INT("int"),
