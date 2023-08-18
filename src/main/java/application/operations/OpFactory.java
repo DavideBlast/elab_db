@@ -3,11 +3,10 @@ package application.operations;
 import java.util.List;
 import java.util.Optional;
 
-
 public class OpFactory {
 
     public Operation createOp7() {
-        final int DEFAULT_VALUE_7 = 1;
+        final int idZona = 1;
         return new Operation() {
             
             @Override
@@ -18,8 +17,18 @@ public class OpFactory {
                     "ORDER BY dataCreazione DESC" : 
                     "SELECT I.* " +
                     "FROM immobili I JOIN annunci_utente A ON (I.idImmobile = A.idImmobile " +
-                    "AND A.statoAnnuncio = 'Attivo' AND I.idZona = " + DEFAULT_VALUE_7 + " ) " +
+                    "AND A.statoAnnuncio = 'Attivo' AND I.idZona = " + idZona + " ) " +
                     "ORDER BY dataCreazione DESC";
+            }
+
+            @Override
+            public List<String> getInputNames() {
+                return List.of("idZona");
+            }
+
+            @Override
+            public List<Tipo> getInputTypes() {
+                return List.of(Tipo.INT);
             }
         };
     }

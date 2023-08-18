@@ -119,17 +119,18 @@ public class App extends Application {
         Operation query1 = new OpFactory().createOp7();
         tab1.setContent(createTabContent("Città", query1));
 
-        Tab tab2 = new Tab("Zone");
-        tab2.setClosable(false);
-        String query2 = "SELECT * FROM zone";
-        tab2.setContent(createTabContent("Zone", query2));
+        // Tab tab2 = new Tab("Zone");
+        // tab2.setClosable(false);
+        // String query2 = "SELECT * FROM zone";
+        // tab2.setContent(createTabContent("Zone", query2));
 
-        Tab tab3 = new Tab("Immobili");
-        tab3.setClosable(false);
-        String query3 = "SELECT * FROM immobili";
-        tab3.setContent(createTabContent("Immobili", query3));
+        // Tab tab3 = new Tab("Immobili");
+        // tab3.setClosable(false);
+        // String query3 = "SELECT * FROM immobili";
+        // tab3.setContent(createTabContent("Immobili", query3));
 
-        tabPane.getTabs().addAll(tab1, tab2, tab3);
+        tabPane.getTabs().addAll(tab1);
+        // tabPane.getTabs().addAll(tab1, tab2, tab3);
         return tabPane;
     }
 
@@ -139,6 +140,10 @@ public class App extends Application {
 
         Label label = new Label(queryName);
         label.setFont(Font.font("Tahoma", FontWeight.BOLD, 16));
+
+        for (var inputName : query.getInputNames()) {
+            TextField textfield = new TextField(inputName);
+        }
 
         TableView<DataItem> tableView = new TableView<>();
         tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
