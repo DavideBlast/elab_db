@@ -30,8 +30,12 @@ import lab.db.ConnectionProvider;
 
 public class App extends Application {
 
-    ConnectionProvider connProv = new ConnectionProvider("root", "root", "elab01");
-	Connection connection = connProv.getMySQLConnection();
+    static ConnectionProvider connProv = new ConnectionProvider("root", "root", "elab01?allowMultiQueries=true");
+	static Connection connection = connProv.getMySQLConnection();
+
+    public static Connection getConnection() {
+        return connection;
+    }
 
     private Stage primaryStage;
     private Scene loginScene;
@@ -117,7 +121,7 @@ public class App extends Application {
 
         Tab tab1 = new Tab("Città");
         tab1.setClosable(false);
-        Operation query1 = new OpFactory().createOp7();
+        Operation query1 = new OpFactory().createOp24();
         tab1.setContent(createTabContent("Città", query1));
 
         // Tab tab2 = new Tab("Zone");
@@ -170,7 +174,14 @@ public class App extends Application {
                 tableView.getColumns().add(column);
             }
             Button updateButton = new Button("Update Table");
-            updateButton.setOnAction(event -> updateTableDataFromDatabase(tableView, numColumns, query.getQuery(Optional.of(List.of(Integer.parseInt(inputs.get(0).getText()))))));
+            List<String> inputStrings = new ArrayList<String>();
+            
+            updateButton.setOnAction(event -> {
+                for (var input : inputs) {
+                    inputStrings.add(input.getText());
+                }
+                updateTableDataFromDatabase(tableView, numColumns, query, inputStrings);
+            });
 
             layout.getChildren().addAll(label, tableView, updateButton);
             return layout;
@@ -182,19 +193,23 @@ public class App extends Application {
             
     }
 
-    private void updateTableDataFromDatabase(TableView<DataItem> tableView, int numColumns, String query) {
+    private void updateTableDataFromDatabase(TableView<DataItem> tableView, int numColumns, Operation query, List<String> inputStrings) {
         ObservableList<DataItem> data = FXCollections.observableArrayList();
 
-        try (Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(query)) {
-
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query.getQuery(Optional.empty()));) {
+            if (query.getUpdate(query.translateInput(inputStrings)).isPresent()) 
+            {
+                preparedStatement.executeUpdate(query.getUpdate(query.translateInput(inputStrings)).get());
+            }
+            ResultSet resultSet = preparedStatement.executeQuery(query.getQuery(Optional.of(query.translateInput(inputStrings))));
             while (resultSet.next()) {
                 String[] values = new String[numColumns];
                 for (int i = 0; i < numColumns; i++) {
                     values[i] = resultSet.getString(i + 1);  // Column indexes start from 1
                 }
-                data.add(new DataItem(values));
+            data.add(new DataItem(values));
             }
+            
         } catch (SQLException e) {
             e.printStackTrace();
         }

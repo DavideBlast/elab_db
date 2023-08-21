@@ -5,6 +5,8 @@ import java.util.Optional;
 
 public interface Operation {
 
+    Optional<String> getUpdate(List<Object> args);
+
     String getQuery(Optional<List<Object>> args);
 
     List<String> getInputNames();
