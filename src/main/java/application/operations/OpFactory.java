@@ -89,12 +89,12 @@ public class OpFactory {
                        "INSERT INTO Trasporto (hashTrasporto, percorrenzaMediaPendolare, autoProCapite)" + 
                        "VALUES (@newHashTrasporto, in_percorrenzaMediaPendolare, in_autoProCapite);" + 
                        "END IF;" + 
-                       "SET @punteggioAmbiente = " + ((10 - (Float) args.get().get(2) / 5) + (Float) args.get().get(3) > 30 ? 10 : (Float) args.get().get(3) / 3) / 2 + 
-                       "SET @punteggioEconomia =  " + 
-                       "SET @punteggioIstruzione = " +
-                       "SET @punteggioSanita = " +
-                       "SET @punteggioTrasporto = " +
-                       "INSERT INTO citta_anni" + 
+                       "SET @punteggioAmbiente = " + ((10 - (Float) args.get().get(2) / 5) + (Float) args.get().get(3) > 30 ? 10 : (Float) args.get().get(3) / 3) / 2 + ";" +
+                       "SET @punteggioEconomia =  " + ((Float) args.get().get(4) / 25000 + 26 / 5 + (Integer) args.get().get(5) / 2000 + 5 - (Float) args.get().get(6) * 8 / 11 + 130 / 11) / 3 + ";" +
+                       "SET @punteggioIstruzione = " + ((Float) args.get().get(7) * 4 / 25 + 2 / 5 + (Float) args.get().get(8) * 4 / 35 + 2 / 7 + (Integer) args.get().get(9) * 4 / 45 + 14 / 3) / 3 + ";" +
+                       "SET @punteggioSanita = " + ((Float) args.get().get(10) * 2 / 5 - 24 + (Float) args.get().get(11) * 40 / 7 + 10 / 7) / 2 + ";" +
+                       "SET @punteggioTrasporto = " + ( - (Float) args.get().get(12) * 4 / 15 + 38 / 3 + - (Float) args.get().get(13) * 40 / 7 + 90 / 7) / 2 + ";" +
+                       "INSERT INTO citta_anni" +
                        "(idCitta, anno, punteggioAmbiente, punteggioTrasporto, punteggioEconomia, punteggioSanita, punteggioIstruzione, hashAmbiente, hashEconomia, hashIstruzione, hashSanita, hashTrasporto) " + 
                        "VALUES (,,,,,,,,,,,)";
             }
