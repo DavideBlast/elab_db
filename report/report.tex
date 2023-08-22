@@ -49,20 +49,20 @@
 
         {\Large \textbf{Città}} $\rightarrow$ Le città sono suddivise in diverse zone e vengono valutate in base a parametri di welfare. Gli utenti utilizzano l'applicazione per individuare la città che meglio si adatta alle loro esigenze e preferenze abitative. \\
         \\
-        {\Large \textbf{Categoria}} $\rightarrow$ Le categorie di welfare sono criteri utilizzati per valutare il benessere delle città europee. Essi includono ambiente, trasporto, economia, sanità ed istruzione. Questi parametri forniscono un quadro del livello di comfort e salute delle città. Consentono agli utenti di confrontare le città in base a questi indicatori, facilitando la scelta di una città che meglio si adatta alle proprie esigenze.
+        {\Large \textbf{Categoria}} $\rightarrow$ Le categorie di welfare sono criteri utilizzati per valutare il benessere nelle città europee. Essi includono ambiente, trasporto, economia, sanità ed istruzione. Questi parametri forniscono un quadro del livello di comfort e salute delle città. Consentono agli utenti di confrontare le città in base a questi indicatori, facilitando la scelta di una città che meglio si adatta alle proprie esigenze.
             \begin{itemize}
                 \item \textbf{Ambiente}
                             Valuta la qualità ambientale delle città, con indicatori come il pm 2.5 (particolato fine) e la percentuale di spazio verde urbano.
                 \item \textbf{Trasporto} 
-                            Valuta l'efficienza dei sistemi di trasporto urbano, considerando il tempo medio di pendolarismo e il numero di auto per persona. Fornisce informazioni sulla congestione del traffico, sull'accessibilità e sull'efficacia delle opzioni di trasporto pubblico e privato nelle città.
+                            Valuta l'efficienza dei sistemi di trasporto urbano, considerando il tempo medio di pendolarismo e il numero di auto per persona.
                 \item \textbf{Economia} 
                             Valuta la vitalità economica di una città attraverso indicatori come il PIL pro capite, lo stipendio medio e il tasso di disoccupazione. Consente inoltre di avere un'indicazione sul livello di prosperità e opportunità lavorative presenti nell'area urbana considerata.
                 \item \textbf{Sanità}
-                            Valuta la qualità del sistema sanitario di una città, considerando l'aspettativa di vita e il numero di ospedali per abitante. Fornisce un'indicazione sulla salute generale e sull'accessibilità alle cure mediche
+                            Valuta la qualità del sistema sanitario di una città, considerando l'aspettativa di vita e il numero di posti letto, all'interno degli ospedali, per abitante. Fornisce un'indicazione sulla salute generale e sull'accessibilità alle cure mediche
                 \item \textbf{Istruzione} 
                             Valuta la qualità dell'istruzione in una città, considerando la percentuale di laureati, la percentuale di diplomati e il numero di università presenti oltre che dare un'indicazione sulla disponibilità e l'accessibilità all'istruzione superiore e alla formazione professionale nell'area urbana considerata.
                 \end{itemize} 
-        {\Large \textbf{Immobile}} $\rightarrow$ Un immobile si riferisce a una proprietà che può essere promossa, venduta, affittata o messa all'asta dagli utenti attraverso la piattaforma. Gli annunci immobiliari includono informazioni come la metratura, il numero di stanze, il prezzo e altre caratteristiche rilevanti dell'immobile. \\
+        {\Large \textbf{Immobile}} $\rightarrow$ Un immobile si riferisce a una proprietà che può essere venduta, affittata o messa all'asta dagli utenti attraverso la piattaforma. Gli annunci immobiliari includono informazioni come la metratura, il numero di stanze, il prezzo e altre caratteristiche rilevanti dell'immobile. \\
         \\
         {\Large \textbf{Annuncio}} $\rightarrow$ Una presentazione di un immobile disponibile per la vendita, l'affitto o l'asta. Gli annunci forniscono dettagli completi sull'immobile, come la sua ubicazione, le specifiche, i prezzi e altre informazioni pertinenti. Gli utenti utilizzano l'applicazione per cercare, visualizzare e interagire con gli annunci immobiliari. \\
         \\
@@ -143,6 +143,19 @@
             \includegraphics[width=\linewidth]{./images/third.png}
             \caption{La terza versione dello schema concettuale}
         \end{figure}
+
+        \section{Aste e giudici}
+        Per enfatizzare la differente natura degli annunci pubblicabili dagli utenti ordinari e le aste riservate ad i giudici,
+        si è deciso di scindere l'entità \textit{annuncio} rispettivamente in \textit{annuncio\_utente} ed \textit{asta}. \\
+        \\
+        Le aste sono tipologie di annunci la cui gestione (dunque pubblicazione) è riservata ad i giudici di esecuzione.
+        In particolare, ciascuna asta verrà amministrata da uno ed un solo giudice, il quale però potrà dirigerne fino ad N.
+        Per riprodurre le dinamiche di ascesa del prezzo ed infine di vendita, viene istituita l’entità rialzo. \\
+        \\
+        Durante il periodo di attività di un’asta, scandito da una data di inizio ed una di fine, gli utenti hanno la facoltà di avanzare più rialzi 
+        (Il collegare direttamente utente ad asta avrebbe ristretto il numero massimo di rialzi effettuabili da un utente, nella stessa asta, ad 1).
+        I rialzi ricevuti in una determinata asta sono identificati univocamente dall’ utente che li ha effettuati e l’istante temporale in cui sono 
+        stati offerti. Al termine di un asta, si può risalire al prezzo di vendita, ove avvenuta, verificando il rialzo più recente ad essa collegato.
         	
     	\section{Introduzione della messaggistica}
         La messaggistica viene modellata attraverso le associazioni tra le entità \textit{utente $\Leftrightarrow$ messaggio} e 
@@ -158,15 +171,6 @@
         ossia il gestore dell’inserzione nelle vesti del suo annuncio. I messaggi all’interno di ogni chat vengono identificati dall’istante 
         temporale in cui sono inviati (timestamp). \\
         
-        \section{Aste e giudici}
-        Le aste sono tipologie di annunci la cui gestione (dunque pubblicazione) è riservata ad i giudici di esecuzione.
-        In particolare, ciascuna asta verrà amministrata da uno ed un solo giudice, il quale però potrà dirigerne fino ad N.
-        Per riprodurre le dinamiche di ascesa del prezzo ed infine di vendita, viene istituita l’entità rialzo. \\
-        \\
-        Durante il periodo di attività di un’asta, scandito da una data di inizio ed una di fine, gli utenti hanno la facoltà di avanzare più rialzi 
-        (Il collegare direttamente utente ad asta avrebbe ristretto il numero massimo di rialzi effettuabili da un utente, nella stessa asta, ad 1).
-        I rialzi ricevuti in una determinata asta sono identificati univocamente dall’ utente che li ha effettuati e l’istante temporale in cui sono 
-        stati offerti. Al termine di un asta, si può risalire al prezzo di vendita, ove avvenuta, verificando il rialzo più recente ad essa collegato.
 
 
 
@@ -251,26 +255,24 @@
              2 & Pubblicare un annuncio immobiliare (vendita, affitto o asta) & 500 al giorno \\
              3 & Visualizzare annunci immobiliari attivi di una città in ordine cronologico & 50.000 al giorno \\ 
              4 & Suddividere gli annunci in vendita, affitto o asta all'interno di una città & 35.000 al giorno \\
-             5 & Distinguere annunci per tipologia immobile (appartamento, villa o stanza) in una data città & 35.000 al giorno \\
-             6 & Ordinare gli immobili in base a particolari filtri (e.g. metratura, classe energetica) & 5.000 al giorno \\
-             7 & Filtrare gli immobili per zona & 40.000 al giorno \\
-             8 & Ordinare gli annunci di affitto per costo mensile & 12.000 al giorno \\
-             9 & Filtrare le stanze in base ad un numero massimo di coinquilini & 7.500 al giorno \\
-             10 & Mostrare aste attive in una città & 7.500 al giorno \\
-             11 & Ordinare le aste per prezzo attuale crescente & 4.000 al giorno \\ 
-             12 & Effettuare un rialzo all'interno di un'asta (controllando la sua validità) & 500 al giorno \\
-             13 & Contattare un utente in merito ad un annuncio creato & 15.000 al giorno \\
-             14 & Ricostruire una conversazione tra due utenti & 30.000 al giorno \\
-             15 & Andamento del prezzo di un immobile in funzione del tempo & 5.000 al giorno \\
-             16 & Comparare il prezzo di un immobile al mq con quello degli immobili nella stessa zona & 10.000 al giorno \\
-             17 & Comparare il prezzo di un immobile al mq con quello degli immobili nella stessa città & 7.500 al giorno \\
-             18 & Comparare il prezzo medio al mq di una zona con quello della città & 3.500 al giorno \\ 
-             19 & Ordinare le zone di una città per costo medio al mq & 1.500 al giorno \\
-             20 & Stilare una top 5 città per una o più categorie & 3.000 al giorno \\
-             21 & Classificare città in base all'evoluzione in una o più categorie rispetto all'anno precedente & 500 al giorno \\ 
-             22 & Ordinare le città in base a valori specifici di una o più categorie & 1.000 al giorno \\ 
-             23 & Calcolare performance di uno stato in una o più categorie (da ogni città) & 2.000 al giorno \\ 
-             24 & Aggiornamento annuale dei punteggi di una città (dati i campi delle categorie) & 1 all'anno \\ [1ex]
+             5 & Ordinare gli immobili in base a particolari filtri (e.g. metratura, classe energetica) & 5.000 al giorno \\
+             6 & Filtrare gli annunci per zona & 40.000 al giorno \\
+             7 & Ordinare gli annunci di affitto per costo mensile & 12.000 al giorno \\
+             8 & Mostrare aste attive in una città & 7.500 al giorno \\
+             9 & Ordinare le aste per prezzo attuale crescente & 4.000 al giorno \\ 
+             10 & Effettuare un rialzo all'interno di un'asta (controllando la sua validità) & 500 al giorno \\
+             11 & Contattare un utente in merito ad un annuncio creato & 15.000 al giorno \\
+             12 & Ricostruire una conversazione tra due utenti & 30.000 al giorno \\
+             13 & Andamento del prezzo di un immobile in funzione del tempo & 5.000 al giorno \\
+             14 & Comparare il prezzo di un immobile al mq con quello degli immobili nella stessa zona & 10.000 al giorno \\
+             15 & Comparare il prezzo di un immobile al mq con quello degli immobili nella stessa città & 7.500 al giorno \\
+             16 & Comparare il prezzo medio al mq di una zona con quello della città & 3.500 al giorno \\ 
+             17 & Ordinare le zone di una città per costo medio al mq & 1.500 al giorno \\
+             18 & Stilare una top 5 città per una o più categorie & 3.000 al giorno \\
+             19 & Classificare città in base all'evoluzione in una o più categorie rispetto all'anno precedente & 500 al giorno \\ 
+             20 & Ordinare le città in base a valori specifici di una o più categorie & 1.000 al giorno \\ 
+             21 & Calcolare performance di uno stato in una o più categorie (da ogni città) & 2.000 al giorno \\ 
+             22 & Aggiornamento annuale dei punteggi di una città (dati i campi delle categorie) & 1 all'anno \\ [1ex]
             \end{tabular}
             \end{adjustbox}
             \end{table}
@@ -289,7 +291,7 @@
              \end{tabular}
             \end{table}
 
-            \textbf{OP 2: Pubblicare un annuncio immobiliare (vendita o affitto)}
+            \textbf{OP 2: Pubblicare un annuncio immobiliare (vendita, affitto o asta)}
             Viene di seguito presentato il caso in cui si voglia aggiungere un annuncio relativo ad un immobile
             non ancora presente nella base di dati: sarà necessario aggiornare, dunque riscrivere, i campi 
             \textit{numeroImmobili} e \textit{costoMedioMq}.
@@ -369,26 +371,7 @@
              \end{tabular}
             \end{table}
 
-            \textbf{OP 5: Distinguere annunci per tipologia immobile (appartamento, villa o stanza) in una data città}
-        	\begin{table}[H]
-            \centering
-             \begin{tabular}{llll}
-             \rowcolor{yellow!20} \textbf{Concetto} & \textbf{Costrutto} & \textbf{Accessi} & \textbf{Tipo}\\ [0.5ex] 
-             \hline
-             Città & E & 1 & Lettura \\ 
-             Divisione & R & 10 & Lettura \\ 
-             Zona & E & 10 & Lettura \\ 
-             Situato & R & 50 & Lettura \\ 
-             Immobile & E & 50 & Lettura \\
-             Riguarda & R & 65 & Lettura \\ 
-             Annuncio & E & 65 & Lettura \\ 
-             \hline
-                \rowcolor{yellow!20} &   & \textbf{Totale:} 251L $\rightarrow$ 8.785.000 al giorno &  \\ [1ex] 
-             
-             \end{tabular}
-            \end{table}
-
-            \textbf{OP 6: Ordinare gli annunci in base a particolari filtri sull'immobile (e.g. metratura, classe energetica)}
+            \textbf{OP 5: Ordinare gli annunci in base a particolari filtri sull'immobile (e.g. metratura, classe energetica)}
         	\begin{table}[H]
             \centering
              \begin{tabular}{llll}
@@ -407,7 +390,7 @@
              \end{tabular}
             \end{table}
 
-            \textbf{OP 7: Filtrare gli annunci per zona}
+            \textbf{OP 6: Filtrare gli annunci per zona}
         	\begin{table}[H]
             \centering
              \begin{tabular}{llll}
@@ -426,7 +409,7 @@
              \end{tabular}
             \end{table}
 
-            \textbf{OP 8: Ordinare gli annunci di affitto per costo mensile}
+            \textbf{OP 7: Ordinare gli annunci di affitto per costo mensile}
         	\begin{table}[H]
             \centering
              \begin{tabular}{llll}
@@ -445,7 +428,7 @@
              \end{tabular}
             \end{table}
 
-            \textbf{OP 9: Filtrare gli annunci delle stanze in base ad un numero massimo di coinquilini}
+            \textbf{OP 8: Mostrare aste attive in una città}
         	\begin{table}[H]
             \centering
              \begin{tabular}{llll}
@@ -464,26 +447,7 @@
              \end{tabular}
             \end{table}
 
-            \textbf{OP 10: Mostrare aste attive in una città}
-        	\begin{table}[H]
-            \centering
-             \begin{tabular}{llll}
-             \rowcolor{yellow!20} \textbf{Concetto} & \textbf{Costrutto} & \textbf{Accessi} & \textbf{Tipo}\\ [0.5ex] 
-             \hline
-             Città & E & 1 & Lettura \\ 
-             Divisione & R & 10 & Lettura \\ 
-             Zona & E & 10 & Lettura \\ 
-             Situato & R & 50 & Lettura \\ 
-             Immobile & E & 50 & Lettura \\ 
-             Riguarda & R & 65 & Lettura \\ 
-             Annuncio & E & 65 & Lettura \\ 
-             \hline
-                \rowcolor{yellow!20} &   & \textbf{Totale:} 251L $\rightarrow$ 1.882.500 al giorno &  \\ [1ex] 
-             
-             \end{tabular}
-            \end{table}
-
-            \textbf{OP 11: Ordinare le aste per prezzo attuale crescente}
+            \textbf{OP 9: Ordinare le aste per prezzo attuale crescente}
         	\begin{table}[H]
             \centering
              \begin{tabular}{llll}
@@ -502,8 +466,7 @@
              \end{tabular}
             \end{table}
 
-            \textbf{OP 12: Effettuare un rialzo all’interno di un’asta (controllando la sua validità)} \\
-            COMMENTO!!!!!!!!!!!!!!!!! Leggere ultimo rialzo
+            \textbf{OP 10: Effettuare un rialzo all’interno di un’asta (controllando la sua validità)} \\
         	\begin{table}[H]
             \centering
              \begin{tabular}{llll}
@@ -523,8 +486,7 @@
              \end{tabular}
             \end{table}
 
-            \textbf{OP 13: Contattare un utente in merito ad un annuncio creato}
-            COMMENTO!!!!!!!!!!!!!!!!! account di chi vuole mandare mex, annuncio di chi lo riceve
+            \textbf{OP 11: Contattare un utente in merito ad un annuncio creato}
         	\begin{table}[H]
             \centering
              \begin{tabular}{llll}
@@ -541,7 +503,7 @@
              \end{tabular}
             \end{table}
 
-            \textbf{OP 14: Ricostruire una conversazione tra due utenti}
+            \textbf{OP 12: Ricostruire una conversazione tra due utenti}
         	\begin{table}[H]
             \centering
              \begin{tabular}{llll}
@@ -558,7 +520,7 @@
              \end{tabular}
             \end{table}
 
-             \textbf{OP 15: Andamento del prezzo di un immobile in funzione del tempo}
+             \textbf{OP 13: Andamento del prezzo di un immobile in funzione del tempo}
         	\begin{table}[H]
             \centering
              \begin{tabular}{llll}
@@ -573,7 +535,7 @@
              \end{tabular}
             \end{table}
 
-            \textbf{OP 16: Comparare il prezzo di un immobile al mq con quello degli immobili nella stessa zona}
+            \textbf{OP 14: Comparare il prezzo di un immobile al mq con quello degli immobili nella stessa zona}
         	\begin{table}[H]
             \centering
              \begin{tabular}{llll}
@@ -592,7 +554,7 @@
              \end{tabular}
             \end{table}
 
-            \textbf{OP 17: Comparare il prezzo di un immobile al mq con quello degli immobili nella stessa città}
+            \textbf{OP 15: Comparare il prezzo di un immobile al mq con quello degli immobili nella stessa città}
         	\begin{table}[H]
             \centering
              \begin{tabular}{llll}
@@ -614,7 +576,7 @@
              \end{tabular}
             \end{table}
             
-            \textbf{OP 18: Comparare il prezzo medio al mq di una zona con quello della città}
+            \textbf{OP 16: Comparare il prezzo medio al mq di una zona con quello della città}
         	\begin{table}[H]
             \centering
              \begin{tabular}{llll}
@@ -629,7 +591,7 @@
              \end{tabular}
             \end{table}
 
-            \textbf{OP 19: Ordinare le zone di una città per costo medio al mq}
+            \textbf{OP 17: Ordinare le zone di una città per costo medio al mq}
         	\begin{table}[H]
             \centering
              \begin{tabular}{llll}
@@ -644,7 +606,7 @@
              \end{tabular}
             \end{table}
 
-            \textbf{OP 20: Stilare una top 5 città per una o più categorie}
+            \textbf{OP 18: Stilare una top 5 città per una o più categorie}
         	\begin{table}[H]
             \centering
              \begin{tabular}{llll}
@@ -660,7 +622,7 @@
              \end{tabular}
             \end{table}
 
-            \textbf{OP 21: Classificare città in base all’evoluzione in una o più categorie rispetto all’anno precedente}
+            \textbf{OP 19: Classificare città in base all’evoluzione in una o più categorie rispetto all’anno precedente}
         	\begin{table}[H]
             \centering
              \begin{tabular}{llll}
@@ -676,7 +638,7 @@
              \end{tabular}
             \end{table}
 
-            \textbf{OP 22: Ordinare le città in base a valori specifici di una o più categorie}
+            \textbf{OP 20: Ordinare le città in base a valori specifici di una o più categorie}
         	\begin{table}[H]
             \centering
              \begin{tabular}{llll}
@@ -700,8 +662,7 @@
              \end{tabular}
             \end{table}
 
-            \textbf{OP 23: Calcolare performance di uno stato in una o più categorie (da ogni città)}
-            COMMENTO!!!!!!!!!!!!! cambiamento punteggio rispetto ad anno precedente
+            \textbf{OP 21: Calcolare performance di uno stato in una o più categorie (da ogni città)}
         	\begin{table}[H]
             \centering
              \begin{tabular}{llll}
@@ -718,8 +679,7 @@
              \end{tabular}
             \end{table}
 
-            \textbf{OP 24: Aggiornamento annuale dei punteggi di una città (dati i campi delle categorie)}
-            DA COMPLETARE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            \textbf{OP 22: Aggiornamento annuale dei punteggi di una città (dati i campi delle categorie)}
         	\begin{table}[H]
             \centering
              \begin{tabular}{llll}
@@ -921,234 +881,239 @@
             \section{Costruzione delle tabelle del DB in linguaggio SQL}
                 
                 \noindent
-                {\large \textbf{Ambiente}} \\
+                {\large \textbf{ambiente}} \\
                 \texttt{
-                    CREATE TABLE Ambiente ( \\
-                    \null\quad\quad idCittà int NOT NULL FOREIGN KEY REFERENCES Città\_Anni, \\
-                    \null\quad\quad Anno int NOT NULL FOREIGN KEY REFERENCES Città\_Anni, \\
-                    \null\quad\quad PM2.5media                      float           NOT NULL, \\
-                    \null\quad\quad PercentualeSpazioVerdeUrbano    float           NOT NULL, \\
-                    \null\quad\quad PRIMARY KEY(idCittà, anno) \\
+                    CREATE TABLE ambiente ( \\
+                    \null\quad\quad hashAmbiente int NOT NULL, \\
+                    \null\quad\quad pm25media                      float           NOT NULL, \\
+                    \null\quad\quad percentualeSpazioVerdeUrbano    float           NOT NULL, \\
+                    \null\quad\quad PRIMARY KEY(hashAmbiente) \\
                     )
                 } \\
 
                 \noindent
-                {\large \textbf{Anni}} \\
+                {\large \textbf{anni}} \\
                 \texttt{
                     CREATE TABLE Anni ( \\
-                    \null\quad\quad Anno    int     PRIMARY KEY \\
+                    \null\quad\quad anno    int     NOT NULL, \\
+                    \null\quad\quad PRIMARY KEY(anno) \\
                     )
                 } \\
 
                 \noindent
-                {\large \textbf{Annunci\_Utente}} \\
+                {\large \textbf{annunci\_utente}} \\
                 \texttt{
-                    CREATE TABLE Annunci\_Utente ( \\
-                    \null\quad\quad idAnnuncio          int             NOT NULL, \\ 
-                    \null\quad\quad idImmobile int NOT NULL FOREIGN KEY REFERENCES Immobili, \\
-                    \null\quad\quad E-mail varchar NOT NULL FOREIGN KEY REFERENCES Utenti, \\
-                    \null\quad\quad StatoAnnuncio       stato\_annuncio         NOT NULL \\
-                            \null\qquad\qquad CHECK(stato\_annuncio in ('Attivo', 'Inattivo')), \\
-                    \null\quad\quad DataCreazione       datetime        NOT NULL, \\
-                    \null\quad\quad TipoAnnuncioUtente  tipo\_annuncio  NOT NULL \\
-                            \null\qquad\qquad CHECK(tipo\_annuncio in ('Vendita', 'Affitto')) \\
-                    \null\quad\quad CostoMensile        int             NOT NULL CHECK (CostoMensile $>$ 0), \\
-                    \null\quad\quad Prezzo              int             NOT NULL CHECK (Prezzo $>$ 0),\\
-                    \null\quad\quad PRIMARY KEY(idAnnuncio, idImmobile, e-mail) \\
+                    CREATE TABLE annunci\_utente ( \\
+                    \null\quad\quad idAnnuncio          int             NOT NULL AUTO\_INCREMENT, \\ 
+                    \null\quad\quad idImmobile int NOT NULL FOREIGN KEY REFERENCES immobili.idImmobile, \\
+                    \null\quad\quad email varchar(25) NOT NULL FOREIGN KEY REFERENCES utenti.email, \\
+                    \null\quad\quad statoAnnuncio       varchar(20)         NOT NULL \\
+                            \null\qquad\qquad CHECK(statoAnnuncio = 'Attivo' OR 'Inattivo'), \\
+                    \null\quad\quad dataCreazione       datetime        NOT NULL, \\
+                    \null\quad\quad tipoAnnuncioUtente  varchar(20)  NOT NULL \\
+                            \null\qquad\qquad CHECK(tipoAnnuncioUtente = 'Vendita' OR 'Affitto') \\
+                    \null\quad\quad costoMensile        int             DEFAULT NULL CHECK (costoMensile $>$ 0), \\
+                    \null\quad\quad prezzo              int             DEFAULT NULL CHECK (prezzo $>$ 0),\\
+                    \null\quad\quad PRIMARY KEY(idAnnuncio, idImmobile, email) \\
+                    )
+                    } \\
+
+                \noindent
+                {\large \textbf{aste}} \\
+                \texttt{
+                    CREATE TABLE aste ( \\
+                    \null\quad\quad idAsta          int         NOT NULL AUTO\_INCREMENT, \\
+                    \null\quad\quad idImmobile int DEFAULT NULL FOREIGN KEY REFERENCES immobili\.idImmobile, \\
+                    \null\quad\quad email varchar(25) NOT NULL FOREIGN KEY REFERENCES giudici\_esecuzione\.email, \\
+                    \null\quad\quad dataCreazione       datetime    NOT NULL, \\
+                    \null\quad\quad prezzoMinimo        int         NOT NULL CHECK (prezzoMinimo $>$ 0), \\
+                    \null\quad\quad rialzoMinimo        int         NOT NULL CHECK (rialzoMinimo $>$ 0), \\
+                    \null\quad\quad depositoCauzionale  int         NOT NULL \\
+                            \null\qquad\qquad CHECK (depositoCauzionale $>$ 0), \\
+                    \null\quad\quad dataFine            datetime    NOT NULL, \\
+                    \null\quad\quad PRIMARY KEY(idAsta, idImmobile, email) \\
                     )
                 } \\
 
                 \noindent
-                {\large \textbf{Aste}} \\
+                {\large \textbf{citta}} \\
                 \texttt{
-                    CREATE TABLE Aste ( \\
-                    \null\quad\quad idAnnuncio          int         NOT NULL, \\
-                    \null\quad\quad idImmobile int NOT NULL FOREIGN KEY REFERENCES Immobili, \\
-                    \null\quad\quad E-mail varchar NOT NULL FOREIGN KEY REFERENCES Giudici\_Esecuzione, \\
-                    \null\quad\quad DataCreazione       datetime    NOT NULL, \\
-                    \null\quad\quad PrezzoMinimo        int         NOT NULL CHECK (PrezzoMinimo $>$ 0), \\
-                    \null\quad\quad RialzoMinimo        int         NOT NULL CHECK (RialzoMinimo $>$ 0), \\
-                    \null\quad\quad DepositoCauzionale  int         NOT NULL \\
-                            \null\qquad\qquad CHECK (DepositoCauzionale $>$ 0), \\
-                    \null\quad\quad DataFine            datetime    NOT NULL, \\
-                    \null\quad\quad PRIMARY KEY(idAnnuncio, idImmobile, e-mail) \\
+                    CREATE TABLE citta ( \\
+                    \null\quad\quad idCitta         int         NOT NULL AUTO\_INCREMENT, \\
+                    \null\quad\quad nomeStato char(25) NOT NULL FOREIGN KEY REFERENCES stati.nome, \\
+                    \null\quad\quad nome            char(50)    NOT NULL, \\
+                    \null\quad\quad popolazione     int         NOT NULL CHECK (popolazione $>$ 0), \\
+                    \null\quad\quad superficie      int         NOT NULL CHECK (superficie $>$ 0), \\
+                    \null\quad\quad regione         char(25) DEFAULT NULL, \\
+                    \null\quad\quad PRIMARY KEY(idCitta, nomeStato) \\
                     )
                 } \\
 
                 \noindent
-                {\large \textbf{Città}} \\
+                {\large \textbf{citta\_anni}} \\
                 \texttt{
-                    CREATE TABLE Città ( \\
-                    \null\quad\quad idCittà         int         NOT NULL, \\
-                    \null\quad\quad NomeStato char(25) NOT NULL FOREIGN KEY REFERENCES Stati, \\
-                    \null\quad\quad Nome            char(50)    NOT NULL, \\
-                    \null\quad\quad Popolazione     int         NOT NULL CHECK (Popolazione $>$ 0), \\
-                    \null\quad\quad Superficie      int         NOT NULL CHECK (Superficie $>$ 0), \\
-                    \null\quad\quad Regione         char(25), \\
-                    \null\quad\quad PRIMARY KEY(idCittà, nomeStato) \\
+                    CREATE TABLE citta\_anni ( \\
+                    \null\quad\quad idCitta int NOT NULL FOREIGN KEY REFERENCES citta.idCitta, \\
+                    \null\quad\quad anno int NOT NULL FOREIGN KEY REFERENCES anni.anno, \\
+                    \null\quad\quad punteggioAmbiente       int     NOT NULL CHECK (punteggioAmbiente $>$ 0), \\
+                    \null\quad\quad punteggioTrasporto      int     NOT NULL \\
+                            \null\qquad\qquad CHECK (punteggioTrasporto $>$ 0), \\
+                    \null\quad\quad punteggioEconomia       int     NOT NULL CHECK (punteggioEconomia $>$ 0), \\
+                    \null\quad\quad punteggioSanita         int     NOT NULL CHECK (punteggioSanita $>$ 0), \\
+                    \null\quad\quad punteggioIstruzione     int     NOT NULL \\
+                            \null\qquad\qquad CHECK (punteggioIstruzione $>$ 0), \\
+                    \null\quad\quad hashAmbiente         int     NOT NULL FOREIGN KEY REFERENCES ambiente.hashAmbiente, \\  
+                    \null\quad\quad hashEconomia         bigint     NOT NULL FOREIGN KEY REFERENCES economia.hashEconomia, \\  
+                    \null\quad\quad hashIstruzione         int     NOT NULL FOREIGN KEY REFERENCES istruzione.hashIstruzione, \\  
+                    \null\quad\quad hashSanita         int     NOT NULL FOREIGN KEY REFERENCES sanita.hashSanita, \\  
+                    \null\quad\quad hashTrasporto         int     NOT NULL FOREIGN KEY REFERENCES trasporto.hashTrasporto, \\  
+                    \null\quad\quad PRIMARY KEY(idCitta, anno) \\
                     )
                 } \\
 
                 \noindent
-                {\large \textbf{Città\_Anni}} \\
+                {\large \textbf{economia}} \\
                 \texttt{
-                    CREATE TABLE Città\_Anni ( \\
-                    \null\quad\quad idCittà int NOT NULL FOREIGN KEY REFERENCES Città, \\
-                    \null\quad\quad Anno int NOT NULL FOREIGN KEY REFERENCES Anni, \\
-                    \null\quad\quad PunteggioAmbiente       int     NOT NULL CHECK (PunteggioAmbiente $>$ 0), \\
-                    \null\quad\quad PunteggioTrasporto      int     NOT NULL \\
-                            \null\qquad\qquad CHECK (PunteggioTrasporto $>$ 0), \\
-                    \null\quad\quad PunteggioEconomia       int     NOT NULL CHECK (PunteggioEconomia $>$ 0), \\
-                    \null\quad\quad PunteggioSanita         int     NOT NULL CHECK (PunteggioSanita $>$ 0), \\
-                    \null\quad\quad PunteggioIstruzione     int     NOT NULL \\
-                            \null\qquad\qquad CHECK (PunteggioIstruzione $>$ 0), \\
-                    \null\quad\quad PRIMARY KEY(idCittà, anno) \\
-                    )
-                } \\
-
-                \noindent
-                {\large \textbf{Economia}} \\
-                \texttt{
-                    CREATE TABLE Economia ( \\
-                    \null\quad\quad idCittà int NOT NULL FOREIGN KEY REFERENCES Città\_Anni, \\
-                    \null\quad\quad Anno int NOT NULL FOREIGN KEY REFERENCES Città\_Anni, \\
+                    CREATE TABLE economia ( \\
+                    \null\quad\quad hashEconomia bigint NOT NULL, \\
                     \null\quad\quad PILProCapite            float   NOT NULL CHECK (PILProCapite $>$ 0), \\
-                    \null\quad\quad StipendioMedio          int     NOT NULL CHECK (StipendioMedio $>$ 0), \\
-                    \null\quad\quad TassoDisoccupazione     float   NOT NULL, \\
-                    \null\quad\quad PRIMARY KEY(idCittà, anno) \\
+                    \null\quad\quad stipendioMedio          int     NOT NULL CHECK (stipendioMedio $>$ 0), \\
+                    \null\quad\quad tassoDisoccupazione     float   NOT NULL, \\
+                    \null\quad\quad PRIMARY KEY(hashEconomia) \\
                     )
                 } \\
 
                 \noindent
-                {\large \textbf{Giudici\_Esecuzione}} \\
+                {\large \textbf{giudici\_esecuzione}} \\
                 \texttt{
-                    CREATE TABLE Giudici\_Esecuzione ( \\
-                    \null\quad\quad E-mail      varchar     PRIMARY KEY, \\
-                    \null\quad\quad Telefono    varchar     CHECK (len(Telefono)=10), \\
-                    \null\quad\quad Nome        char(25)    NOT NULL \\
+                    CREATE TABLE giudici\_esecuzione ( \\
+                    \null\quad\quad email      varchar(30)     NOT NULL, \\
+                    \null\quad\quad telefono    varchar(10)     CHECK (length(telefono)=10), \\
+                    \null\quad\quad nome        char(25)    NOT NULL, \\
+                    \null\quad\quad PRIMARY KEY(email) \\
                     )
                 } \\
 
                 \noindent
-                {\large \textbf{Immobili}} \\
+                {\large \textbf{immobili}} \\
                 \texttt{
-                    CREATE TABLE Immobili ( \\
-                    \null\quad\quad idImmobile           NOT NULL, \\
-                    \null\quad\quad idZona               NOT NULL               FOREIGN KEY REFERENCES Zone, \\
-                    \null\quad\quad MetriQuadri          NOT NULL               CHECK (MetriQuadri $>$ 0), \\
-                    \null\quad\quad ClasseEnergetica     classe\_energetica \\
-                            \null\qquad\qquad CHECK(classe\_energetica in ('A+', 'A', 'B', 'C', 'D', 'E', \\
-                            \null\qquad\qquad 'F', 'G')), \\
-                    \null\quad\quad AnnoCostruzione      int                    CHECK (AnnoCostruzione $>$ 0), \\
-                    \null\quad\quad Via                  varchar                NOT NULL, \\
-                    \null\quad\quad NumeroCivico         int                    NOT NULL, \\
-                    \null\quad\quad TipoImmobile         tipo\_immobile         NOT NULL \\
-                            \null\qquad\qquad CHECK(tipo\_immobile in ('Appartamento', 'Villa', 'Stanza')), \\
-                    \null\quad\quad NumeroInterno        int, \\
-                    \null\quad\quad Piano                int, \\
-                    \null\quad\quad NumeroStanze         int                    CHECK (NumeroStanze $>$ 0), \\
-                    \null\quad\quad NumeroConquilini     int, \\
-                    \null\quad\quad PRIMARY KEY(idImmobile, idCittà, idZona) \\
+                    CREATE TABLE immobili ( \\
+                    \null\quad\quad idImmobile           int NOT NULL AUTO\_INCREMENT, \\
+                    \null\quad\quad idZona               int NOT NULL               FOREIGN KEY REFERENCES zone.idZona, \\
+                    \null\quad\quad metriQuadri          int NOT NULL               CHECK (metriQuadri $>$ 0), \\
+                    \null\quad\quad classeEnergetica     varchar(50) \\
+                            \null\qquad\qquad CHECK(classeEnergetica = 'A+' OR 'A' OR 'B' OR 'C' OR 'D' OR 'E' OR \\
+                            \null\qquad\qquad 'F' OR 'G'), \\
+                    \null\quad\quad annoCostruzione      int                    CHECK (annoCostruzione $>$ 0), \\
+                    \null\quad\quad via                  varchar                NOT NULL, \\
+                    \null\quad\quad numeroCivico         int                    NOT NULL, \\
+                    \null\quad\quad tipoImmobile         varchar(50)         NOT NULL \\
+                            \null\qquad\qquad CHECK(tipoImmobile = 'Appartamento' OR 'Villa' OR 'Stanza'), \\
+                    \null\quad\quad numeroInterno        int, \\
+                    \null\quad\quad piano                int, \\
+                    \null\quad\quad numeroStanze         int                    CHECK (numeroStanze $>$ 0), \\
+                    \null\quad\quad numeroConquilini     int, \\
+                    \null\quad\quad PRIMARY KEY(idImmobile, idZona) \\
                     )
                 } \\
 
                 \noindent
-                {\large \textbf{Istruzione}} \\
+                {\large \textbf{istruzione}} \\
                 \texttt{
-                    CREATE TABLE Istruzione ( \\
-                    \null\quad\quad idCittà                 int         NOT NULL FOREIGN KEY REFERENCES Città\_Anni, \\
-                    \null\quad\quad Anno                    int         NOT NULL FOREIGN KEY REFERENCES Città\_Anni, \\
-                    \null\quad\quad PercentualeLaureati     float       NOT NULL \\
-                            \null\qquad\qquad CHECK (PercentualeLaureati $>$ 0), \\
-                    \null\quad\quad PercentualeDiplomati    float       NOT NULL \\
-                            \null\qquad\qquad CHECK (PercentualeDiplomati $>$ 0), \\
-                    \null\quad\quad NumeroUniversita        int         NOT NULL, \\
-                    \null\quad\quad PRIMARY KEY(idCittà, anno) \\
+                    CREATE TABLE istruzione ( \\
+                    \null\quad\quad hashIstruzione int NOT NULL, \\
+                    \null\quad\quad percentualeLaureati     float       NOT NULL \\
+                            \null\qquad\qquad CHECK (percentualeLaureati $>$ 0), \\
+                    \null\quad\quad percentualeDiplomati    float       NOT NULL \\
+                            \null\qquad\qquad CHECK (percentualeDiplomati $>$ 0), \\
+                    \null\quad\quad numeroUniversita        int         NOT NULL, \\
+                    \null\quad\quad PRIMARY KEY(hashIstruzione) \\
                     )
                 } \\
 
                 \noindent
-                {\large \textbf{Messaggi}} \\
+                {\large \textbf{messaggi}} \\
                 \texttt{
-                    CREATE TABLE Messaggi ( \\
-                    \null\quad\quad Timestamp   int         NOT NULL, \\
-                    \null\quad\quad E-mail      varchar     NOT NULL FOREIGN KEY REFERENCES Utenti, \\
-                    \null\quad\quad idAnnuncio  int         NOT NULL FOREIGN KEY REFERENCES Annunci\_Utente, \\
-                    \null\quad\quad Testo       char(1024)  NOT NULL, \\
-                    \null\quad\quad Mittente    int         NOT NULL, \\
-                    \null\quad\quad PRIMARY KEY(timestamp, e-mail, idAnnuncio) \\
+                    CREATE TABLE messaggi ( \\
+                    \null\quad\quad timestamp   datetime         NOT NULL, \\
+                    \null\quad\quad email      varchar(25)     NOT NULL FOREIGN KEY REFERENCES utenti.email, \\
+                    \null\quad\quad idAnnuncio  int         NOT NULL FOREIGN KEY REFERENCES annunci\_utente.idAnnuncio, \\
+                    \null\quad\quad testo       text  NOT NULL, \\
+                    \null\quad\quad mittente    varchar(25)         NOT NULL, \\
+                    \null\qquad\qquad CHECK(mittente = 'Richiedente' OR 'Venditore'), \\
+                    \null\quad\quad PRIMARY KEY(timestamp, email, idAnnuncio) \\
                     )
                 } \\
 
                 \noindent
-                {\large \textbf{Rialzi}} \\
+                {\large \textbf{rialzi}} \\
                 \texttt{
-                    CREATE TABLE Rialzi ( \\
-                    \null\quad\quad PrezzoAttuale   int         NOT NULL CHECK (PrezzoAttuale $>$ 0), \\
-                    \null\quad\quad E-mail          varchar     NOT NULL FOREIGN KEY REFERENCES Utenti, \\
-                    \null\quad\quad idAnnuncio      int         NOT NULL FOREIGN KEY REFERENCES Annunci\_Utente, \\
-                    \null\quad\quad DataRialzo      datetime    NOT NULL, \\
-                    \null\quad\quad PRIMARY KEY(prezzoAttuale, e-mail, idAnnuncio) \\
+                    CREATE TABLE rialzi ( \\
+                    \null\quad\quad prezzoAttuale   int         NOT NULL CHECK (prezzoAttuale $>$ 0), \\
+                    \null\quad\quad email          varchar(25)     NOT NULL FOREIGN KEY REFERENCES utenti.email, \\
+                    \null\quad\quad idAsta      int         NOT NULL FOREIGN KEY REFERENCES annunci\_utente.idAsta, \\
+                    \null\quad\quad dataRialzo      datetime    NOT NULL, \\
+                    \null\quad\quad PRIMARY KEY(prezzoAttuale, email, idAsta) \\
                     )
                 } \\
 
                 \noindent
-                {\large \textbf{Sanità}} \\
+                {\large \textbf{sanita}} \\
                 \texttt{
-                    CREATE TABLE Sanità ( \\
-                    \null\quad\quad idCittà             int     NOT NULL FOREIGN KEY REFERENCES Città\_Anni, \\
-                    \null\quad\quad Anno                int     NOT NULL FOREIGN KEY REFERENCES Città\_Anni, \\
-                    \null\quad\quad AspettativaVita     float   NOT NULL CHECK (AspettativaVita $>$ 0), \\
-                    \null\quad\quad OspedaliProCapite   float   NOT NULL \\
-                            \null\qquad\qquad CHECK (OspedaliProCapite $>$ 0), \\
-                    \null\quad\quad PRIMARY KEY(idCittà, anno) \\
+                    CREATE TABLE sanita ( \\
+                    \null\quad\quad hashSanita int NOT NULL, \\
+                    \null\quad\quad aspettativaVita     float   NOT NULL CHECK (aspettativaVita $>$ 0), \\
+                    \null\quad\quad postiLettoProCapite   float   NOT NULL \\
+                            \null\qquad\qquad CHECK (postiLettoProCapite $>$ 0), \\
+                    \null\quad\quad PRIMARY KEY(hashSanita) \\
                     )
                 } \\
 
                 \noindent
-                {\large \textbf{Stati}} \\
+                {\large \textbf{stati}} \\
                 \texttt{
-                    CREATE TABLE Stati( \\
-                    \null\quad\quad Nome            char(25)        PRIMARY KEY, \\
-                    \null\quad\quad Superficie      int             CHECK (Superficie $>$ 0), \\
-                    \null\quad\quad Popolazione     int             CHECK (Popolazione $>$ 0) \\
+                    CREATE TABLE stati( \\
+                    \null\quad\quad nome            char(25)        NOT NULL, \\
+                    \null\quad\quad superficie      int             CHECK (superficie $>$ 0), \\
+                    \null\quad\quad popolazione     int             CHECK (popolazione $>$ 0), \\
+                    \null\quad\quad PRIMARY KEY(nome) \\
                     )   
                 } \\
 
                 \noindent
-                {\large \textbf{Trasporto}} \\
+                {\large \textbf{trasporto}} \\
                 \texttt{
-                    CREATE TABLE Trasporto ( \\
-                    \null\quad\quad idCittà                     int     NOT NULL FOREIGN KEY REFERENCES Città\_Anni, \\
-                    \null\quad\quad Anno                        int     NOT NULL FOREIGN KEY REFERENCES Città\_Anni, \\
-                    \null\quad\quad PercorrenzaMediaPendolare   float   NOT NULL \\
-                            \null\qquad\qquad CHECK (PercorrenzaMediaPendolare $>$ 0), \\
-                    \null\quad\quad AutoProCapite               float   NOT NULL \\
-                            \null\qquad\qquad CHECK (AutoProCapite $>$ 0), \\
-                    \null\quad\quad PRIMARY KEY(idCittà, anno) \\
+                    CREATE TABLE trasporto ( \\
+                    \null\quad\quad hashTrasporto int NOT NULL, \\
+                    \null\quad\quad percorrenzaMediaPendolare   float   NOT NULL \\
+                            \null\qquad\qquad CHECK (percorrenzaMediaPendolare $>$ 0), \\
+                    \null\quad\quad autoProCapite               float   NOT NULL \\
+                            \null\qquad\qquad CHECK (autoProCapite $>$ 0), \\
+                    \null\quad\quad PRIMARY KEY(hashTrasporto) \\
                     )
                 } \\
 
                 \noindent
-                {\large \textbf{Utenti}} \\
+                {\large \textbf{utenti}} \\
                 \texttt{
-                    CREATE TABLE Utenti ( \\
-                    \null\quad\quad E-mail      varchar     PRIMARY KEY, \\
-                    \null\quad\quad Telefono    varchar     CHECK (len(Telefono)=10), \\
-                    \null\quad\quad Nome        char(25)    NOT NULL \\
+                    CREATE TABLE utenti ( \\
+                    \null\quad\quad email      varchar(30)     NOT NULL, \\
+                    \null\quad\quad telefono    varchar(10)     CHECK (length(telefono)=10), \\
+                    \null\quad\quad nome        char(25)    NOT NULL, \\
+                    \null\quad\quad PRIMARY KEY(email) \\
                     )
                 } \\
 
                 \noindent
-                {\large \textbf{Zone}} \\
+                {\large \textbf{zone}} \\
                 \texttt{
-                    CREATE TABLE Zone ( \\
-                    \null\quad\quad idZona          int         NOT NULL, \\
-                    \null\quad\quad idCittà         int         NOT NULL FOREIGN KEY REFERENCES Città, \\
-                    \null\quad\quad Nome            char(25)    NOT NULL, \\
-                    \null\quad\quad CostoMedioMq    float       NOT NULL CHECK (CostoMedioMq $>$ 0), \\
+                    CREATE TABLE zone ( \\
+                    \null\quad\quad idZona          int         NOT NULL AUTO\_INCREMENT, \\
+                    \null\quad\quad idCitta         int         NOT NULL FOREIGN KEY REFERENCES citta.idCitta, \\
+                    \null\quad\quad nome            char(25)    NOT NULL, \\
+                    \null\quad\quad costoMedioMq    float       NOT NULL CHECK (costoMedioMq $>$ 0), \\
                     \null\quad\quad numeroImmobili  int         NOT NULL CHECK (numeroImmobili $\geq$ 0), \\
-                    \null\quad\quad PRIMARY KEY(idZona, idCittà) \\
+                    \null\quad\quad PRIMARY KEY(idZona, idCitta) \\
                     )
                 } \\
 
@@ -1163,7 +1128,7 @@
 
             \textbf{OP 1: Registrare un nuovo account} \\
             \texttt{
-                \textcolor{blue}{INSERT INTO} Utenti (e-mail, telefono, nome) \\
+                \textcolor{blue}{INSERT INTO} utenti (e-mail, telefono, nome) \\
                 \textcolor{blue}{VALUES} (?, ?, ?) \\
             } 
             
@@ -1171,14 +1136,15 @@
             \textbf{OP 2: Pubblicare un annuncio immobiliare (vendita o affitto)} \\
             \texttt{
                 \textcolor{blue}{IF} (\textcolor{blue}{SELECT} \textcolor{blue}{COUNT}(*) \\
-                \null\quad\quad\textcolor{blue}{FROM} Immobili \\
-                \null\quad\quad\textcolor{blue}{WHERE} via = ? \textcolor{blue}{AND} numeroCivico = ? \textcolor{blue}{AND} idCittà = ? > 0, \\
+                \null\quad\quad\textcolor{blue}{FROM} immobili \\
+                \null\quad\quad\textcolor{blue}{WHERE} via = ? \textcolor{blue}{AND} numeroCivico = ? \textcolor{blue}{AND} idCitta = ? > 0, \\
                 \null\quad\quad TRUE, FALSE)  \\
             } \\
             Se tale condizione risulta soddisfatta, procediamo all'inizializzazione di \textit{annuncio\_utente} con i
-            parametri appena trovati. Se non dovesse essere soddisfatta, vengono inseriti i dati di input. \\ \\
+            parametri appena trovati. Se non dovesse essere soddisfatta, vengono inseriti i dati di input. 
+            In maniera analoga viene eseguita la query di inserimento di aste da parte dei giudici \\ \\
             \texttt{
-                \textcolor{blue}{INSERT INTO} Annunci\_Utente (idAnnuncio, idImmobile, e-mail, statoAnnuncio, dataCreazione, tipoAnnuncioUtente, costoMensile, prezzo) \\
+                \textcolor{blue}{INSERT INTO} annunci\_utente (idAnnuncio, idImmobile, email, statoAnnuncio, dataCreazione, tipoAnnuncioUtente, costoMensile, prezzo) \\
                 \textcolor{blue}{VALUES} (?, ?, ?, ?, ?, ?, ?, ?) \\
             }
 
@@ -1186,73 +1152,68 @@
             \textbf{OP 3: Visualizzare annunci immobiliari attivi di una città in ordine cronologico} \\
             \texttt{
                 \textcolor{blue}{SELECT} * \\
-                \textcolor{blue}{FROM} (Immobili I \textcolor{blue}{JOIN} Annunci\_Utente A \textcolor{blue}{ON} (A.idImmobile = I.idImmobile)) J \textcolor{blue}{JOIN} Zone Z \textcolor{blue}{ON} (J.idZona = I.idZona \textcolor{blue}{AND} Z.idCittà = ? \textcolor{blue}{AND} StatoAnnuncio = 'Attivo') \\
-                \textcolor{blue}{ORDER BY} J.DataCreazione  \textcolor{blue}{DESC} \\
+                \textcolor{blue}{FROM} (immobili I \textcolor{blue}{JOIN} annunci\_utente A \textcolor{blue}{ON} (A.idImmobile = I.idImmobile)) \textcolor{blue}{JOIN} zone Z \textcolor{blue}{ON} (I.idZona = Z.idZona \textcolor{blue}{AND} Z.idCitta = ? \textcolor{blue}{AND} A.statoAnnuncio = 'Attivo') \\
+                \textcolor{blue}{ORDER BY} A.dataCreazione  \textcolor{blue}{DESC} \\
             }
 
             \noindent
             \textbf{OP 4: Suddividere gli annunci in vendita, affitto o asta all’interno di una città} \\
-            annunci\_utente: \\
             \texttt{
                 \textcolor{blue}{SELECT} * \\
-                \textcolor{blue}{FROM} (Immobili I \textcolor{blue}{JOIN} Annunci\_Utente A \textcolor{blue}{ON} (A.idImmobile = I.idImmobile)) J \textcolor{blue}{JOIN} Zone Z \textcolor{blue}{ON} (J.idZona = I.idZona \textcolor{blue}{AND} Z.idCittà = ? \textcolor{blue}{AND} StatoAnnuncio = 'Attivo' \textcolor{blue}{AND} tipoAnnuncioUtente = ?) \\
-                \textcolor{blue}{ORDER BY} J.DataCreazione  \textcolor{blue}{DESC} \\
+                \textcolor{blue}{FROM} (immobili I \textcolor{blue}{JOIN} annunci\_utente A \textcolor{blue}{ON} (A.idImmobile = I.idImmobile)) \textcolor{blue}{JOIN} zone Z \textcolor{blue}{ON} (I.idZona = Z.idZona \textcolor{blue}{AND} Z.idCitta = ? \textcolor{blue}{AND} A.statoAnnuncio = 'Attivo' \textcolor{blue}{AND} A.tipoAnnuncioUtente = ?) \\
+                \textcolor{blue}{ORDER BY} A.dataCreazione  \textcolor{blue}{DESC} \\
             }
-            aste: \\
-            \texttt{
-                \textcolor{blue}{SELECT} * \\
-                \textcolor{blue}{FROM} (Immobili I \textcolor{blue}{JOIN} Aste A \textcolor{blue}{ON} (A.idImmobile = I.idImmobile)) J \textcolor{blue}{JOIN} Zone Z \textcolor{blue}{ON} (J.idZona = I.idZona \textcolor{blue}{AND} Z.idCittà = ? \textcolor{blue}{AND} A.dataFine > \textcolor{blue}{NOW()}) \\
-                \textcolor{blue}{ORDER BY} J.DataCreazione  \textcolor{blue}{DESC} \\
-            }
+            \\
+            Similmente vengono proiettate le aste attive in una data città in ordine di creazione decrescente.\\
 
             \noindent
             \textbf{OP 5: Ordinare gli annunci in base a particolari filtri sull'immobile (e.g. metratura, tipoImmobile)} \\
             AGGIUNGERE CASO ASTE \\
             \texttt{
                 \textcolor{blue}{SELECT} * \\
-                \textcolor{blue}{FROM} immobili I \textcolor{blue}{JOIN} annunci\_utente A \textcolor{blue}{ON} (I.idImmobile = A.idImmobile \textcolor{blue}{AND} A.statoAnnuncio = “Attivo” \textcolor{blue}{AND} I.tipoImmobile = ?) \\
+                \textcolor{blue}{FROM} immobili I \textcolor{blue}{JOIN} annunci\_utente A \textcolor{blue}{ON} (I.idImmobile = A.idImmobile \textcolor{blue}{AND} A.statoAnnuncio = 'Attivo' \textcolor{blue}{AND} I.tipoImmobile = ?) \\
                 \textcolor{blue}{WHERE} \textcolor{blue}{EXISTS} (\textcolor{blue}{SELECT} * \\
-                    \null\qquad\qquad\qquad\quad\textcolor{blue}{FROM} zone Z, città C \\
-                    \null\qquad\qquad\qquad\quad\textcolor{blue}{WHERE} C.idCittà = ? \\
-                    \null\qquad\qquad\qquad\quad\textcolor{blue}{AND} Z.idCittà = C.idCittà \\
+                    \null\qquad\qquad\qquad\quad\textcolor{blue}{FROM} zone Z, citta C \\
+                    \null\qquad\qquad\qquad\quad\textcolor{blue}{WHERE} C.idCitta = ? \\
+                    \null\qquad\qquad\qquad\quad\textcolor{blue}{AND} Z.idCitta= C.idCitta \\
                     \null\qquad\qquad\qquad\quad\textcolor{blue}{AND} Z.idZona = I.idZona) \\
             }
 
             \noindent
-            \textbf{OP 7: Filtrare gli annunci per zona} \\
+            \textbf{OP 6: Filtrare gli annunci per zona} \\
             AGGIUNGERE CASO ASTE \\
             \texttt{
                 \textcolor{blue}{SELECT} * \\
                 \textcolor{blue}{FROM} immobili I \textcolor{blue}{JOIN} annunci\_utente A \textcolor{blue}{ON} (I.idImmobile = A.idImmobile \\
                 \textcolor{blue}{AND} A.statoAnnuncio = "Attivo" \textcolor{blue}{AND} I.idZona = ?) \\
-                \textcolor{blue}{ORDER BY} DataCreazione   \textcolor{blue}{DESC} \\
+                \textcolor{blue}{ORDER BY} dataCreazione   \textcolor{blue}{DESC} \\
             }
 
             \noindent
-            \textbf{OP 8: Ordinare gli annunci di affitto per costo mensile} \\
+            \textbf{OP 7: Ordinare gli annunci di affitto per costo mensile} \\
             \texttt{
                 \textcolor{blue}{SELECT} * \\
-                \textcolor{blue}{FROM} Immobili I \textcolor{blue}{JOIN} annunci\_utente A \textcolor{blue}{ON} (I.idImmobile = A.idImmobile \textcolor{blue}{AND} A.statoAnnuncio = 'Attivo' \textcolor{blue}{AND} A.tipoAnnuncioUtente = 'Affitto') \\
+                \textcolor{blue}{FROM} immobili I \textcolor{blue}{JOIN} annunci\_utente A \textcolor{blue}{ON} (I.idImmobile = A.idImmobile \textcolor{blue}{AND} A.statoAnnuncio = 'Attivo' \textcolor{blue}{AND} A.tipoAnnuncioUtente = 'Affitto') \\
                 \textcolor{blue}{WHERE EXISTS} (\textcolor{blue}{SELECT} * \\
-                    \null\qquad\qquad\qquad\quad\textcolor{blue}{FROM} zone Z, città C \\
-                    \null\qquad\qquad\qquad\quad\textcolor{blue}{WHERE} C.idCittà = ? \\
-                    \null\qquad\qquad\qquad\quad\textcolor{blue}{AND} Z.idCittà = C.idCittà \\
+                    \null\qquad\qquad\qquad\quad\textcolor{blue}{FROM} zone Z, citta C \\
+                    \null\qquad\qquad\qquad\quad\textcolor{blue}{WHERE} C.idCitta = ? \\
+                    \null\qquad\qquad\qquad\quad\textcolor{blue}{AND} Z.idCitta = C.idCitta \\
                     \null\qquad\qquad\qquad\quad\textcolor{blue}{AND} Z.idZona = I.idZona) \\
                 \textcolor{blue}{ORDER BY} A.costoMensiile \textcolor{blue}{DESC} \\
             }
             
             \noindent
-            \textbf{OP 10: Mostrare aste attive in una città} \\
+            \textbf{OP 8: Mostrare aste attive in una città} \\
             \texttt{
                 \textcolor{blue}{SELECT} * \\
-                \textcolor{blue}{FROM} (Immobili I \textcolor{blue}{JOIN} Aste A \\ 
-                \textcolor{blue}{ON} (A.idImmobile = I.idImmobile)) J \textcolor{blue}{JOIN} Zone Z \\ 
-                \textcolor{blue}{ON} (J.idZona = I.idZona \textcolor{blue}{AND} Z.idCittà = ? \textcolor{blue}{AND} J.dataFine > \textcolor{blue}{NOW()}) \\
-                \textcolor{blue}{ORDER BY} J.DataCreazione  \textcolor{blue}{DESC} \\
+                \textcolor{blue}{FROM} (immobili I \textcolor{blue}{JOIN} Aste A \\ 
+                \textcolor{blue}{ON} (A.idImmobile = I.idImmobile)) \textcolor{blue}{JOIN} Zone Z \\ 
+                \textcolor{blue}{ON} (I.idZona = I.idZona \textcolor{blue}{AND} Z.idCitta = ? \textcolor{blue}{AND} A.dataFine > \textcolor{blue}{NOW()}) \\
+                \textcolor{blue}{ORDER BY} A.DataCreazione  \textcolor{blue}{DESC} \\
             }
             
             \noindent
-            \textbf{OP 11: Ordinare le aste per prezzo attuale crescente} \\
+            \textbf{OP 9: Ordinare le aste per prezzo attuale crescente} \\
             \texttt{
                 \textcolor{blue}{SELECT} idAnnuncio, \textcolor{blue}{IF}(( \textcolor{blue}{SELECT COUNT}(*) \\
                     \null\qquad\qquad\qquad\qquad\qquad\qquad \textcolor{blue}{FROM} rialzi R \\
@@ -1270,27 +1231,27 @@
             }
 
             \noindent
-            \textbf{OP 12: Effettuare un rialzo all’interno di un’asta (controllando la sua validità)} \\
+            \textbf{OP 10: Effettuare un rialzo all’interno di un’asta (controllando la sua validità)} \\
             \texttt{
                 \textcolor{blue}{IF} ((\textcolor{blue}{SELECT MAX}(prezzoAttuale) \\
-                    \null\qquad \textcolor{blue}{FROM} Rialzi \\
+                    \null\qquad \textcolor{blue}{FROM} rialzi \\
                     \null\qquad \textcolor{blue}{WHERE} idAnnuncio = ?) <= ? - (\textcolor{blue}{SELECT} rialzoMinimo \\
-                        \null\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad \textcolor{blue}{FROM} Aste \\
+                        \null\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad \textcolor{blue}{FROM} aste \\
                         \null\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad \textcolor{blue}{WHERE} idAnnuncio = ?), \\
-                    \null\qquad \textcolor{blue}{INSERT INTO} Rialzi(prezzoAttuale, e-mail, idAnnuncio, dataRialzo) \\
+                    \null\qquad \textcolor{blue}{INSERT INTO} rialzi(prezzoAttuale, email, idAnnuncio, dataRialzo) \\
                     \null\qquad \textcolor{blue}{VALUES}(?, ?, ?, ?), \\ 
                     \null\qquad \textcolor{blue}{NULL}) \\
             }       
             
             \noindent
-            \textbf{OP 13: Contattare un utente in merito ad un annuncio creato} \\
+            \textbf{OP 11: Contattare un utente in merito ad un annuncio creato} \\
             \texttt{
-                \textcolor{blue}{INSERT INTO} Messaggi (Timestamp, E-mail, idAnnuncio, Testo, Mittente) \\
+                \textcolor{blue}{INSERT INTO} messaggi (timestamp, email, idAnnuncio, testo, mittente) \\
                 \textcolor{blue}{VALUES} (\textcolor{blue}{NOW()}, ?, ?, ?, ?) \\
             } 
 
             \noindent
-            \textbf{OP 14: Ricostruire una conversazione tra due utenti} \\
+            \textbf{OP 12: Ricostruire una conversazione tra due utenti} \\
             \texttt{
                 \textcolor{blue}{SELECT} testo, mittente, timestamp \\
                 \textcolor{blue}{FROM} messaggi \\
@@ -1300,114 +1261,113 @@
             }
 
             \noindent
-            \textbf{OP 15: Andamento del prezzo di un immobile in funzione del tempo} \\
+            \textbf{OP 13: Andamento del prezzo di un immobile in funzione del tempo} \\
             \texttt{
                 \textcolor{blue}{SELECT} dataCreazione, prezzo, costoMensile \\
-                \textcolor{blue}{FROM} Annunci\_Utente \\
+                \textcolor{blue}{FROM} annunci\_utente \\
                 \textcolor{blue}{WHERE} idImmobile = ? \\
-                \textcolor{blue}{ORDER BY} DataCreazione \textcolor{blue}{DESC} \\
+                \textcolor{blue}{ORDER BY} dataCreazione \textcolor{blue}{DESC} \\
             }
             
             \noindent
-            \textbf{OP 16: Comparare il prezzo di un immobile al mq con quello degli immobili nella stessa zona} \\
+            \textbf{OP 14: Comparare il prezzo di un immobile al mq con quello degli immobili nella stessa zona} \\
             \texttt{
                 \textcolor{blue}{SELECT} ((prezzo/metriQuadri)-costoMedioMq) * 100/costoMedioMq \\
-                \textcolor{blue}{FROM} (Immobili I \textcolor{blue}{JOIN} Annunci\_Utente A  \\
-                \textcolor{blue}{ON} (A.idImmobile = I.idImmobile)) J \textcolor{blue}{JOIN} Zone Z \\
-                \textcolor{blue}{ON} (J.idZona = I.idZona) \\
+                \textcolor{blue}{FROM} (immobili I \textcolor{blue}{JOIN} annunci\_Utente A  \\
+                \textcolor{blue}{ON} (A.idImmobile = I.idImmobile)) \textcolor{blue}{JOIN} Zone Z \\
+                \textcolor{blue}{ON} (I.idZona = Z.idZona) \\
                 \textcolor{blue}{WHERE} idImmobile = ? \textcolor{blue}{AND} statoAnnuncio = 'Attivo' \\
             }
             
             \noindent
-            \textbf{OP 17: Comparare il prezzo di un immobile al mq con quello degli immobili nella stessa città} \\
+            \textbf{OP 15: Comparare il prezzo di un immobile al mq con quello degli immobili nella stessa città} \\
             \texttt{
                 \textcolor{blue}{SET} @costoMedioMqCitta = (\textcolor{blue}{SELECT SUM}(costoMedioMq*numeroImmobili) \\
-                    \null\qquad\qquad\qquad\qquad\qquad\qquad\quad\textcolor{blue}{FROM} Zone \\
-                    \null\qquad\qquad\qquad\qquad\qquad\qquad\quad\textcolor{blue}{WHERE} idCittà = ?) / \textcolor{blue}{SELECT SUM}(numeroImmobili) \\
-                        \null\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\textcolor{blue}{FROM} Zone  \\
-                        \null\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\textcolor{blue}{WHERE} idCittà = ? \\
+                    \null\qquad\qquad\qquad\qquad\qquad\qquad\quad\textcolor{blue}{FROM} zone \\
+                    \null\qquad\qquad\qquad\qquad\qquad\qquad\quad\textcolor{blue}{WHERE} idCitta = ?) / \textcolor{blue}{SELECT SUM}(numeroImmobili) \\
+                        \null\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\textcolor{blue}{FROM} zone  \\
+                        \null\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\textcolor{blue}{WHERE} idCitta = ? \\
                 \textcolor{blue}{SELECT} ((prezzo/metriQuadri)-@costoMedioMqCitta) * 100/@costoMedioMqCitta \\
-                \textcolor{blue}{FROM} (Immobili I \textcolor{blue}{JOIN} Annunci\_Utente A  \\
-                \textcolor{blue}{ON} (A.idImmobile = I.idImmobile)) J \textcolor{blue}{JOIN} Zone Z \\
-                \textcolor{blue}{ON} (J.idZona = I.idZona) \textcolor{blue}{JOIN} Città C \\
-                \textcolor{blue}{ON} (C.idCittà = Z.idCittà) \\
+                \textcolor{blue}{FROM} (immobili I \textcolor{blue}{JOIN} annunci\_Utente A  \\
+                \textcolor{blue}{ON} (A.idImmobile = I.idImmobile)) \textcolor{blue}{JOIN} Zone Z \\
+                \textcolor{blue}{ON} (I.idZona = Z.idZona) \textcolor{blue}{JOIN} Città C \\
+                \textcolor{blue}{ON} (Z.idCittà = C.idCittà) \\
                 \textcolor{blue}{WHERE} idImmobile = ? \textcolor{blue}{AND} statoAnnuncio = 'Attivo' \\
             }
 
             \noindent
-            \textbf{OP 18: Comparare il prezzo medio al mq di una zona con quello della città} \\
+            \textbf{OP 16: Comparare il prezzo medio al mq di una zona con quello della città} \\
             \texttt{
                 \textcolor{blue}{SELECT} * \\
                 \textcolor{blue}{FROM}  \\
                 \textcolor{blue}{SELECT} idZona, (costoMedioMq-\textcolor{blue}{SUM}(costoMedioMq * numeroImmobili)/ \\
                 \textcolor{blue}{SUM}(numeroImmobili)) * 100 / \textcolor{blue}{SUM}(costoMedioMq * numeroImmobili)/ \\
                 \textcolor{blue}{SUM}(numeroImmobili) \\
-                \textcolor{blue}{FROM} Zone \\
-                \textcolor{blue}{WHERE} idCittà = ? \textcolor{blue}{AS} percZonaCitta\\
+                \textcolor{blue}{FROM} zone \\
+                \textcolor{blue}{WHERE} idCitta = ? \textcolor{blue}{AS} percZonaCitta\\
                 \textcolor{blue}{WHERE} percZonaCitta.idZona = ? \\
             }
 
             \noindent
-            \textbf{OP 19: Ordinare le zone di una città per costo medio al mq} \\
+            \textbf{OP 17: Ordinare le zone di una città per costo medio al mq} \\
             \texttt{
                 \textcolor{blue}{SELECT} * \\
-                \textcolor{blue}{FROM} Zone \\
-                \textcolor{blue}{WHERE} idCittà = ? \\
-                \textcolor{blue}{ORDER BY} CostoMedioMq \textcolor{blue}{DESC} \\
+                \textcolor{blue}{FROM} zone \\
+                \textcolor{blue}{WHERE} idCitta = ? \\
+                \textcolor{blue}{ORDER BY} costoMedioMq \textcolor{blue}{DESC} \\
             }
 
             \noindent
-            \textbf{OP 20: Stilare una top 5 città per una o più categorie} \\
+            \textbf{OP 18: Stilare una top 5 città per una o più categorie} \\
             \texttt{
                 \textcolor{blue}{SELECT TOP}(5) \textcolor{blue}{WITH TIES} \\
-                \textcolor{blue}{FROM} città\_anni \\
-                \textcolor{blue}{WHERE} A.anni = ? \\
+                \textcolor{blue}{FROM} citta\_anni A\\
+                \textcolor{blue}{WHERE} A.anno = ? \\
                 \textcolor{blue}{ORDER BY} A.punteggioAmbiente*?+ \\
                 A.punteggioTrasporto*?+A.punteggioEconomia*?+ \\
                 A.punteggioSanità*?+A.punteggioIstruzione*? \textcolor{blue}{DESC} \\
             }
             
             \noindent
-            \textbf{OP 21: Classificare città in base all’evoluzione in una o più categorie rispetto all’anno precedente} \\
+            \textbf{OP 19: Classificare città in base all’evoluzione in una o più categorie rispetto all’anno precedente} \\
             \texttt{
-                \textcolor{blue}{SELECT} idCittà, anno, punteggioCittà \\
-                \textcolor{blue}{SELECT} punteggioAmbiente+punteggioTrasporto+punteggioEconomia+punteggioSanità+punteggioIstruzione AS punteggioCittà, anno \\
-                \textcolor{blue}{FROM} città\_anni \\
-                \textcolor{blue}{WHERE} idCittà = ? \textcolor{blue}{AND} anno = ? \\
+                \textcolor{blue}{SELECT} punteggioAmbiente+punteggioTrasporto+punteggioEconomia+punteggioSanita+punteggioIstruzione AS punteggioCitta, anno \\
+                \textcolor{blue}{FROM} citta\_anni \\
+                \textcolor{blue}{WHERE} idCitta = ? \textcolor{blue}{AND} anno = ? \\
             }
             
             \noindent
-            \textbf{OP 22: Ordinare le città in base a valori specifici di una o più categorie} \\
+            \textbf{OP 20: Ordinare le città in base a valori specifici di una o più categorie} \\
             \texttt{
-                \textcolor{blue}{SELECT} A.percentualeSpazioVerdeUrbano, C.nome, C.anno, C.idCittà \\
-                \textcolor{blue}{FROM} Ambiente A, Città\_Anni C \\
+                \textcolor{blue}{SELECT} A.percentualeSpazioVerdeUrbano, C.nome, C.anno, C.idCitta \\
+                \textcolor{blue}{FROM} ambiente A, citta\_anni C \\
                 \textcolor{blue}{WHERE} A.hashAmbiente = C.hashAmbiente  \\
                 \textcolor{blue}{AND} C.anno = ? \\
                 \textcolor{blue}{ORDER BY} A.percentualeSpazioVerdeUrbano \textcolor{blue}{DESC} \\
             }
             
             \noindent
-            \textbf{OP 23: Calcolare performance di uno stato in una o più categorie (da ogni città)} \\
+            \textbf{OP 21: Calcolare performance di uno stato in una o più categorie (da ogni città)} \\
             \texttt{
                 \textcolor{blue}{SELECT AVG} (A.punteggio*) \\
-                \textcolor{blue}{FROM} (stati S \textcolor{blue}{JOIN} città C \\
-                \textcolor{blue}{ON} (S.nome = C.nomeStato)) J \\
-                \textcolor{blue}{JOIN} città\_anni A \\
-                \textcolor{blue}{ON} (A.idCittà = J.idCittà \textcolor{blue}{AND} anno = ?) \\
-                \textcolor{blue}{WHERE} J.nomeStato = ? \\
+                \textcolor{blue}{FROM} (stati S \textcolor{blue}{JOIN} citta C \\
+                \textcolor{blue}{ON} (S.nome = C.nomeStato)) \\
+                \textcolor{blue}{JOIN} citta\_anni A \\
+                \textcolor{blue}{ON} (A.idCitta = C.idCitta \textcolor{blue}{AND} anno = ?) \\
+                \textcolor{blue}{WHERE} C.nomeStato = ? \\
             }
 
             \noindent
-            \textbf{OP 24: Aggiornamento annuale dei punteggi di una città (dati i campi delle categorie)} \\
+            \textbf{OP 22: Aggiornamento annuale dei punteggi di una città (dati i campi delle categorie)} \\
             \texttt{
-                newHashAmbiente = \textcolor{blue}{CAST}(PM2.5media*10 \textcolor{blue}{AS} int)*1001 + \textcolor{blue}{CAST}(percentualeSpazioVerdeUrbano*10 \textcolor{blue}{AS} int) \\ \\
+                newHashAmbiente = \textcolor{blue}{CAST}(pm25media*10 \textcolor{blue}{AS} int)*1001 + \textcolor{blue}{CAST}(percentualeSpazioVerdeUrbano*10 \textcolor{blue}{AS} int) \\ \\
                 \textcolor{blue}{IF} ((SELECT COUNT(hashAmbiente) \\
-                \textcolor{blue}{FROM} Ambiente \\
+                \textcolor{blue}{FROM} ambiente \\
                 \textcolor{blue}{WHERE} hashAmbiente = newHashAmbiente) > 0,  \\
                 \textcolor{blue}{NULL},  \\
-                \textcolor{blue}{INSERT INTO} Ambiente(hashAmbiente, PM2.5media, percentualeSpazioVerdeUrbano) \\
+                \textcolor{blue}{INSERT INTO} ambiente(hashAmbiente, pm25media, percentualeSpazioVerdeUrbano) \\
                 \textcolor{blue}{VALUES} (newHashAmbiente, ?, ?)) \\
-                \textcolor{blue}{INSERT INTO} Città\_Anni(punteggioAmbiente, newHashAmbiente) \\
+                \textcolor{blue}{INSERT INTO} citta\_anni(punteggioAmbiente, newHashAmbiente) \\
             }
 
         \chapter{Progettazione dell'applicazione}
