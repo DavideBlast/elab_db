@@ -121,20 +121,20 @@ public class App extends Application {
 
         Tab tab1 = new Tab("Città");
         tab1.setClosable(false);
-        Operation query1 = new OpFactory().createOp24();
+        Operation query1 = new OpFactory().createOp2();
         tab1.setContent(createTabContent("Città", query1));
 
-        // Tab tab2 = new Tab("Zone");
-        // tab2.setClosable(false);
-        // String query2 = "SELECT * FROM zone";
-        // tab2.setContent(createTabContent("Zone", query2));
+        Tab tab2 = new Tab("Zone");
+        tab2.setClosable(false);
+        Operation query2 = new OpFactory().createOp13_14();
+        tab2.setContent(createTabContent("Zone", query2));
 
         // Tab tab3 = new Tab("Immobili");
         // tab3.setClosable(false);
         // String query3 = "SELECT * FROM immobili";
         // tab3.setContent(createTabContent("Immobili", query3));
 
-        tabPane.getTabs().addAll(tab1);
+        tabPane.getTabs().addAll(tab1, tab2);
         // tabPane.getTabs().addAll(tab1, tab2, tab3);
         return tabPane;
     }
@@ -177,6 +177,7 @@ public class App extends Application {
             List<String> inputStrings = new ArrayList<String>();
             
             updateButton.setOnAction(event -> {
+                inputStrings.clear();
                 for (var input : inputs) {
                     inputStrings.add(input.getText());
                 }
@@ -197,7 +198,7 @@ public class App extends Application {
         ObservableList<DataItem> data = FXCollections.observableArrayList();
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(query.getQuery(Optional.empty()));) {
-            if (query.getUpdate(query.translateInput(inputStrings)).isPresent()) 
+            if (true) 
             {
                 preparedStatement.executeUpdate(query.getUpdate(query.translateInput(inputStrings)).get());
             }

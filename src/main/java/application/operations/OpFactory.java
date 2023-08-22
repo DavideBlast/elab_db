@@ -4,12 +4,146 @@ import java.beans.Statement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
 import application.App;
 
 public class OpFactory {
+
+    public Operation createOp2() {
+        return new Operation(){
+
+            private Iterator<Integer> idIterator = null;
+
+			@Override
+			public Optional<String> getUpdate(List<Object> args) {
+                var in_metriQuadri = (Integer) args.get(0);
+                var in_classeEnergetica = (String) args.get(1);
+                var in_annoCostruzione = (Integer) args.get(2);
+                var in_via = (String) args.get(3);
+                var in_numeroCivico = (Integer) args.get(4);
+                var in_tipoImmobile = (String) args.get(5);
+                var in_numeroInterno = (in_tipoImmobile.equals("Appartamento")) ? (String) args.get(6) : "null";
+                var in_piano = (in_tipoImmobile.equals("Appartamento")) ? (String) args.get(7) : "null";
+                var in_numeroStanze = (in_tipoImmobile.equals("Appartamento") || in_tipoImmobile.equals("Villa")) ? (String) args.get(8) : "null";
+                var in_numeroConquilini = (in_tipoImmobile.equals("Stanza")) ? (String) args.get(9) : "null";
+                var in_tipoAnnuncioUtente = (String) args.get(10);
+                var in_costoMensile = (in_tipoAnnuncioUtente.equals("Affitto")) ? (String) args.get(11) : "null";
+                var in_prezzo = (in_tipoAnnuncioUtente.equals("Vendita")) ? (String) args.get(12) : "null";
+
+                int in_idImmobile = 0;
+
+                try {
+                    String check = "select count(*) from immobili where via = '" + in_via + "' AND numeroCivico = " + in_numeroCivico;
+                    String check2 = "select idImmobile from immobili where via = '" + in_via + "' AND numeroCivico = " + in_numeroCivico;
+                    if(in_tipoImmobile.equals("Appartamento")){
+                        check += " AND numeroInterno = " + in_numeroInterno;
+                        check2 += " AND numeroInterno = " + in_numeroInterno;
+                    }
+                    PreparedStatement statement = App.getConnection().prepareStatement(check);
+                    ResultSet resultSet = statement.executeQuery(check);
+                    resultSet.next();
+                    
+                    if (resultSet.getInt(1) == 0) {
+                        statement.executeUpdate("INSERT INTO immobili (idImmobile, idZona, metriQuadri, classeEnergetica, annoCostruzione, via, numeroCivico, tipoImmobile, numeroInterno, piano, numeroStanze, numeroConquilini) \n" + 
+                                  "VALUES (default, 1, " + in_metriQuadri + ", '" + in_classeEnergetica + "', " + in_annoCostruzione + ", '" + in_via + "', " + in_numeroCivico + ", '" + in_tipoImmobile + "', " + in_numeroInterno + ", " + in_piano + ", " + in_numeroStanze + ", " + in_numeroConquilini + "); \n");
+                    }
+                    statement = App.getConnection().prepareStatement(check2);
+                    resultSet = statement.executeQuery(check2);
+                    resultSet.next();
+
+                    in_idImmobile = resultSet.getInt(1);
+
+                    if(idIterator == null){
+                        statement = App.getConnection().prepareStatement("select idAnnuncio from annunci_utente order by idAnnuncio desc limit 1");
+                        resultSet = statement.executeQuery("select idAnnuncio from annunci_utente order by idAnnuncio desc limit 1");
+                        resultSet.next();
+
+                        idIterator = new IDIterator(resultSet.getInt(1));
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return Optional.of("INSERT INTO annunci_utente (idAnnuncio, idImmobile, email, statoAnnuncio, dataCreazione, tipoAnnuncioUtente, costoMensile, prezzo) \n" + 
+                                    "VALUES (" + idIterator.next() + ", " + in_idImmobile + ", 'vittorio@gmail.com', 'Attivo', NOW(), '" + in_tipoAnnuncioUtente + "', " + in_costoMensile + ", " + in_prezzo + ");");
+			}
+
+			@Override
+			public String getQuery(Optional<List<Object>> args) {
+                return "SELECT * \n" +
+                       "FROM annunci_utente \n" +
+                       "ORDER BY idAnnuncio DESC \n" +
+                       "LIMIT 1";
+			}
+
+			@Override
+			public List<String> getInputNames() {
+				return List.of("metriQuadri",
+                               "classeEnergetica",
+                               "annoCostruzione",
+                               "via",
+                               "numeroCivico",
+                               "tipoImmobile",
+                               "numeroInterno",
+                               "piano",
+                               "numeroStanze",
+                               "numeroConquilini",
+                               "tipoAnnuncioUtente",
+                               "costoMensile",
+                               "prezzo");
+			}
+
+			@Override
+			public List<Object> translateInput(List<String> inputs) {
+				return List.of(Integer.parseInt(inputs.get(0)),
+                               inputs.get(1),
+                               Integer.parseInt(inputs.get(2)),
+                               inputs.get(3),
+                               Integer.parseInt(inputs.get(4)),
+                               inputs.get(5),
+                               inputs.get(6),
+                               inputs.get(7),
+                               inputs.get(8),
+                               inputs.get(9),
+                               inputs.get(10),
+                               inputs.get(11),
+                               inputs.get(12));
+			}
+        };
+    }
+
+    public Operation createOp13_14() {
+        return new Operation() {
+
+			@Override
+			public Optional<String> getUpdate(List<Object> args) {
+				return Optional.of("INSERT INTO Messaggi (timestamp, email, idAnnuncio, testo, mittente) \n" + 
+                                   "VALUES (NOW(), 'vittorio@gmail.com', 1, '" + (String) args.get(0) + "', 'Richiedente')");
+			}
+
+			@Override
+			public String getQuery(Optional<List<Object>> args) {
+                return "SELECT testo, mittente, timestamp \n" +
+                       "FROM messaggi \n" +
+                       "WHERE email = 'vittorio@gmail.com' \n" +
+                       "AND idAnnuncio = 1 \n" +
+                       "ORDER BY timestamp";
+			}
+
+			@Override
+			public List<String> getInputNames() {
+				return List.of("Testo");
+			}
+
+			@Override
+			public List<Object> translateInput(List<String> inputs) {
+				return List.of(inputs.get(0));
+			}
+        };
+    }
 
     public Operation createOp7() {
         final int idZona = 1;
@@ -33,11 +167,6 @@ public class OpFactory {
             }
 
             @Override
-            public List<Tipo> getInputTypes() {
-                return List.of(Tipo.INT);
-            }
-
-            @Override
             public List<Object> translateInput(List<String> inputs) {
                 return List.of(Integer.parseInt(inputs.get(0)));
             }
@@ -54,7 +183,10 @@ public class OpFactory {
 
             @Override
             public String getQuery(Optional<List<Object>> args) {
-                return "SELECT * FROM citta_anni";
+                if (!args.isPresent()) {
+                    return "SELECT * FROM citta_anni";
+                }
+                return "SELECT * FROM citta_anni WHERE idCitta = " + args.get().get(0) + " AND anno = " + args.get().get(1);
             }
 
             @Override
@@ -73,12 +205,6 @@ public class OpFactory {
                                "postiLettoProCapite",
                                "percorrenzaMediaPendolare",
                                "autoProCapite");
-            }
-
-            @Override
-            public List<Tipo> getInputTypes() {
-                // TODO Auto-generated method stub
-                throw new UnsupportedOperationException("Unimplemented method 'getInputTypes'");
             }
 
             @Override
@@ -168,6 +294,8 @@ public class OpFactory {
                         output+="INSERT INTO Trasporto (hashTrasporto, percorrenzaMediaPendolare, autoProCapite) \n" + 
                                 "VALUES (" + newHashTrasporto + ", " +  in_percorrenzaMediaPendolare + " , " + in_autoProCapite + " );\n ";
                     }
+
+
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -179,6 +307,26 @@ public class OpFactory {
             }
             
         };
+    }
+
+    private class IDIterator implements Iterator<Integer> {
+
+        private int current;
+
+        protected IDIterator(final int current){
+            this.current = current + 1;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return true;
+        }
+
+        @Override
+        public Integer next() {
+            return current++;
+        }
+
     }
     
 }
