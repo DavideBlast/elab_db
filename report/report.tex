@@ -15,6 +15,8 @@
 \usepackage[table]{xcolor}
 \usepackage{adjustbox}
 \usepackage{setspace}
+\usepackage{listings}
+
 
 
 \begin{document}
@@ -704,7 +706,7 @@
                 Nel caso dell'entità \textit{immobile} si è invece deciso di procedere accorpando le
                 entità figlie \textit{villa, appartamento e stanza} nella prima. Questa scelta deriva
                 dal mancato (o meglio trascurabile) utilizzo delle specializzazioni nelle operazioni
-                precedentemente formulate. (SOLUZIONE MANCANTE)\\
+                precedentemente formulate.\\
                 \\
                 Nella riformulazione della doppia gerarchia \textit{annuncio-annuncio\_utente} abbiamo
                 adottato due criteri distinti. In primis abbiamo scisso l'\textit{annuncio} in 
@@ -722,20 +724,70 @@
             prestare attenzione alla loro coerenza a livello applicativo.
 
             \subsection*{Scelta delle chiavi primarie}
-            Lo schema presenta già tutte le chiavi primarie necessarie ad individuare le singole entità, eccezione fatta
-            per le "categorie" (\textit{ambiente, trasporto, etc.}) in cui verranno importati gli identificatori delle 
-            singole \textit{città\_anno}.
+            Lo schema presenta già tutte le chiavi primarie necessarie ad individuare le singole entità.
+            Per ciascuna delle entità "categoria" si è optato per la realizzazione di algoritmi di hashing che, 
+            presi in input i valori dei campi di una categoria, generano un intero positivo univoco che assumerà
+            il ruolo di chiave primaria. Segue una breve trattazione sulla progettazione di tali algoritmi.\\
+            \\
+            Per creare hash univoci serve una funzione invertibile, ovvero è possibile ricavare l'input partendo 
+            dall'output della funzione.
+            Supponiamo di voler creare un hash partendo da due dati A e B tali che A $\in$ [0, 5] e B $\in$ [0,7]
+            Si può semplicemente usare la funzione $f1 = A * 10 + B$, intuitivamente le decine del codice ricavato 
+            rappresentano A e le unità B. È altrettanto ovvio però che ci siano molti valori fra 0 e 57 
+            (f1min e f1max) che rimangono inutilizzati, causando perciò spreco di spazio. Proponiamo quindi una 
+            soluzione ottimizzata con $f2 = A * 8 + B$. Usiamo la base 8 piuttosto che la base 10, eliminando lo 
+            spreco di spazio che avevamo precedentemente. La base non è scelta a caso, per salvare B la base minima 
+            necessaria è la base 8, poichè si usano 8 simboli diversi per rappresentare il dato. Adesso tutti i dati 
+            fra f1min e f1max sono validi. \\
+            \\
+            Ma se dovessimo prendere in considerazione più di due dati?
+            Inserisco C [0,1], un booleano per esempio. Proviamo $f3 = C * 64 + A * 8 + B$. Non è una soluzione orrenda, 
+            ma si ripresenta lo spreco di possibili valori intermedi, questa volta su A. Per rappresentare A non è 
+            necessaria la base 8, basterebbe la base 6, perciò tutti i valori di f3 in cui A $\in$ [6,7] sono sprecati...
+            Introduciamo le basi miste! Non dobbiamo per forza usare la stessa base per ogni cifra. Riprendiamo un attimo 
+            $f3 = C * 64 + A * 8 + B$. Qui il problema è il coefficiente applicato a C, ma come si trova il coefficiente 
+            ottimale? Semplice, basta trovare il massimo valore che può assumere l'espressione $A * 8 + B$. Sostituiamo 
+            $A = 5$ e $B = 7$ per trovare $5 * 8 + 7 = 47$. Per la logica delle basi, il numero successivo azzererà i valori di 
+            A e B e incrementerà di 1 C, quindi il coefficiente ottimale di C è $47 + 1 = 48$. \\
+            \\
+            Questo metodo funziona con un 
+            numero variabile di dati, basta trovare il valore massimo assunto dall'espressione che lo precede e incrementarlo 
+            di 1 per il nuovo coefficiente. L'ultima cosa da controllare è quindi che il dato sia immagazzinabile in una 
+            variabile. Basta controllare che il valore massimo del hash sia minore o uguale di $2^{BIT}$ - 1, dove BIT è il numero 
+            di bit a disposizione (in genere 32). Il tipo di variabile ottimale per salvare questo hash è un unsigned int.
+            
+
+            \noindent
+            \texttt{
+                \noindent
+                \\
+                hashAmbiente = (pm25media*10) * 1001\\ 
+                \null\qquad\qquad + percentualeSpazioVerdeUrbano * 10;\\
+                hashEconomia = (tassoDisoccupazione*10) * 7239535 \\
+                \null\qquad\qquad + (PILProCapite/1000) * 8035 \\
+                \null\qquad\qquad + stipendioMedio-300;\\
+                hashIstruzione = (numeroUniversita*10) * 1002001 \\
+                \null\qquad\qquad + (percentualeDiplomati * 10) * 1001\\
+                \null\qquad\qquad +  percentualeLaureati * 10;\\
+                hashSanita = (postiLettoProCapite*10) * 501 \\
+                \null\qquad\qquad + (aspettativaVita * 10 - 500);\\
+                hashTrasporto = (autoProCapite*100) * 151 \\
+                \null\qquad\qquad + percorrenzaMediaPendolare * 100;\\
+            }
+
+ 
+            
 
             \subsection*{Eliminazione degli identificatori esterni}
             Nello schema E/R sono eliminate le seguenti relazioni: \\
             • \textit{Composizione}, importando il nome dello stato in \textit{città} \\
             • \textit{AppartenenzaAnno}, importando anno in \textit{città\_anno} \\
             • \textit{AppartenenzaCittà}, importando idCittà in \textit{città\_anno} \\
-            • \textit{Valutazione\_A}, importando anno ed idCittà in \textit{ambiente} \\
-            • \textit{Valutazione\_T}, importando anno ed idCittà in \textit{trasporto} \\
-            • \textit{Valutazione\_E}, importando anno ed idCittà in \textit{economia} \\
-            • \textit{Valutazione\_S}, importando anno ed idCittà in \textit{sanità} \\
-            • \textit{Valutazione\_I}, importando anno ed idCittà in \textit{istruzione} \\
+            • \textit{Valutazione\_A}, importando hashAmbiente in \textit{città\_anno} \\
+            • \textit{Valutazione\_T}, importando hashTrasporto in \textit{città\_anno} \\
+            • \textit{Valutazione\_E}, importando hashEconomia in \textit{città\_anno} \\
+            • \textit{Valutazione\_S}, importando hashSanita in \textit{città\_anno} \\
+            • \textit{Valutazione\_I}, importando hashIstruzione in \textit{città\_anno} \\
             • \textit{Divisione}, importando idCittà in \textit{zona} \\
             • \textit{Situato}, importando idZona in \textit{immobile} \\
             • \textit{RiguardaAnnuncio}, importando idImmobile in \textit{annuncio\_utente} \\
@@ -755,8 +807,8 @@
             di statistiche proiettate nel livello applicativo. Il dato in questione, tuttavia, si sarebbe potuto ottenere 
             andando ad analizzare tutti gli \textit{immobili} situati nella \textit{zona} di interesse, facendo la media delle divisioni tra il 
             costo di ciascuna abitazione per la sua metratura. Quest'ultima manovra, già in origine percepita come eccessivamente
-            onerosa a livello computazionale, verrà messa a confronto con l'alternativa adottata, nelle due operazioni coinvolte. 
-
+            onerosa a livello computazionale, verrà messa a confronto con l'alternativa adottata, nelle due operazioni coinvolte. \\
+            \\
             \textbf{OP 2: Pubblicare un annuncio immobiliare (vendita o affitto)}
             \begin{center}
                 \textbf{Con ridondanza}
@@ -791,8 +843,8 @@
             \rowcolor{green!20}  &   & \textbf{Totale:}  3.000 al giorno &  \\ [1ex] 
             \end{tabular}
             \end{table}
-        	
-            \textbf{OP 16: Comparare il prezzo di un immobile al mq con quello degli immobili nella stessa zona}
+        	\noindent
+            \textbf{OP 14: Comparare il prezzo di un immobile al mq con quello degli immobili nella stessa zona}
         	\begin{center}
                 \textbf{Con ridondanza}
             \end{center}
@@ -838,38 +890,33 @@
         \section{Traduzione di entità e associazioni in relazioni}
         \onehalfspacing
         \textbf{stati}(\underline{nome}, superficie, popolazione) \\
-        \textbf{città}(\underline{idCittà}, nome, popolazione, superficie, regione*, nomeStato) \\ 
+        \textbf{citta}(\underline{idCitta}, nome, popolazione, superficie, regione*, nomeStato) \\ 
             \null\quad\quad FK: nomeStato REFERENCES \textbf{stati} \\
-        \textbf{città\_anni}(\underline{idCittà}, \underline{anno}, punteggioAmbiente, punteggioTrasporto, punteggioEconomia, punteggioSanità, punteggioIstruzione) \\
-            \null\quad\quad FK: idCittà REFERENCES \textbf{città} \\
+        \textbf{citta\_anni}(\underline{idCitta}, \underline{anno}, punteggioAmbiente, punteggioTrasporto, punteggioEconomia, punteggioSanità, punteggioIstruzione, hashAmbiente, hashTrasporto, hashEconomia, hashSanita, hashIstruzione) \\
+            \null\quad\quad FK: idCitta REFERENCES \textbf{citta} \\
             \null\quad\quad FK: anno REFERENCES \textbf{anni} \\
+            \null\quad\quad FK: hashAmbiente REFERENCES \textbf{ambiente} \\
+            \null\quad\quad FK: hashTrasporto REFERENCES \textbf{trasporto} \\
+            \null\quad\quad FK: hashEconomia REFERENCES \textbf{economia} \\
+            \null\quad\quad FK: hashSanita REFERENCES \textbf{sanita} \\
+            \null\quad\quad FK: hashIstruzione REFERENCES \textbf{istruzione} \\
         \textbf{anni}(\underline{anno}) \\
-        \textbf{ambiente}(\underline{idCittà}, \underline{anno}, PM2.5media, percentualeSpazioVerdeUrbano) \\
-            \null\quad\quad FK: idCittà REFERENCES \textbf{città} \\
-            \null\quad\quad FK: anno REFERENCES \textbf{anni} \\
-        \textbf{trasporto}(\underline{idCittà}, \underline{anno}, percorrenzaMediaPendolare, autoProCapite) \\
-            \null\quad\quad FK: idCittà REFERENCES \textbf{città} \\
-            \null\quad\quad FK: anno REFERENCES \textbf{anni} \\
-        \textbf{economia}(\underline{idCittà}, \underline{anno}, PILProCapite, stipendioMedio, tassoDisoccupazione) \\
-            \null\quad\quad FK: idCittà REFERENCES \textbf{città} \\
-            \null\quad\quad FK: anno REFERENCES \textbf{anni} \\
-        \textbf{sanità}(\underline{idCittà}, \underline{anno}, aspettativaVita, ospedaliProCapite) \\
-            \null\quad\quad FK: idCittà REFERENCES \textbf{città} \\
-            \null\quad\quad FK: anno REFERENCES \textbf{anni} \\
-        \textbf{istruzione}(\underline{idCittà}, \underline{anno}, percentualeLaureati, percentualeDiplomati, numeroUniversità) \\
-            \null\quad\quad FK: idCittà REFERENCES \textbf{città} \\
-            \null\quad\quad FK: anno REFERENCES \textbf{anni} \\
-        \textbf{zone}(\underline{idZona}, idCittà, nome, costoMedioMq, numeroImmobili) \\
+        \textbf{ambiente}(\underline{hashAmbiente}, pm25media, percentualeSpazioVerdeUrbano) \\
+        \textbf{trasporto}(\underline{hashTrasporto}, percorrenzaMediaPendolare, autoProCapite) \\
+        \textbf{economia}(\underline{hashEconomia}, PILProCapite, stipendioMedio, tassoDisoccupazione) \\
+        \textbf{sanita}(\underline{hashSanita}, aspettativaVita, postiLettoProCapite) \\
+        \textbf{istruzione}(\underline{hashIstruzione}, percentualeLaureati, percentualeDiplomati, numeroUniversita) \\
+        \textbf{zone}(\underline{idZona}, idCitta, nome, costoMedioMq, numeroImmobili) \\
         \textbf{immobili}(\underline{idImmobile}, \underline{idZona}, metriQuadri, classeEnergetica*, annoCostruzione*, via, numeroCivico, numeroInterno*, piano*, numeroStanze*, numeroConquilini*, tipoImmobile) \\
             \null\quad\quad FK: idZona REFERENCES \textbf{zone} \\
-        \textbf{annunci\_utente}(\underline{idAnnuncio}, \underline{idImmobile}, \underline{email}, statoAnnuncio, dataCreazione, tipoAnnuncioUtente, costoMensiile*, prezzo*) \\
+        \textbf{annunci\_utente}(\underline{idAnnuncio}, \underline{idImmobile}, \underline{email}, statoAnnuncio, dataCreazione, tipoAnnuncioUtente, costoMensile*, prezzo*) \\
             \null\quad\quad FK: idImmobile REFERENCES \textbf{immobili} \\
             \null\quad\quad FK: email REFERENCES \textbf{utenti} \\
-        \textbf{aste}(\underline{idAnnuncio}, \underline{idImmobile}, \underline{email}, prezzoMinimo, rialzoMinimo, depositoCauzionale, dataFine, dataCreazione) \\
+        \textbf{aste}(\underline{idAsta}, \underline{idImmobile}, \underline{email}, prezzoMinimo, rialzoMinimo, depositoCauzionale, dataFine, dataCreazione) \\
             \null\quad\quad FK: idImmobile REFERENCES \textbf{immobili} \\
             \null\quad\quad FK: email REFERENCES \textbf{giudici\_esecuzione} \\
-        \textbf{rialzi}(\underline{prezzoAttuale}, \underline{idAnnuncio}, \underline{email}, dataRialzo) \\
-            \null\quad\quad FK: idAnnuncio REFERENCES \textbf{aste} \\
+        \textbf{rialzi}(\underline{prezzoAttuale}, \underline{idAsta}, \underline{email}, dataRialzo) \\
+            \null\quad\quad FK: idAsta REFERENCES \textbf{aste} \\
             \null\quad\quad FK: email REFERENCES \textbf{utenti} \\
         \textbf{giudici\_esecuzione}(\underline{email}, telefono*, nome) \\
         \textbf{utenti}(\underline{email}, telefono*, nome) \\
@@ -1128,7 +1175,7 @@
 
             \textbf{OP 1: Registrare un nuovo account} \\
             \texttt{
-                \textcolor{blue}{INSERT INTO} utenti (e-mail, telefono, nome) \\
+                \textcolor{blue}{INSERT INTO} utenti (email, telefono, nome) \\
                 \textcolor{blue}{VALUES} (?, ?, ?) \\
             } 
             
@@ -1168,7 +1215,6 @@
 
             \noindent
             \textbf{OP 5: Ordinare gli annunci in base a particolari filtri sull'immobile (e.g. metratura, tipoImmobile)} \\
-            AGGIUNGERE CASO ASTE \\
             \texttt{
                 \textcolor{blue}{SELECT} * \\
                 \textcolor{blue}{FROM} immobili I \textcolor{blue}{JOIN} annunci\_utente A \textcolor{blue}{ON} (I.idImmobile = A.idImmobile \textcolor{blue}{AND} A.statoAnnuncio = 'Attivo' \textcolor{blue}{AND} I.tipoImmobile = ?) \\
@@ -1185,7 +1231,7 @@
             \texttt{
                 \textcolor{blue}{SELECT} * \\
                 \textcolor{blue}{FROM} immobili I \textcolor{blue}{JOIN} annunci\_utente A \textcolor{blue}{ON} (I.idImmobile = A.idImmobile \\
-                \textcolor{blue}{AND} A.statoAnnuncio = "Attivo" \textcolor{blue}{AND} I.idZona = ?) \\
+                \textcolor{blue}{AND} A.statoAnnuncio = 'Attivo' \textcolor{blue}{AND} I.idZona = ?) \\
                 \textcolor{blue}{ORDER BY} dataCreazione   \textcolor{blue}{DESC} \\
             }
 
@@ -1220,11 +1266,12 @@
                     \null\qquad\qquad\qquad\qquad\qquad\qquad \textcolor{blue}{WHERE} R.idAnnuncio = idAnnuncio) == 0, \\
                     \null\qquad\qquad\qquad\qquad\qquad\qquad prezzoMinimo, \\
                     \null\qquad\qquad\qquad\qquad\qquad\qquad (\textcolor{blue}{DECLARE} prezzoMassimo float; \\
-                    \null\qquad\qquad\qquad\qquad\qquad\qquad \textcolor{blue}{SELECT TOP}(1) prezzoAttuale \\
+                    \null\qquad\qquad\qquad\qquad\qquad\qquad \textcolor{blue}{SELECT prezzoAttuale} \\
                     \null\qquad\qquad\qquad\qquad\qquad\qquad \textcolor{blue}{INTO} prezzoMassimo \\
                     \null\qquad\qquad\qquad\qquad\qquad\qquad \textcolor{blue}{FROM} rialzi R \\
                     \null\qquad\qquad\qquad\qquad\qquad\qquad \textcolor{blue}{WHERE} R.idAnnuncio = idAnnuncio \\
                     \null\qquad\qquad\qquad\qquad\qquad\qquad \textcolor{blue}{ORDER BY} prezzoAttuale \textcolor{blue}{DESC}; \\
+                    \null\qquad\qquad\qquad\qquad\qquad\qquad \textcolor{blue}{LIMIT} 1 \\
                     \null\qquad\qquad\qquad\qquad\qquad\qquad prezzoMassimo)) \\
                 \textcolor{blue}{FROM} aste \\
                 \textcolor{blue}{WHERE} dataFine > \textcolor{blue}{NOW()} \\
