@@ -119,32 +119,43 @@ public class App extends Application {
     private TabPane createUtenteTabPane() {
         TabPane tabPane = new TabPane();
 
-        Tab tab1 = new Tab("Città");
+        Tab tab1 = new Tab("OP.2");
         tab1.setClosable(false);
         Operation query1 = new OpFactory().createOp2();
-        tab1.setContent(createTabContent("Città", query1));
+        tab1.setContent(createTabContent("OP.2", query1));
 
-        Tab tab2 = new Tab("Zone");
+        Tab tab2 = new Tab("OP.6");
         tab2.setClosable(false);
-        Operation query2 = new OpFactory().createOp11_12();
-        tab2.setContent(createTabContent("Zone", query2));
+        Operation query2 = new OpFactory().createOp6();
+        tab2.setContent(createTabContent("OP.6", query2));
 
-        // Tab tab3 = new Tab("Immobili");
-        // tab3.setClosable(false);
-        // String query3 = "SELECT * FROM immobili";
-        // tab3.setContent(createTabContent("Immobili", query3));
+        Tab tab3 = new Tab("OP.11");
+        tab3.setClosable(false);
+        Operation query3 = new OpFactory().createOp11_12();
+        tab3.setContent(createTabContent("OP.11", query3));
 
-        tabPane.getTabs().addAll(tab1, tab2);
-        // tabPane.getTabs().addAll(tab1, tab2, tab3);
+        Tab tab4 = new Tab("OP.15");
+        tab4.setClosable(false);
+        Operation query4 = new OpFactory().createOp15();
+        tab4.setContent(createTabContent("OP.15", query4));
+
+        Tab tab5 = new Tab("OP.18");
+        tab5.setClosable(false);
+        Operation query5 = new OpFactory().createOp18();
+        tab5.setContent(createTabContent("OP.18", query5));
+
+        Tab tab6 = new Tab("OP.22");
+        tab6.setClosable(false);
+        Operation query6 = new OpFactory().createOp22();
+        tab6.setContent(createTabContent("OP.22", query6));
+
+        tabPane.getTabs().addAll(tab1, tab2, tab3, tab4, tab5, tab6);
         return tabPane;
     }
 
      private VBox createTabContent(String queryName, Operation query) {
         VBox layout = new VBox(10);
         layout.setPadding(new Insets(20));
-
-        Label label = new Label(queryName);
-        label.setFont(Font.font("Tahoma", FontWeight.BOLD, 16));
 
         List<TextField> inputs = new ArrayList<TextField>();
 
@@ -184,7 +195,7 @@ public class App extends Application {
                 updateTableDataFromDatabase(tableView, numColumns, query, inputStrings);
             });
 
-            layout.getChildren().addAll(label, tableView, updateButton);
+            layout.getChildren().addAll(tableView, updateButton);
             return layout;
 
         } catch (SQLException e) {
@@ -198,7 +209,7 @@ public class App extends Application {
         ObservableList<DataItem> data = FXCollections.observableArrayList();
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(query.getQuery(Optional.empty()));) {
-            if (true) 
+            if (query.getUpdate(query.translateInput(inputStrings)).isPresent()) 
             {
                 preparedStatement.executeUpdate(query.getUpdate(query.translateInput(inputStrings)).get());
             }

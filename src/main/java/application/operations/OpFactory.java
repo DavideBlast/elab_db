@@ -51,14 +51,14 @@ public class OpFactory {
                                   "VALUES (default, 1, " + in_metriQuadri + ", '" + in_classeEnergetica + "', " + in_annoCostruzione + ", '" + in_via + "', " + in_numeroCivico + ", '" + in_tipoImmobile + "', " + in_numeroInterno + ", " + in_piano + ", " + in_numeroStanze + ", " + in_numeroConquilini + "); \n");
                     }
                     statement = App.getConnection().prepareStatement(check2);
-                    resultSet = statement.executeQuery(check2);
+                    resultSet = statement.executeQuery();
                     resultSet.next();
 
                     in_idImmobile = resultSet.getInt(1);
 
                     if(idIterator == null){
                         statement = App.getConnection().prepareStatement("select idAnnuncio from annunci_utente order by idAnnuncio desc limit 1");
-                        resultSet = statement.executeQuery("select idAnnuncio from annunci_utente order by idAnnuncio desc limit 1");
+                        resultSet = statement.executeQuery();
                         resultSet.next();
 
                         idIterator = new IDIterator(resultSet.getInt(1));
@@ -115,36 +115,6 @@ public class OpFactory {
         };
     }
 
-    public Operation createOp11_12() {
-        return new Operation() {
-
-			@Override
-			public Optional<String> getUpdate(List<Object> args) {
-				return Optional.of("INSERT INTO Messaggi (timestamp, email, idAnnuncio, testo, mittente) \n" + 
-                                   "VALUES (NOW(), 'vittorio@gmail.com', 1, '" + (String) args.get(0) + "', 'Richiedente')");
-			}
-
-			@Override
-			public String getQuery(Optional<List<Object>> args) {
-                return "SELECT testo, mittente, timestamp \n" +
-                       "FROM messaggi \n" +
-                       "WHERE email = 'vittorio@gmail.com' \n" +
-                       "AND idAnnuncio = 1 \n" +
-                       "ORDER BY timestamp";
-			}
-
-			@Override
-			public List<String> getInputNames() {
-				return List.of("Testo");
-			}
-
-			@Override
-			public List<Object> translateInput(List<String> inputs) {
-				return List.of(inputs.get(0));
-			}
-        };
-    }
-
     public Operation createOp6() {
         final int idZona = 1;
         return new Operation() {
@@ -176,6 +146,154 @@ public class OpFactory {
                 return Optional.empty();
             }
         };
+    }
+
+    public Operation createOp11_12() {
+        return new Operation() {
+
+			@Override
+			public Optional<String> getUpdate(List<Object> args) {
+				return Optional.of("INSERT INTO Messaggi (timestamp, email, idAnnuncio, testo, mittente) \n" + 
+                                   "VALUES (NOW(), 'vittorio@gmail.com', 1, '" + (String) args.get(0) + "', 'Richiedente')");
+			}
+
+			@Override
+			public String getQuery(Optional<List<Object>> args) {
+                return "SELECT testo, mittente, timestamp \n" +
+                       "FROM messaggi \n" +
+                       "WHERE email = 'vittorio@gmail.com' \n" +
+                       "AND idAnnuncio = 1 \n" +
+                       "ORDER BY timestamp";
+			}
+
+			@Override
+			public List<String> getInputNames() {
+				return List.of("Testo");
+			}
+
+			@Override
+			public List<Object> translateInput(List<String> inputs) {
+				return List.of(inputs.get(0));
+			}
+        };
+    }
+
+    public Operation createOp15() {
+        return new Operation() {
+
+            @Override
+            public Optional<String> getUpdate(List<Object> args) {
+                return Optional.empty();
+            }
+
+            @Override
+            public String getQuery(Optional<List<Object>> args) {
+                if (!args.isPresent()) {
+                    return "SELECT 'perc_diff'";
+                }
+
+                var in_idImmobile = args.get().get(0);
+                int idCitta = 0;
+                double costoMedioMqCitta = 0;
+
+                try {
+
+                    PreparedStatement statement = App.getConnection().prepareStatement("select C.idCitta from (immobili I join zone Z on I.idZona = Z.idZona and I.idImmobile = " + in_idImmobile + ") join citta C on Z.idCitta = C.idCitta");
+                    ResultSet resultSet = statement.executeQuery();
+                    resultSet.next();
+                    idCitta = resultSet.getInt(1);
+
+                    statement = App.getConnection().prepareStatement("SELECT SUM(costoMedioMq*numeroImmobili) FROM zone WHERE idCitta = " + idCitta);
+                    resultSet = statement.executeQuery();
+                    resultSet.next();
+                    var dividendo = resultSet.getDouble(1);
+                    statement = App.getConnection().prepareStatement("SELECT SUM(numeroImmobili) FROM zone WHERE idCitta = " + idCitta);
+                    resultSet = statement.executeQuery();
+                    resultSet.next();
+                    var divisore = resultSet.getDouble(1);
+                    
+                    costoMedioMqCitta = dividendo/divisore;
+
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+
+                return "SELECT ((prezzo/metriQuadri)- " + costoMedioMqCitta + ") * 100/ " + costoMedioMqCitta + " AS perc_diff " +
+                        "FROM (immobili I JOIN annunci_utente A " +
+                        "ON (A.idImmobile = I.idImmobile)) JOIN Zone Z " +
+                        "ON (I.idZona = Z.idZona) JOIN Citta C " +
+                        "ON (Z.idCitta = C.idCitta) " +
+                        "WHERE A.idImmobile = " + in_idImmobile + " AND statoAnnuncio = 'Attivo'";
+            }
+
+            @Override
+            public List<String> getInputNames() {
+                return List.of("idImmobile");
+            }
+
+            @Override
+            public List<Object> translateInput(List<String> inputs) {
+                return List.of(Integer.parseInt(inputs.get(0)));
+            }
+            
+        };
+    }
+
+
+    public Operation createOp18() {
+        return new Operation(){
+
+            @Override
+            public Optional<String> getUpdate(List<Object> args) {
+                return Optional.empty();
+            }
+
+            @Override
+            public String getQuery(Optional<List<Object>> args) {
+                if (!args.isPresent()) {
+                    return "SELECT C.idCitta, C.nome, A.punteggioAmbiente , A.punteggioTrasporto , A.punteggioEconomia , A.punteggioSanita , A.punteggioIstruzione " +
+                            "FROM (citta_anni A JOIN citta C on A.idCitta = C.idCitta) " +
+                            "WHERE A.anno = 42069";
+                }
+                var in_anno = args.get().get(0);
+                return "SELECT C.idCitta, C.nome, A.punteggioAmbiente , A.punteggioTrasporto , A.punteggioEconomia , A.punteggioSanita , A.punteggioIstruzione " +
+                        "FROM (citta_anni A JOIN citta C on A.idCitta = C.idCitta) " +
+                        "WHERE A.anno = " + in_anno +
+                        " ORDER BY A.punteggioAmbiente + A.punteggioTrasporto + A.punteggioEconomia + A.punteggioSanita + A.punteggioIstruzione DESC " + 
+                        "LIMIT 5";
+            }
+
+            @Override
+            public List<String> getInputNames() {
+                return List.of("anno");
+            }
+
+            @Override
+            public List<Object> translateInput(List<String> inputs) {
+                return List.of(Integer.parseInt(inputs.get(0)));
+            }
+            
+        };
+    }
+
+    private class IDIterator implements Iterator<Integer> {
+
+        private int current;
+
+        protected IDIterator(final int current){
+            this.current = current + 1;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return true;
+        }
+
+        @Override
+        public Integer next() {
+            return current++;
+        }
+
     }
 
     public Operation createOp22() {
@@ -256,7 +374,7 @@ public class OpFactory {
 
                 try {
                     PreparedStatement statement = App.getConnection().prepareStatement("select count(*) from ambiente where hashAmbiente = " + newHashAmbiente);
-                    ResultSet resultSet = statement.executeQuery("select count(*) from ambiente where hashAmbiente = " + newHashAmbiente);
+                    ResultSet resultSet = statement.executeQuery();
                     resultSet.next();
                     if (resultSet.getInt(1) == 0) {
                         output+="INSERT INTO Ambiente (hashAmbiente, pm25media, percentualeSpazioVerdeUrbano) \n" + 
@@ -264,7 +382,7 @@ public class OpFactory {
                     }
 
                     statement = App.getConnection().prepareStatement("select count(*) from economia where hashEconomia = " + newHashEconomia);
-                    resultSet = statement.executeQuery("select count(*) from economia where hashEconomia = " + newHashEconomia);
+                    resultSet = statement.executeQuery();
                     resultSet.next();
                     if (resultSet.getInt(1) == 0) {
                         output+="INSERT INTO Economia (hashEconomia, PILProCapite, stipendioMedio, tassoDisoccupazione) \n" + 
@@ -272,7 +390,7 @@ public class OpFactory {
                     }
 
                     statement = App.getConnection().prepareStatement("select count(*) from istruzione where hashIstruzione = " + newHashIstruzione);
-                    resultSet = statement.executeQuery("select count(*) from istruzione where hashIstruzione = " + newHashIstruzione);
+                    resultSet = statement.executeQuery();
                     resultSet.next();
                     if (resultSet.getInt(1) == 0) {
                         output+="INSERT INTO Istruzione (hashIstruzione, percentualeLaureati, percentualeDiplomati, numeroUniversita) \n" + 
@@ -280,7 +398,7 @@ public class OpFactory {
                     }
 
                     statement = App.getConnection().prepareStatement("select count(*) from sanita where hashSanita = " + newHashSanita);
-                    resultSet = statement.executeQuery("select count(*) from sanita where hashSanita = " + newHashSanita);
+                    resultSet = statement.executeQuery();
                     resultSet.next();
                     if (resultSet.getInt(1) == 0) {
                         output+="INSERT INTO Sanita (hashSanita, postiLettoProCapite, aspettativaVita) \n" + 
@@ -288,7 +406,7 @@ public class OpFactory {
                     }
 
                     statement = App.getConnection().prepareStatement("select count(*) from trasporto where hashTrasporto = " + newHashTrasporto);
-                    resultSet = statement.executeQuery("select count(*) from trasporto where hashTrasporto = " + newHashTrasporto);
+                    resultSet = statement.executeQuery();
                     resultSet.next();
                     if (resultSet.getInt(1) == 0) {
                         output+="INSERT INTO Trasporto (hashTrasporto, percorrenzaMediaPendolare, autoProCapite) \n" + 
@@ -309,25 +427,6 @@ public class OpFactory {
         };
     }
 
-    private class IDIterator implements Iterator<Integer> {
-
-        private int current;
-
-        protected IDIterator(final int current){
-            this.current = current + 1;
-        }
-
-        @Override
-        public boolean hasNext() {
-            return true;
-        }
-
-        @Override
-        public Integer next() {
-            return current++;
-        }
-
-    }
     
 }
 
