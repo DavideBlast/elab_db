@@ -115,7 +115,7 @@ public class OpFactory {
         };
     }
 
-    public Operation createOp13_14() {
+    public Operation createOp11_12() {
         return new Operation() {
 
 			@Override
@@ -145,7 +145,7 @@ public class OpFactory {
         };
     }
 
-    public Operation createOp7() {
+    public Operation createOp6() {
         final int idZona = 1;
         return new Operation() {
             
@@ -178,7 +178,7 @@ public class OpFactory {
         };
     }
 
-    public Operation createOp24() {
+    public Operation createOp22() {
         return new Operation() {
 
             @Override

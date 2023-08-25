@@ -126,7 +126,7 @@ public class App extends Application {
 
         Tab tab2 = new Tab("Zone");
         tab2.setClosable(false);
-        Operation query2 = new OpFactory().createOp13_14();
+        Operation query2 = new OpFactory().createOp11_12();
         tab2.setContent(createTabContent("Zone", query2));
 
         // Tab tab3 = new Tab("Immobili");
