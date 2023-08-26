@@ -99,7 +99,8 @@
         delle città "doppione", rimarrebbero comunque insolute casistiche tipiche del territorio britannico, dove città omonime 
         potrebbero situarsi in contee diverse ma all'interno della stessa "Government Office \textit{Region}". A titolo di esempio, basti
         pensare che nell'intero UK compaiono 14 città chiamate Newport! \footnote{https://www.southwalesargus.co.uk/news/19433701.newports-across-world/} \\
-        \\
+        \newpage
+        \noindent
         Un annuncio riguarda un solo immobile, mentre lo stesso immobile può comparire in più annunci diversi. Quest'ultima cardinalità,
         meno ovvia, deriva dall'esigenza di conservare lo storico di tutte le vendite/affitti di ciascuna abitazione, in modo da formulare
         in seguito un trend del prezzo in funzione del tempo (da presentare agli interessati).
@@ -109,13 +110,14 @@
             \includegraphics[width=\linewidth]{./images/first.png}
             \caption{La prima versione dello schema concettuale}
         \end{figure}
-
+        
+        \newpage
         \section{Divisione in zone e di immobili}
         Introducendo una gerarchia per differenziare le varie tipologie di \textit{immobili} inserite negli annunci,
-        ogni immobile dovrà essere necessariamente contraddistinto da un ID proprio. Perchè? Se tutte le dimore
+        ogni immobile dovrà essere necessariamente contraddistinto da un ID proprio. Perché? Se tutte le dimore
         fossero case indipendenti, allora potrebbero essere identificate da attributi che ne specifichino la posizione.
         Aggiungendo gli appartamenti poi, basterebbe includere nella chiave un campo che indichi il numero dell'interno.
-        Con l'avvento delle stanze singole tuttavia, la soluzione precedentemente adottata risulterà inadatta, poichè 
+        Con l'avvento delle stanze singole tuttavia, la soluzione precedentemente adottata risulterà inadatta, poiché 
         non risponderebbe alla necessità di un utente di affittare più stanze della stessa abitazione (ognuna con un 
         annuncio dedicato).
 
@@ -124,7 +126,7 @@
             \includegraphics[width=\linewidth]{./images/second.png}
             \caption{La seconda versione dello schema concettuale}
         \end{figure}
-
+        
         \section{Espansione delle valutazioni}
         Nell’amplificazione della porzione di schema relativa all’analisi delle città abbiamo scisso la precedente entità 
         “segnaposto” \textit{valutazione} in una serie di categorie, come illustrato nei requisiti. Ciascuna di queste è caratterizzata 
@@ -146,6 +148,7 @@
             \caption{La terza versione dello schema concettuale}
         \end{figure}
 
+        \newpage
         \section{Aste e giudici}
         Per enfatizzare la differente natura degli annunci pubblicabili dagli utenti ordinari e le aste riservate ad i giudici,
         si è deciso di scindere l'entità \textit{annuncio} rispettivamente in \textit{annuncio\_utente} ed \textit{asta}. \\
@@ -175,11 +178,9 @@
         
 
 
-
-        \begin{figure}[ht]
+        \begin{figure}[]
             \centering{}
-            \includegraphics[width=\linewidth]{./images/fourth.png}
-            \caption{L'ultima versione dello schema concettuale}
+            \includegraphics[angle=90,width=\textwidth,height=\textheight,keepaspectratio]{./images/fourth.png}
         \end{figure}
 
         	
@@ -278,9 +279,11 @@
             \end{tabular}
             \end{adjustbox}
             \end{table}
-        	
+        
+        \newpage
     	\section{Schemi di navigazione e tabelle degli accessi}	
 
+        \noindent
         \textbf{OP 1: Registrare un nuovo account}
         	\begin{table}[H]
             \centering
@@ -292,7 +295,8 @@
              \rowcolor{yellow!20}\rowcolor{yellow!20} &   & \textbf{Totale:} 1S $\rightarrow$ 3.000 al giorno &  \\ [1ex] 
              \end{tabular}
             \end{table}
-
+            
+            \noindent
             \textbf{OP 2: Pubblicare un annuncio immobiliare (vendita, affitto o asta)}
             Viene di seguito presentato il caso in cui si voglia aggiungere un annuncio relativo ad un immobile
             non ancora presente nella base di dati: sarà necessario aggiornare, dunque riscrivere, i campi 
@@ -311,6 +315,7 @@
              \rowcolor{yellow!20}  \rowcolor{yellow!20} &   & \textbf{Totale:} 5S $\rightarrow$ 5.000 al giorno &  \\ [1ex] 
              \end{tabular}
             \end{table} 
+            \noindent
             Nell'eventualità in cui venisse pubblicato un'annuncio relativo ad un immobile già comparso sulla
             piattaforma, e pertanto già considerato nel calcolo del \textit{costoMedioMq} del quartiere di
             appartenenza, dovremmo leggere il prezzo al mq designato dal proprietario più recente rispetto all'attuale, 
@@ -332,6 +337,8 @@
              \end{tabular}
             \end{table}
 
+            \newpage
+            \noindent
             \textbf{OP 3: Visualizzare annunci immobiliari attivi di una città in ordine cronologico} \\
             Data una città, prendiamo le sue 10 zone, che hanno in media 5 immobili l'una. Visto che gli annunci totali \textit{attivi} (worst case 450.000) 
             sono $\ge$ degli immobili (350.000) (considerando che lo stesso immobile può essere pubblicato sia come affitto che vendita)
@@ -354,6 +361,7 @@
              \end{tabular}
             \end{table}
 
+            \noindent
             \textbf{OP 4: Suddividere gli annunci in vendita, affitto o asta all’interno di una città}
         	\begin{table}[H]
             \centering
@@ -373,6 +381,8 @@
              \end{tabular}
             \end{table}
 
+            \newpage
+            \noindent
             \textbf{OP 5: Ordinare gli annunci in base a particolari filtri sull'immobile (e.g. metratura, classe energetica)}
         	\begin{table}[H]
             \centering
@@ -392,6 +402,7 @@
              \end{tabular}
             \end{table}
 
+            \noindent
             \textbf{OP 6: Filtrare gli annunci per zona}
         	\begin{table}[H]
             \centering
@@ -411,6 +422,7 @@
              \end{tabular}
             \end{table}
 
+            \noindent
             \textbf{OP 7: Ordinare gli annunci di affitto per costo mensile}
         	\begin{table}[H]
             \centering
@@ -430,6 +442,8 @@
              \end{tabular}
             \end{table}
 
+            \newpage
+            \noindent
             \textbf{OP 8: Mostrare aste attive in una città}
         	\begin{table}[H]
             \centering
@@ -449,6 +463,7 @@
              \end{tabular}
             \end{table}
 
+            \noindent
             \textbf{OP 9: Ordinare le aste per prezzo attuale crescente}
         	\begin{table}[H]
             \centering
@@ -468,6 +483,7 @@
              \end{tabular}
             \end{table}
 
+            \noindent
             \textbf{OP 10: Effettuare un rialzo all’interno di un’asta (controllando la sua validità)} \\
         	\begin{table}[H]
             \centering
@@ -488,6 +504,8 @@
              \end{tabular}
             \end{table}
 
+            \newpage
+            \noindent
             \textbf{OP 11: Contattare un utente in merito ad un annuncio creato}
         	\begin{table}[H]
             \centering
@@ -505,6 +523,7 @@
              \end{tabular}
             \end{table}
 
+            \noindent
             \textbf{OP 12: Ricostruire una conversazione tra due utenti}
         	\begin{table}[H]
             \centering
@@ -522,7 +541,8 @@
              \end{tabular}
             \end{table}
 
-             \textbf{OP 13: Andamento del prezzo di un immobile in funzione del tempo}
+            \noindent
+            \textbf{OP 13: Andamento del prezzo di un immobile in funzione del tempo}
         	\begin{table}[H]
             \centering
              \begin{tabular}{llll}
@@ -537,6 +557,8 @@
              \end{tabular}
             \end{table}
 
+            \newpage
+            \noindent
             \textbf{OP 14: Comparare il prezzo di un immobile al mq con quello degli immobili nella stessa zona}
         	\begin{table}[H]
             \centering
@@ -556,6 +578,7 @@
              \end{tabular}
             \end{table}
 
+            \noindent
             \textbf{OP 15: Comparare il prezzo di un immobile al mq con quello degli immobili nella stessa città}
         	\begin{table}[H]
             \centering
@@ -578,6 +601,7 @@
              \end{tabular}
             \end{table}
             
+            \noindent
             \textbf{OP 16: Comparare il prezzo medio al mq di una zona con quello della città}
         	\begin{table}[H]
             \centering
@@ -593,6 +617,8 @@
              \end{tabular}
             \end{table}
 
+            \newpage
+            \noindent
             \textbf{OP 17: Ordinare le zone di una città per costo medio al mq}
         	\begin{table}[H]
             \centering
@@ -608,6 +634,7 @@
              \end{tabular}
             \end{table}
 
+            \noindent
             \textbf{OP 18: Stilare una top 5 città per una o più categorie}
         	\begin{table}[H]
             \centering
@@ -624,6 +651,7 @@
              \end{tabular}
             \end{table}
 
+            \noindent
             \textbf{OP 19: Classificare città in base all’evoluzione in una o più categorie rispetto all’anno precedente}
         	\begin{table}[H]
             \centering
@@ -640,6 +668,8 @@
              \end{tabular}
             \end{table}
 
+            \newpage
+            \noindent
             \textbf{OP 20: Ordinare le città in base a valori specifici di una o più categorie}
         	\begin{table}[H]
             \centering
@@ -664,6 +694,7 @@
              \end{tabular}
             \end{table}
 
+            \noindent
             \textbf{OP 21: Calcolare performance di uno stato in una o più categorie (da ogni città)}
         	\begin{table}[H]
             \centering
@@ -681,6 +712,7 @@
              \end{tabular}
             \end{table}
 
+            \noindent
             \textbf{OP 22: Aggiornamento annuale dei punteggi di una città (dati i campi delle categorie)}
         	\begin{table}[H]
             \centering
@@ -723,6 +755,7 @@
             si è deciso di scomporre questo nelle sue componenti, \textit{via, numeroCivico}, anch'esse uniche, senza dover quindi 
             prestare attenzione alla loro coerenza a livello applicativo.
 
+            \newpage
             \subsection*{Scelta delle chiavi primarie}
             Lo schema presenta già tutte le chiavi primarie necessarie ad individuare le singole entità.
             Per ciascuna delle entità "categoria" si è optato per la realizzazione di algoritmi di hashing che, 
@@ -843,6 +876,7 @@
             \rowcolor{green!20}  &   & \textbf{Totale:}  3.000 al giorno &  \\ [1ex] 
             \end{tabular}
             \end{table}
+            \newpage
         	\noindent
             \textbf{OP 14: Comparare il prezzo di un immobile al mq con quello degli immobili nella stessa zona}
         	\begin{center}
@@ -886,7 +920,7 @@
             immobile e dividere per il nuovo numeroImmobili, andando ad aggiornare quest'ultimo). \\
             \\
       
-
+        \newpage
         \section{Traduzione di entità e associazioni in relazioni}
         \onehalfspacing
         \textbf{stati}(\underline{nome}, superficie, popolazione) \\
@@ -912,6 +946,8 @@
         \textbf{annunci\_utente}(\underline{idAnnuncio}, \underline{idImmobile}, \underline{email}, statoAnnuncio, dataCreazione, tipoAnnuncioUtente, costoMensile*, prezzo*) \\
             \null\quad\quad FK: idImmobile REFERENCES \textbf{immobili} \\
             \null\quad\quad FK: email REFERENCES \textbf{utenti} \\
+        \newpage
+        \noindent
         \textbf{aste}(\underline{idAsta}, \underline{idImmobile}, \underline{email}, prezzoMinimo, rialzoMinimo, depositoCauzionale, dataFine, dataCreazione) \\
             \null\quad\quad FK: idImmobile REFERENCES \textbf{immobili} \\
             \null\quad\quad FK: email REFERENCES \textbf{giudici\_esecuzione} \\
@@ -947,6 +983,7 @@
                     )
                 } \\
 
+                \newpage
                 \noindent
                 {\large \textbf{annunci\_utente}} \\
                 \texttt{
@@ -982,6 +1019,7 @@
                     )
                 } \\
 
+                \newpage
                 \noindent
                 {\large \textbf{citta}} \\
                 \texttt{
@@ -1018,6 +1056,7 @@
                     )
                 } \\
 
+                \newpage
                 \noindent
                 {\large \textbf{economia}} \\
                 \texttt{
@@ -1049,8 +1088,7 @@
                     \null\quad\quad idZona               int NOT NULL               FOREIGN KEY REFERENCES zone.idZona, \\
                     \null\quad\quad metriQuadri          int NOT NULL               CHECK (metriQuadri $>$ 0), \\
                     \null\quad\quad classeEnergetica     varchar(50) \\
-                            \null\qquad\qquad CHECK(classeEnergetica = 'A+' OR 'A' OR 'B' OR 'C' OR 'D' OR 'E' OR \\
-                            \null\qquad\qquad 'F' OR 'G'), \\
+                            \null\qquad\qquad CHECK(classeEnergetica = 'A+' OR 'A' OR 'B' OR 'C' OR 'D' \\\null\qquad\qquad OR 'E' OR 'F' OR 'G'), \\
                     \null\quad\quad annoCostruzione      int                    CHECK (annoCostruzione $>$ 0), \\
                     \null\quad\quad via                  varchar                NOT NULL, \\
                     \null\quad\quad numeroCivico         int                    NOT NULL, \\
@@ -1092,6 +1130,7 @@
                     )
                 } \\
 
+                \newpage
                 \noindent
                 {\large \textbf{rialzi}} \\
                 \texttt{
@@ -1127,6 +1166,7 @@
                     )   
                 } \\
 
+                \newpage
                 \noindent
                 {\large \textbf{trasporto}} \\
                 \texttt{
@@ -1162,13 +1202,11 @@
                     \null\quad\quad numeroImmobili  int         NOT NULL CHECK (numeroImmobili $\geq$ 0), \\
                     \null\quad\quad PRIMARY KEY(idZona, idCitta) \\
                     )
-                } \\
-
+                }
             \section{Schema relazionale finale}
-                \begin{figure}[H]
+            \begin{figure}[H]
                     \centering{}
-                    \includegraphics[width=\linewidth]{./images/relational_scheme.png}
-                    \caption{Schema relazionale finale}
+                    \includegraphics[angle=90,width=\textwidth,height=0.9\textheight,keepaspectratio]{./images/relational_scheme.png}
             \end{figure}
                 
             \section{Traduzione delle operazioni in query SQL}
@@ -1203,6 +1241,7 @@
                 \textcolor{blue}{ORDER BY} A.dataCreazione  \textcolor{blue}{DESC} \\
             }
 
+            \newpage
             \noindent
             \textbf{OP 4: Suddividere gli annunci in vendita, affitto o asta all’interno di una città} \\
             \texttt{
@@ -1236,6 +1275,7 @@
                 \textcolor{blue}{ORDER BY} dataCreazione   \textcolor{blue}{DESC} \\
             }
 
+            \newpage
             \noindent
             \textbf{OP 7: Ordinare gli annunci di affitto per costo mensile} \\
             \texttt{
@@ -1271,6 +1311,7 @@
                 \textcolor{blue}{ORDER BY} prezzo\_attuale \\
             }
 
+            \newpage
             \noindent
             \textbf{OP 10: Effettuare un rialzo all’interno di un’asta (controllando la sua validità)} \\
             \texttt{
@@ -1311,6 +1352,7 @@
                 \textcolor{blue}{ORDER BY} dataCreazione \textcolor{blue}{DESC} \\
             }
             
+            \newpage
             \noindent
             \textbf{OP 14: Comparare il prezzo di un immobile al mq con quello degli immobili nella stessa zona} \\
             \texttt{
@@ -1343,6 +1385,7 @@
                 \textcolor{blue}{AND} A.statoAnnuncio = 'Attivo' \\
             }
 
+            \newpage
             \noindent
             \textbf{OP 16: Comparare il prezzo medio al mq di una zona con quello della città} \\
             \texttt{
@@ -1370,7 +1413,7 @@
             \noindent
             \textbf{OP 18: Stilare una top 5 città per una o più categorie} \\
             \texttt{
-                \textcolor{blue}{SELECT TOP}(5) \textcolor{blue}{WITH TIES} \\
+                \textcolor{blue}{SELECT TOP}(5) \textcolor{blue}{WITH TIES} * \\
                 \textcolor{blue}{FROM} citta\_anni A\\
                 \textcolor{blue}{WHERE} A.anno = ? \\
                 \textcolor{blue}{ORDER BY} A.punteggioAmbiente*?+ \\
@@ -1378,6 +1421,7 @@
                 A.punteggioSanità*?+A.punteggioIstruzione*? \textcolor{blue}{DESC} \\
             }
             
+            \newpage
             \noindent
             \textbf{OP 19: Classificare città in base all'evoluzione in una categoria rispetto all'anno precedente} \\
             \texttt{
@@ -1422,14 +1466,14 @@
             \noindent
             \textbf{OP 22: Aggiornamento annuale dei punteggi di una città (dati i campi delle categorie)} \\
             \texttt{
-                SET @newHashAmbiente = \textcolor{blue}{floor}(? * 10) * 1001 + \textcolor{blue}{floor}(? * 10); \\
+                \textcolor{blue}{SET} @newHashAmbiente = \textcolor{blue}{FLOOR}(? * 10) * 1001 + \textcolor{blue}{FLOOR}(? * 10); \\
                 \textcolor{blue}{IF NOT EXISTS} (SELECT COUNT(*) \\
                 \textcolor{blue}{FROM} ambiente \\
                 \textcolor{blue}{WHERE} hashAmbiente = @newHashAmbiente),  \\
                 \textcolor{blue}{THEN},  \\
                 \textcolor{blue}{INSERT INTO} ambiente(hashAmbiente, pm25media, percentualeSpazioVerdeUrbano) \\
                 \textcolor{blue}{VALUES} (@newHashAmbiente, ?, ?) \\
-                SET @punteggioAmbiente = ((10 - ? / 5) + (? / 3)) / 2; \\
+                \textcolor{blue}{SET} @punteggioAmbiente = ((10 - ? / 5) + (? / 3)) / 2; \\
                 \textcolor{blue}{INSERT INTO} citta\_anni(punteggioAmbiente, newHashAmbiente) \\
                 \textcolor{blue}{VALUES} (@punteggioAmbiente, @newHashAmbiente) \\
             }
@@ -1437,6 +1481,21 @@
         \chapter{Progettazione dell'applicazione}
             
     	\section{Descrizione dell'architettura dell'applicazione realizzata}
-        	asdasd
- 
+        L'applicazione è stata realizzata in Java, mentre il database risiede in locale con il DBMS mySQL. La loro connessione avviene grazie a JDBC. 
+        L'applicazione, a livello grafico, è stata implementata con la libreria JavaFX utilizzando diverse scene per i diversi tipi di utente.
+        Ogni scena è composta da un numero di Tab pari a le operazioni eseguibili sul DB.
+        Ciascun Tab possiede il giusto numero di TextField necessari al corretto inserimento degli input e una TableView per una visualizzazione in 
+        tempo reale dei dati inseriti e/o richiesti.
+        I controlli di input vengono gestiti nella maggior parte dei casi dal DBMS attraverso opportuni CHECK().
+        \begin{figure}[H]
+            \centering{}
+            \includegraphics[width=0.50\linewidth]{./images/db1.png}
+            \caption{Schermata iniziale di log-in}
+        \end{figure}
+
+        \begin{figure}[H]
+            \centering{}
+            \includegraphics[width=\linewidth]{./images/db2.png}
+            \caption{Interfaccia utente per eseguire query}
+        \end{figure}
 \end{document}
