@@ -1422,14 +1422,16 @@
             \noindent
             \textbf{OP 22: Aggiornamento annuale dei punteggi di una città (dati i campi delle categorie)} \\
             \texttt{
-                newHashAmbiente = \textcolor{blue}{CAST}(pm25media*10 \textcolor{blue}{AS} int)*1001 + \textcolor{blue}{CAST}(percentualeSpazioVerdeUrbano*10 \textcolor{blue}{AS} int) \\ \\
-                \textcolor{blue}{IF} ((SELECT COUNT(hashAmbiente) \\
+                SET @newHashAmbiente = \textcolor{blue}{floor}(? * 10) * 1001 + \textcolor{blue}{floor}(? * 10); \\
+                \textcolor{blue}{IF NOT EXISTS} (SELECT COUNT(*) \\
                 \textcolor{blue}{FROM} ambiente \\
-                \textcolor{blue}{WHERE} hashAmbiente = newHashAmbiente) > 0,  \\
-                \textcolor{blue}{NULL},  \\
+                \textcolor{blue}{WHERE} hashAmbiente = @newHashAmbiente),  \\
+                \textcolor{blue}{THEN},  \\
                 \textcolor{blue}{INSERT INTO} ambiente(hashAmbiente, pm25media, percentualeSpazioVerdeUrbano) \\
-                \textcolor{blue}{VALUES} (newHashAmbiente, ?, ?)) \\
+                \textcolor{blue}{VALUES} (@newHashAmbiente, ?, ?) \\
+                SET @punteggioAmbiente = ((10 - ? / 5) + (? / 3)) / 2; \\
                 \textcolor{blue}{INSERT INTO} citta\_anni(punteggioAmbiente, newHashAmbiente) \\
+                \textcolor{blue}{VALUES} (@punteggioAmbiente, @newHashAmbiente) \\
             }
 
         \chapter{Progettazione dell'applicazione}
